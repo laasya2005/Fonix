@@ -4,7 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { startRecording, stopRecording, cancelRecording } from "@/lib/audio-recorder";
 import { awardXP, getGamificationState, LEVELS } from "@/lib/gamification";
 import { SOUND_CATEGORIES, SHADOWING_SENTENCES, type SoundCategory, type DrillWord, type ShadowingSentence } from "@/data/pronunciation-drills";
-import { PRONUNCIATION_VIDEOS } from "@/data/pronunciation-videos";
+
 
 type Mode = "menu" | "shadowing" | "drill-select" | "drill";
 type PracticeState = "ready" | "playing-model" | "recording" | "comparing" | "feedback";
@@ -353,16 +353,6 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
                     opacity: locked ? 0.45 : 1,
                   }}
                 >
-                  <img
-                    src={`https://img.youtube.com/vi/${PRONUNCIATION_VIDEOS[cat.id]?.videoId || ''}/mqdefault.jpg`}
-                    alt={cat.name}
-                    style={{
-                      width: '3.5rem', height: '2.5rem', borderRadius: '0.4rem',
-                      objectFit: 'cover', flexShrink: 0,
-                      border: '1px solid var(--border)',
-                      filter: locked ? 'grayscale(1)' : 'none',
-                    }}
-                  />
                   <div style={{ flex: 1 }}>
                     <p style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text)' }}>{cat.name}</p>
                     <p style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>
@@ -407,41 +397,15 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
           <div style={{ height: '100%', borderRadius: '1rem', background: 'var(--accent)', width: `${(currentIdx / totalItems) * 100}%`, transition: 'width 0.3s ease' }} />
         </div>
 
-        {/* How-to: video + instructions (drill mode, before first recording) */}
+        {/* How-to instructions (drill mode, before first recording) */}
         {mode === "drill" && selectedCategory && practiceState === "ready" && !userAudioUrl && (() => {
-          const video = PRONUNCIATION_VIDEOS[selectedCategory.id];
           return (
             <div style={{
               background: 'var(--surface)', border: '1px solid var(--border)',
               borderRadius: '0.75rem', padding: '0.75rem', marginBottom: '0.75rem',
             }}>
-              {/* YouTube video */}
-              {video && (
-                <div style={{ marginBottom: '0.6rem' }}>
-                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)', marginBottom: '0.3rem' }}>
-                    Watch: {video.title}
-                  </p>
-                  <div style={{
-                    position: 'relative', paddingBottom: '56.25%', height: 0,
-                    borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid var(--border)',
-                  }}>
-                    <iframe
-                      src={`https://www.youtube.com/embed/${video.videoId}?rel=0`}
-                      title={video.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      style={{
-                        position: 'absolute', top: 0, left: 0,
-                        width: '100%', height: '100%', border: 'none',
-                      }}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {/* Step-by-step text instructions */}
               <p style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.4rem' }}>
-                Quick guide:
+                How to make this sound:
               </p>
               <ol style={{ margin: 0, paddingLeft: '1.1rem' }}>
                 {selectedCategory.howTo.map((step, i) => (
