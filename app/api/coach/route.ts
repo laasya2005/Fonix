@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
   const modeContext = MODE_CONTEXT[mode] || MODE_CONTEXT.small_talk;
 
-  const systemPrompt = `You are Clario, an American English ACCENT coach. You help non-native speakers sound more American.
+  const systemPrompt = `You are Fonix, an American English ACCENT coach. You help non-native speakers sound more American.
 
 SCENARIO: ${modeContext}
 
