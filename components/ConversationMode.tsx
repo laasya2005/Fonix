@@ -107,16 +107,7 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
 
         const analysis = analyzeTranscript(sentenceLike, speechResult);
 
-        if (analysis.allCorrect) {
-          setAllCorrect(true);
-          setEncouragement("Perfect response! You sounded natural.");
-          setSummary("Great job!");
-          setAnalyzedWords([]);
-          setState("results");
-          return;
-        }
-
-        const topFlagged = analysis.flaggedWords.slice(0, 2);
+        const topFlagged = analysis.flaggedWords.slice(0, 3);
 
         const res = await fetch("/api/analyze", {
           method: "POST",

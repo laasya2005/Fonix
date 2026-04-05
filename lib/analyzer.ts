@@ -108,6 +108,7 @@ export function analyzeTranscript(
 ): AnalyzerResult {
   const flagged: FlaggedWord[] = [];
   const aligned = alignWords(sentence.tokens, speech.words);
+  const seen = new Set<number>();
 
   for (let i = 0; i < sentence.tokens.length; i++) {
     const expected = sentence.tokens[i];
@@ -122,39 +123,56 @@ export function analyzeTranscript(
     if (heard === "") {
       // Word was skipped entirely
       flagged.push({
-        index: i,
-        expected,
-        heard: "(skipped)",
-        confidence: 0,
-        reason: FlagReason.TRANSCRIPT_MISMATCH,
-        tags,
+        index: i, expected, heard: "(skipped)", confidence: 0,
+        reason: FlagReason.TRANSCRIPT_MISMATCH, tags,
       });
+      seen.add(i);
     } else if (heard.toLowerCase() !== expected.toLowerCase()) {
-      // Mispronounced — only flag if the words are similar enough
-      // (a true pronunciation error, not an alignment artifact)
+      // Mispronounced — only flag if similar enough (not alignment artifact)
       if (isSimilarWord(expected, heard)) {
         flagged.push({
-          index: i,
-          expected,
-          heard,
-          confidence,
-          reason: FlagReason.TRANSCRIPT_MISMATCH,
-          tags,
+          index: i, expected, heard, confidence,
+          reason: FlagReason.TRANSCRIPT_MISMATCH, tags,
         });
+        seen.add(i);
       }
     } else if (confidence < CONFIDENCE_THRESHOLD) {
       flagged.push({
-        index: i,
-        expected,
-        heard,
-        confidence,
-        reason: FlagReason.LOW_CONFIDENCE,
-        tags,
+        index: i, expected, heard, confidence,
+        reason: FlagReason.LOW_CONFIDENCE, tags,
       });
+      seen.add(i);
     }
   }
 
-  flagged.sort((a, b) => a.confidence - b.confidence);
+  // ALWAYS include focus words for accent-aware analysis by GPT,
+  // even if the transcript matched. Speech recognition can't detect
+  // accent-level issues — only GPT with pronunciation tags can.
+  for (let fi = 0; fi < sentence.focusIndices.length; fi++) {
+    const i = sentence.focusIndices[fi];
+    if (seen.has(i)) continue; // already flagged above
 
-  return { flaggedWords: flagged, allCorrect: flagged.length === 0 };
+    const match = aligned.get(i);
+    const heard = match?.heard ?? "";
+    const confidence = match?.confidence ?? 1;
+
+    flagged.push({
+      index: i,
+      expected: sentence.tokens[i],
+      heard,
+      confidence,
+      reason: FlagReason.KNOWN_DIFFICULTY,
+      tags: sentence.focus[fi].tags,
+    });
+  }
+
+  // Sort: hard flags first (lower confidence), then known difficulty
+  flagged.sort((a, b) => {
+    if (a.reason !== FlagReason.KNOWN_DIFFICULTY && b.reason === FlagReason.KNOWN_DIFFICULTY) return -1;
+    if (a.reason === FlagReason.KNOWN_DIFFICULTY && b.reason !== FlagReason.KNOWN_DIFFICULTY) return 1;
+    return a.confidence - b.confidence;
+  });
+
+  // Never allCorrect — always send focus words for accent analysis
+  return { flaggedWords: flagged, allCorrect: false };
 }

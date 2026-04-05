@@ -51,12 +51,12 @@ describe("analyzeTranscript", () => {
       ],
     };
     const result = analyzeTranscript(sentence, speech);
-    expect(result.flaggedWords).toHaveLength(1);
-    expect(result.flaggedWords[0].expected).toBe("water");
-    expect(result.flaggedWords[0].reason).toBe(FlagReason.LOW_CONFIDENCE);
+    const lowConf = result.flaggedWords.find((w) => w.reason === FlagReason.LOW_CONFIDENCE);
+    expect(lowConf).toBeDefined();
+    expect(lowConf!.expected).toBe("water");
   });
 
-  test("does not flag known difficulty words when spoken correctly with high confidence", () => {
+  test("always includes focus words for accent analysis even when transcript matches", () => {
     const sentence = makeSentence();
     const speech: SpeechResult = {
       transcript: "the water is cold",
@@ -68,11 +68,30 @@ describe("analyzeTranscript", () => {
       ],
     };
     const result = analyzeTranscript(sentence, speech);
-    expect(result.allCorrect).toBe(true);
-    expect(result.flaggedWords).toHaveLength(0);
+    // Focus words (water, cold) should always be sent for accent analysis
+    expect(result.flaggedWords).toHaveLength(2);
+    expect(result.flaggedWords.map((w) => w.expected)).toEqual(
+      expect.arrayContaining(["water", "cold"])
+    );
+    expect(result.flaggedWords[0].reason).toBe(FlagReason.KNOWN_DIFFICULTY);
   });
 
-  test("returns allCorrect true when no flags and no focus words", () => {
+  test("returns allCorrect false even when transcript matches (accent check needed)", () => {
+    const sentence = makeSentence();
+    const speech: SpeechResult = {
+      transcript: "the water is cold",
+      words: [
+        { word: "the", confidence: 0.95 },
+        { word: "water", confidence: 0.85 },
+        { word: "is", confidence: 0.98 },
+        { word: "cold", confidence: 0.90 },
+      ],
+    };
+    const result = analyzeTranscript(sentence, speech);
+    expect(result.allCorrect).toBe(false);
+  });
+
+  test("returns no extra flags when no focus words and transcript matches", () => {
     const sentence = makeSentence({ focusIndices: [], focus: [] });
     const speech: SpeechResult = {
       transcript: "the water is cold",
@@ -84,7 +103,6 @@ describe("analyzeTranscript", () => {
       ],
     };
     const result = analyzeTranscript(sentence, speech);
-    expect(result.allCorrect).toBe(true);
     expect(result.flaggedWords).toHaveLength(0);
   });
 

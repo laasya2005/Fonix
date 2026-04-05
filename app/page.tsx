@@ -102,17 +102,8 @@ export default function Home() {
 
         const analysis = analyzeTranscript(sentence, speechResult);
 
-        if (analysis.allCorrect) {
-          setAllCorrect(true);
-          setEncouragement("Every word was clear. Keep it up!");
-          setSummary("Great job!");
-          setAnalyzedWords([]);
-          markSentenceCompleted(sentence.id);
-          setState("results");
-          return;
-        }
-
-        const topFlagged = analysis.flaggedWords.slice(0, 2);
+        // Always send to API for accent-aware analysis — even when transcript matches
+        const topFlagged = analysis.flaggedWords.slice(0, 3);
 
         const res = await fetch("/api/analyze", {
           method: "POST",
