@@ -17,6 +17,7 @@ import { PracticeMode } from "@/components/PracticeMode";
 import { ResultsSummary } from "@/components/ResultsSummary";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
 import { AICoach } from "@/components/AICoach";
+import { PronunciationTrainer } from "@/components/PronunciationTrainer";
 import { BadgePopup } from "@/components/BadgePopup";
 import { LevelUpPopup } from "@/components/LevelUpPopup";
 
@@ -24,6 +25,7 @@ type AppState =
   | "module-select"
   | "conversation"
   | "coach"
+  | "pronunciation"
   | "idle"
   | "recording"
   | "analyzing"
@@ -233,6 +235,7 @@ export default function Home() {
         onConversationMode={handleConversationMode}
         onPracticeWord={handlePracticeWord}
         onDailyChallenge={handleDailyChallenge}
+        onPronunciation={() => setState("pronunciation")}
       />
     );
   }
@@ -240,6 +243,11 @@ export default function Home() {
   // AI Coach mode
   if (state === "coach") {
     return <AICoach onBack={handleChangeModule} />;
+  }
+
+  // Pronunciation training mode
+  if (state === "pronunciation") {
+    return <PronunciationTrainer onBack={handleChangeModule} />;
   }
 
   // Conversation practice mode (legacy)

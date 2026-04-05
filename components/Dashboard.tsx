@@ -23,6 +23,7 @@ interface DashboardProps {
   onConversationMode: () => void;
   onPracticeWord: (word: string) => void;
   onDailyChallenge: (sentenceIndex: number) => void;
+  onPronunciation: () => void;
 }
 
 interface Stats {
@@ -40,7 +41,7 @@ const TRACKS: { id: Category; name: string; benefit: string; iconPath: React.Rea
 ];
 
 
-export function Dashboard({ onSelect, onConversationMode, onPracticeWord, onDailyChallenge }: DashboardProps) {
+export function Dashboard({ onSelect, onConversationMode, onPracticeWord, onDailyChallenge, onPronunciation }: DashboardProps) {
   const [stats, setStats] = useState<Stats>({ sentencesCompleted: 0, wordsAttempted: 0, struggled: 0 });
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [reviewOpen, setReviewOpen] = useState(false);
@@ -180,6 +181,40 @@ export function Dashboard({ onSelect, onConversationMode, onPracticeWord, onDail
           completed={dailyChallengeCompleted}
           onStart={() => onDailyChallenge(dailySentenceIdx)}
         />
+      </section>
+
+      {/* ═══ PRONUNCIATION GYM ═══ */}
+      <section style={{ ...container, marginTop: '1rem' }}>
+        <p className="animate-fade-in" style={{
+          fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.1em',
+          color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.5rem', animationDelay: '220ms',
+        }}>Accent training</p>
+
+        <button
+          onClick={onPronunciation}
+          className="animate-card-in touch-manipulation"
+          style={{
+            width: '100%', padding: '1rem', borderRadius: '0.85rem',
+            border: '1px solid var(--border)', background: 'var(--surface)',
+            textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease',
+            animationDelay: '270ms',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{
+              width: '2.5rem', height: '2.5rem', borderRadius: '0.6rem', flexShrink: 0,
+              background: 'var(--surface-raised)', border: '1px solid var(--border)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem',
+            }}>
+              👅
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <p style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: '0.15rem' }}>Pronunciation Gym</p>
+              <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>Shadowing, drills, A/B comparison — train your American accent</p>
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </button>
       </section>
 
       {/* ═══ RECOMMENDED ═══ */}
