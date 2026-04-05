@@ -2,7 +2,7 @@ import sentences from "@/data/sentences.json";
 import { PronunciationTag } from "@/lib/types";
 
 const validTags = Object.values(PronunciationTag);
-const validCategories = ["daily", "interview", "phone_call"];
+const validCategories = ["interview", "public_speaking", "customer_service", "sales", "social"];
 const validLevels = ["beginner", "intermediate", "advanced"];
 
 describe("sentences.json", () => {
@@ -52,11 +52,13 @@ describe("sentences.json", () => {
     }
   });
 
-  test("has all three categories", () => {
+  test("has all five categories", () => {
     const categories = new Set(sentences.sentences.map((s: any) => s.category));
-    expect(categories).toContain("daily");
     expect(categories).toContain("interview");
-    expect(categories).toContain("phone_call");
+    expect(categories).toContain("public_speaking");
+    expect(categories).toContain("customer_service");
+    expect(categories).toContain("sales");
+    expect(categories).toContain("social");
   });
 
   test("has all three levels", () => {
