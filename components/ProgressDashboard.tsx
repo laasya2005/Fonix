@@ -33,7 +33,7 @@ export function ProgressDashboard({ onClose }: ProgressDashboardProps) {
     .slice(0, 3);
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm shadow-indigo-100">
+    <div className="bg-white p-5 min-h-[calc(100vh-72px)]">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold text-slate-800">Your Progress</h2>
         <button

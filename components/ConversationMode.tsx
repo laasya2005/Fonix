@@ -189,27 +189,27 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
   return (
     <>
       {/* Header */}
-      <div className="px-4 mb-4">
-        <div className="flex items-center justify-between mb-2">
+      <div className="px-4 py-3 bg-white border-b border-slate-100">
+        <div className="flex items-center justify-between mb-1.5">
           <button
             onClick={onBack}
-            className="text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors"
+            className="text-[11px] font-medium text-slate-400 hover:text-slate-600 transition-colors"
           >
-            &larr; Back to modules
+            &larr; Modules
           </button>
-          <span className="text-xs font-medium text-slate-500">
+          <span className="text-[11px] font-medium text-slate-500">
             {currentNum} / {totalConvos}
           </span>
         </div>
-        <div className="w-full bg-indigo-100 rounded-full h-1.5">
+        <div className="w-full bg-indigo-100 rounded-full h-1">
           <div
-            className="bg-indigo-500 h-1.5 rounded-full transition-all duration-500"
+            className="bg-indigo-500 h-1 rounded-full transition-all duration-500"
             style={{ width: `${(currentNum / totalConvos) * 100}%` }}
           />
         </div>
       </div>
 
-      <div className="bg-white rounded-none sm:rounded-2xl p-6 shadow-sm shadow-indigo-100">
+      <div className="bg-white p-4">
         {/* Scenario */}
         <div className="flex items-center gap-2 mb-4">
           <span className="text-xs font-medium uppercase tracking-wide text-indigo-500 bg-indigo-50 px-2.5 py-1 rounded-full">
@@ -319,10 +319,10 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
       </div>
 
       {/* Skip */}
-      <div className="px-4 mt-3 text-center">
+      <div className="bg-white pb-4 pt-1 text-center border-b border-slate-100">
         <button
           onClick={handleNext}
-          className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+          className="text-[11px] text-slate-400 hover:text-slate-600 transition-colors"
         >
           Skip this conversation
         </button>

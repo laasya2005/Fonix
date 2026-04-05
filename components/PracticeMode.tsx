@@ -88,7 +88,7 @@ export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps
   const config = result ? BAND_CONFIG[result.band] : null;
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm shadow-indigo-100">
+    <div className="bg-white p-5 min-h-[calc(100vh-72px)]">
       <button
         onClick={onBack}
         className="text-sm text-slate-400 hover:text-slate-600 mb-4"

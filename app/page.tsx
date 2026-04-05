@@ -216,29 +216,29 @@ export default function Home() {
 
   return (
     <>
-      {/* Progress bar + sentence counter */}
-      <div className="px-4 mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-slate-500">
-            Sentence {currentNum} of {totalSentences}
+      {/* Progress bar */}
+      <div className="px-4 py-3 bg-white border-b border-slate-100">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[11px] font-medium text-slate-500">
+            {currentNum} / {totalSentences}
           </span>
           <button
             onClick={() => setState("progress")}
-            className="text-xs font-medium text-indigo-500 hover:text-indigo-700 transition-colors"
+            className="text-[11px] font-medium text-indigo-500 hover:text-indigo-700 transition-colors"
           >
-            View progress
+            Progress
           </button>
         </div>
-        <div className="w-full bg-indigo-100 rounded-full h-1.5">
+        <div className="w-full bg-indigo-100 rounded-full h-1">
           <div
-            className="bg-indigo-500 h-1.5 rounded-full transition-all duration-500"
+            className="bg-indigo-500 h-1 rounded-full transition-all duration-500"
             style={{ width: `${(currentNum / totalSentences) * 100}%` }}
           />
         </div>
       </div>
 
-      {/* Main card */}
-      <div className="bg-white rounded-none sm:rounded-2xl p-6 shadow-sm shadow-indigo-100">
+      {/* Main content — no card, just content on white bg */}
+      <div className="bg-white p-4 pb-2">
         <SentenceDisplay
           sentence={sentence}
           onChangeModule={handleChangeModule}
@@ -270,11 +270,11 @@ export default function Home() {
         )}
       </div>
 
-      {/* Skip sentence link */}
-      <div className="px-4 mt-3 text-center">
+      {/* Skip */}
+      <div className="bg-white pb-4 pt-1 text-center border-b border-slate-100">
         <button
           onClick={handleNextSentence}
-          className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+          className="text-[11px] text-slate-400 hover:text-slate-600 transition-colors"
         >
           Skip this sentence
         </button>

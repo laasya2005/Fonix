@@ -19,8 +19,8 @@ export function SentenceDisplay({ sentence, onChangeModule }: SentenceDisplayPro
   const mod = MODULE_LABELS[sentence.category];
 
   return (
-    <div className="mb-6">
-      <div className="flex items-center justify-between mb-3">
+    <div className="mb-4">
+      <div className="flex items-center justify-between mb-2">
         <button
           onClick={onChangeModule}
           className="flex items-center gap-1.5 text-xs font-medium text-indigo-500 bg-indigo-50 px-2.5 py-1 rounded-full hover:bg-indigo-100 transition-colors"

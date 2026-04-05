@@ -3,24 +3,23 @@
 :root {
   --color-primary: #6366f1;
   --color-primary-light: #818cf8;
-  --color-bg-start: #eef2ff;
-  --color-bg-end: #f8fafc;
+  --color-bg: #f5f3ff;
 }
 
 body {
-  background: linear-gradient(180deg, var(--color-bg-start) 0%, var(--color-bg-end) 100%);
+  background: var(--color-bg);
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 @keyframes pulse-ring {
-  0% {
-    transform: scale(1);
-    opacity: 0.6;
-  }
-  100% {
-    transform: scale(1.5);
-    opacity: 0;
-  }
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
 }
 
 .animate-pulse-ring {
@@ -28,14 +27,8 @@ body {
 }
 
 @keyframes slide-up {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .animate-slide-up {
