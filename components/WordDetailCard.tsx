@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Band } from "@/lib/types";
 import type { AnalyzedWord } from "@/lib/types";
-import { getCachedTts, cacheTts } from "@/lib/tts-cache";
 
 interface WordDetailCardProps {
   word: AnalyzedWord;
@@ -18,26 +17,16 @@ export function WordDetailCard({
 }: WordDetailCardProps) {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  async function playPronunciation() {
+  function playPronunciation() {
+    if (!("speechSynthesis" in window)) return;
+
     setIsPlaying(true);
-
-    let base64Audio = getCachedTts(word.word, "us");
-
-    if (!base64Audio) {
-      const res = await fetch("/api/tts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ word: word.word, accent: "us" }),
-      });
-      const data = await res.json();
-      base64Audio = data.audio;
-      cacheTts(word.word, "us", base64Audio!);
-    }
-
-    const audio = new Audio(`data:audio/mp3;base64,${base64Audio}`);
-    audio.onended = () => setIsPlaying(false);
-    audio.onerror = () => setIsPlaying(false);
-    audio.play();
+    const utterance = new SpeechSynthesisUtterance(word.word);
+    utterance.lang = "en-US";
+    utterance.rate = 0.85;
+    utterance.onend = () => setIsPlaying(false);
+    utterance.onerror = () => setIsPlaying(false);
+    speechSynthesis.speak(utterance);
   }
 
   const statusColor =
