@@ -17,6 +17,8 @@ import { PracticeMode } from "@/components/PracticeMode";
 import { ResultsSummary } from "@/components/ResultsSummary";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
 import { AICoach } from "@/components/AICoach";
+import { BadgePopup } from "@/components/BadgePopup";
+import { LevelUpPopup } from "@/components/LevelUpPopup";
 
 type AppState =
   | "module-select"
@@ -47,6 +49,19 @@ export default function Home() {
   const [allCorrect, setAllCorrect] = useState(false);
   const [selectedWord, setSelectedWord] = useState<AnalyzedWord | null>(null);
   const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
+  const [badgePopup, setBadgePopup] = useState<string | null>(null);
+  const [levelUpPopup, setLevelUpPopup] = useState<number | null>(null);
+  const [xpFloat, setXpFloat] = useState<number | null>(null);
+
+  const handleAwardResult = useCallback((result: { leveledUp: boolean; newLevel: number; newBadges: string[] }, xpAmount: number) => {
+    setXpFloat(xpAmount);
+    setTimeout(() => setXpFloat(null), 1500);
+    if (result.leveledUp) {
+      setLevelUpPopup(result.newLevel);
+    } else if (result.newBadges.length > 0) {
+      setBadgePopup(result.newBadges[0]);
+    }
+  }, []);
 
   const sentences = useMemo(
     () =>
@@ -168,11 +183,12 @@ export default function Home() {
 
         // Award XP for sentence completion
         const isPerfect = data.words.length === 0 || data.words.every((w) => !w.shouldPractice);
-        awardXP(isPerfect ? 25 : 10, {
+        const xpResult = awardXP(isPerfect ? 25 : 10, {
           sentenceCompleted: true,
           perfectScore: isPerfect,
           category: sentence.category,
         });
+        handleAwardResult(xpResult, isPerfect ? 25 : 10);
 
         setState("results");
       },
@@ -339,6 +355,23 @@ export default function Home() {
           onPractice={handlePractice}
         />
       )}
+
+      {/* XP float */}
+      {xpFloat && (
+        <div className="animate-xp-float" style={{
+          position: 'fixed', bottom: '6rem', left: '50%', transform: 'translateX(-50%)',
+          fontSize: '1rem', fontWeight: 700, color: 'var(--accent)', zIndex: 55,
+          pointerEvents: 'none',
+        }}>
+          +{xpFloat} XP
+        </div>
+      )}
+
+      {/* Badge popup */}
+      {badgePopup && <BadgePopup badgeId={badgePopup} onClose={() => setBadgePopup(null)} />}
+
+      {/* Level up popup */}
+      {levelUpPopup && <LevelUpPopup newLevel={levelUpPopup} onClose={() => setLevelUpPopup(null)} />}
     </>
   );
 }
