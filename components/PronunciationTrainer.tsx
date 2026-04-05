@@ -332,11 +332,21 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
                     border: '1px solid var(--border)', background: 'var(--surface)',
                     textAlign: 'left', cursor: locked ? 'default' : 'pointer',
                     transition: 'all 0.2s ease',
-                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    display: 'flex', alignItems: 'center', gap: '0.75rem',
                     opacity: locked ? 0.45 : 1,
                   }}
                 >
-                  <div>
+                  <img
+                    src={`/mouth/${cat.id}.png`}
+                    alt={cat.name}
+                    style={{
+                      width: '2.75rem', height: '2.75rem', borderRadius: '0.5rem',
+                      objectFit: 'cover', flexShrink: 0,
+                      border: '1px solid var(--border)',
+                      filter: locked ? 'grayscale(1)' : 'none',
+                    }}
+                  />
+                  <div style={{ flex: 1 }}>
                     <p style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text)' }}>{cat.name}</p>
                     <p style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>
                       {locked ? `Unlocks at Lv.${cat.minLevel} ${levelName}` : `${cat.description} \u00b7 ${cat.words.length} words`}
@@ -380,12 +390,20 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
           <div style={{ height: '100%', borderRadius: '1rem', background: 'var(--accent)', width: `${(currentIdx / totalItems) * 100}%`, transition: 'width 0.3s ease' }} />
         </div>
 
-        {/* How-to instructions (drill mode, shown before first recording) */}
+        {/* How-to instructions with mouth diagram (drill mode, shown before first recording) */}
         {mode === "drill" && selectedCategory && practiceState === "ready" && !userAudioUrl && (
           <div style={{
             background: 'var(--surface)', border: '1px solid var(--border)',
             borderRadius: '0.75rem', padding: '0.75rem', marginBottom: '0.75rem',
           }}>
+            {/* Mouth position image */}
+            <div style={{ marginBottom: '0.6rem', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid var(--border)' }}>
+              <img
+                src={`/mouth/${selectedCategory.id}.png`}
+                alt={`Mouth position for ${selectedCategory.name}`}
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+            </div>
             <p style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.4rem' }}>
               How to make this sound:
             </p>
