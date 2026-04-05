@@ -39,16 +39,39 @@ export function WordDetailCard({
     audio.play();
   }
 
-  function playCorrect() {
-    if (!("speechSynthesis" in window)) return;
+  async function playCorrect() {
     stopAny();
     setPlayingWhat("correct");
-    const utterance = new SpeechSynthesisUtterance(word.word);
-    utterance.lang = "en-US";
-    utterance.rate = 0.75;
-    utterance.onend = () => setPlayingWhat(null);
-    utterance.onerror = () => setPlayingWhat(null);
-    speechSynthesis.speak(utterance);
+    try {
+      // Use OpenAI TTS for high-quality American pronunciation
+      const res = await fetch("/api/tts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ word: word.word }),
+      });
+      const data = await res.json();
+      if (data.audio) {
+        const audio = new Audio(`data:audio/mp3;base64,${data.audio}`);
+        audioRef.current = audio;
+        audio.onended = () => setPlayingWhat(null);
+        audio.onerror = () => setPlayingWhat(null);
+        audio.play();
+        return;
+      }
+    } catch {
+      // fall through to browser TTS
+    }
+    // Fallback to browser TTS
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(word.word);
+      utterance.lang = "en-US";
+      utterance.rate = 0.75;
+      utterance.onend = () => setPlayingWhat(null);
+      utterance.onerror = () => setPlayingWhat(null);
+      speechSynthesis.speak(utterance);
+    } else {
+      setPlayingWhat(null);
+    }
   }
 
   // Highlight the focus word in the sentence text
