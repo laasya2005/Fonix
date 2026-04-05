@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as sdk from "microsoft-cognitiveservices-speech-sdk";
+import { execSync } from "child_process";
+import { writeFileSync, readFileSync, unlinkSync } from "fs";
 
 const SOUND_TIPS: Record<string, string> = {
   th_sound: "Tongue should be between your teeth. If it sounds like T or D, your tongue is behind your teeth.",
@@ -39,7 +41,26 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const audioBuffer = Buffer.from(await audioFile.arrayBuffer());
+    const rawBuffer = Buffer.from(await audioFile.arrayBuffer());
+
+    // Convert WebM/Opus to WAV (16kHz, 16-bit, mono) using ffmpeg
+    const ts = Date.now();
+    const inputPath = `/tmp/fonix-in-${ts}.webm`;
+    const outputPath = `/tmp/fonix-out-${ts}.wav`;
+
+    writeFileSync(inputPath, rawBuffer);
+    try {
+      execSync(`ffmpeg -y -i ${inputPath} -ar 16000 -ac 1 -sample_fmt s16 ${outputPath} 2>/dev/null`);
+    } catch {
+      // ffmpeg failed — clean up and return fallback
+      try { unlinkSync(inputPath); } catch { /* */ }
+      const catTip = SOUND_TIPS[soundCategory || ""] || "Listen to both recordings and compare.";
+      return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "Audio conversion failed. Try again.", example: catTip });
+    }
+
+    const wavBuffer = readFileSync(outputPath);
+    try { unlinkSync(inputPath); } catch { /* */ }
+    try { unlinkSync(outputPath); } catch { /* */ }
 
     // Azure Speech Pronunciation Assessment
     const speechConfig = sdk.SpeechConfig.fromSubscription(speechKey, speechRegion);
@@ -53,10 +74,11 @@ export async function POST(request: NextRequest) {
       enableMiscue: true,
     }));
 
-    // Create audio config from push stream
+    // Push WAV audio into the stream (skip WAV header — first 44 bytes)
     const format = sdk.AudioStreamFormat.getWaveFormatPCM(16000, 16, 1);
     const pushStream = sdk.AudioInputStream.createPushStream(format);
-    pushStream.write(audioBuffer.buffer.slice(audioBuffer.byteOffset, audioBuffer.byteOffset + audioBuffer.byteLength));
+    const pcmData = wavBuffer.slice(44); // skip WAV header
+    pushStream.write(pcmData.buffer.slice(pcmData.byteOffset, pcmData.byteOffset + pcmData.byteLength));
     pushStream.close();
 
     const audioConfig = sdk.AudioConfig.fromStreamInput(pushStream);
