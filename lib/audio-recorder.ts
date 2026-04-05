@@ -1,6 +1,6 @@
 /**
- * Web Audio API recorder that outputs WAV format directly.
- * No ffmpeg needed — works on Vercel serverless.
+ * Web Audio API recorder that outputs WAV format (16kHz, 16-bit, mono).
+ * Handles browsers that ignore the requested sample rate by resampling.
  */
 
 let audioContext: AudioContext | null = null;
@@ -9,11 +9,27 @@ let processor: ScriptProcessorNode | null = null;
 let source: MediaStreamAudioSourceNode | null = null;
 let audioChunks: Float32Array[] = [];
 let isCurrentlyRecording = false;
+let actualSampleRate = 16000;
 
 export interface RecordingResult {
   blob: Blob;
   url: string;
   duration: number;
+}
+
+function resample(input: Float32Array, fromRate: number, toRate: number): Float32Array {
+  if (fromRate === toRate) return input;
+  const ratio = fromRate / toRate;
+  const outputLength = Math.round(input.length / ratio);
+  const output = new Float32Array(outputLength);
+  for (let i = 0; i < outputLength; i++) {
+    const srcIndex = i * ratio;
+    const srcIndexFloor = Math.floor(srcIndex);
+    const srcIndexCeil = Math.min(srcIndexFloor + 1, input.length - 1);
+    const frac = srcIndex - srcIndexFloor;
+    output[i] = input[srcIndexFloor] * (1 - frac) + input[srcIndexCeil] * frac;
+  }
+  return output;
 }
 
 function float32ToInt16(float32Array: Float32Array): Int16Array {
@@ -35,22 +51,20 @@ function encodeWAV(samples: Int16Array, sampleRate: number): ArrayBuffer {
     }
   }
 
-  // WAV header
   writeString(0, 'RIFF');
   view.setUint32(4, 36 + samples.length * 2, true);
   writeString(8, 'WAVE');
   writeString(12, 'fmt ');
-  view.setUint32(16, 16, true); // PCM
-  view.setUint16(20, 1, true); // format = 1 (PCM)
-  view.setUint16(22, 1, true); // mono
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
   view.setUint32(24, sampleRate, true);
-  view.setUint32(28, sampleRate * 2, true); // byte rate
-  view.setUint16(32, 2, true); // block align
-  view.setUint16(34, 16, true); // bits per sample
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
   writeString(36, 'data');
   view.setUint32(40, samples.length * 2, true);
 
-  // Write PCM samples
   const offset = 44;
   for (let i = 0; i < samples.length; i++) {
     view.setInt16(offset + i * 2, samples[i], true);
@@ -63,10 +77,11 @@ export async function startRecording(): Promise<void> {
   audioChunks = [];
   mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  audioContext = new AudioContext({ sampleRate: 16000 });
+  // Don't force 16000 — let the browser use its native rate, we'll resample later
+  audioContext = new AudioContext();
+  actualSampleRate = audioContext.sampleRate;
   source = audioContext.createMediaStreamSource(mediaStream);
 
-  // ScriptProcessorNode to capture raw PCM
   processor = audioContext.createScriptProcessor(4096, 1, 1);
   processor.onaudioprocess = (e) => {
     if (isCurrentlyRecording) {
@@ -83,9 +98,7 @@ export async function startRecording(): Promise<void> {
 export function stopRecording(): Promise<RecordingResult> {
   return new Promise((resolve) => {
     isCurrentlyRecording = false;
-    const startTime = Date.now();
 
-    // Small delay to flush any remaining audio
     setTimeout(() => {
       // Merge all chunks
       const totalLength = audioChunks.reduce((acc, chunk) => acc + chunk.length, 0);
@@ -96,13 +109,16 @@ export function stopRecording(): Promise<RecordingResult> {
         offset += chunk.length;
       }
 
+      // Resample to 16kHz if needed (Azure requires 16kHz)
+      const targetRate = 16000;
+      const resampled = resample(merged, actualSampleRate, targetRate);
+
       // Convert to 16-bit PCM and encode as WAV
-      const int16 = float32ToInt16(merged);
-      const sampleRate = audioContext?.sampleRate || 16000;
-      const wavBuffer = encodeWAV(int16, sampleRate);
+      const int16 = float32ToInt16(resampled);
+      const wavBuffer = encodeWAV(int16, targetRate);
       const blob = new Blob([wavBuffer], { type: 'audio/wav' });
       const url = URL.createObjectURL(blob);
-      const duration = (Date.now() - startTime) / 1000;
+      const duration = resampled.length / targetRate;
 
       // Clean up
       if (processor) { processor.disconnect(); processor = null; }

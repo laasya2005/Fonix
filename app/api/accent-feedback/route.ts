@@ -46,6 +46,10 @@ export async function POST(request: NextRequest) {
     };
     const pronHeader = Buffer.from(JSON.stringify(pronAssessmentParams)).toString("base64");
 
+    // Read sample rate from WAV header to verify format
+    const wavView = new DataView(audioBuffer);
+    const wavSampleRate = audioBuffer.byteLength >= 28 ? wavView.getUint32(24, true) : 16000;
+
     const response = await fetch(
       `https://${speechRegion}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=en-US&format=detailed`,
       {
@@ -61,7 +65,12 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errText = await response.text();
-      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[4] Azure ${response.status}: ${errText.slice(0, 200)} | audio: ${audioBuffer.byteLength}b, target: "${target}"`, example: "" });
+      // Parse WAV header for debug info
+      const wavView = new DataView(audioBuffer);
+      const wavSampleRate = audioBuffer.byteLength >= 28 ? wavView.getUint32(24, true) : 0;
+      const wavChannels = audioBuffer.byteLength >= 23 ? wavView.getUint16(22, true) : 0;
+      const wavBits = audioBuffer.byteLength >= 35 ? wavView.getUint16(34, true) : 0;
+      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[4] Azure ${response.status}: ${errText.slice(0, 100)} | ${audioBuffer.byteLength}b, ${wavSampleRate}Hz, ${wavChannels}ch, ${wavBits}bit, "${target}"`, example: "" });
     }
 
     const result = await response.json();
