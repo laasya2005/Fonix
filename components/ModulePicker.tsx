@@ -44,9 +44,10 @@ const MODULES: Module[] = [
 
 interface ModulePickerProps {
   onSelect: (category: Category) => void;
+  onConversationMode: () => void;
 }
 
-export function ModulePicker({ onSelect }: ModulePickerProps) {
+export function ModulePicker({ onSelect, onConversationMode }: ModulePickerProps) {
   return (
     <div className="px-4">
       <div className="text-center mb-6">
@@ -57,6 +58,41 @@ export function ModulePicker({ onSelect }: ModulePickerProps) {
           Pick a goal — we&apos;ll coach you with real sentences from that context
         </p>
       </div>
+
+      {/* Conversation Practice — featured card */}
+      <button
+        onClick={onConversationMode}
+        className="w-full bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl p-5 shadow-lg shadow-indigo-200 mb-4 text-left flex items-center gap-4 group hover:from-indigo-600 hover:to-indigo-700 transition-all"
+      >
+        <span className="text-2xl w-12 h-12 flex items-center justify-center bg-white/20 rounded-xl">
+          💬
+        </span>
+        <div className="flex-1 min-w-0">
+          <p className="font-bold text-white text-sm">
+            Conversation Practice
+          </p>
+          <p className="text-xs text-indigo-200 mt-0.5">
+            Practice real workplace conversations — listen, respond, get feedback
+          </p>
+        </div>
+        <svg
+          className="w-4 h-4 text-indigo-200 group-hover:text-white transition-colors shrink-0"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+
+      <p className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-3 px-1">
+        Sentence practice by goal
+      </p>
 
       <div className="space-y-3">
         {MODULES.map((mod) => (

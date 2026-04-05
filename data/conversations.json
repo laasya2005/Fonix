@@ -1,0 +1,228 @@
+{
+  "conversations": [
+    {
+      "id": 1,
+      "scenario": "Monday morning at the coffee machine",
+      "category": "social",
+      "level": "beginner",
+      "lines": [
+        { "speaker": "coworker", "text": "Hey! Did you end up doing anything fun this weekend?" },
+        { "speaker": "user", "text": "Yeah, I actually went hiking with a couple of friends. The weather was perfect for it." }
+      ],
+      "expected": "yeah i actually went hiking with a couple of friends the weather was perfect for it",
+      "tokens": ["yeah", "i", "actually", "went", "hiking", "with", "a", "couple", "of", "friends", "the", "weather", "was", "perfect", "for", "it"],
+      "focusIndices": [2, 4, 11, 13],
+      "focus": [
+        { "word": "actually", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] },
+        { "word": "hiking", "tags": ["VOWEL_SHIFT"] },
+        { "word": "weather", "tags": ["TH_SOUND", "FLAP_T"] },
+        { "word": "perfect", "tags": ["STRESS_PATTERN", "FINAL_CONSONANT"] }
+      ]
+    },
+    {
+      "id": 2,
+      "scenario": "Elevator ride with your manager",
+      "category": "social",
+      "level": "beginner",
+      "lines": [
+        { "speaker": "coworker", "text": "Good morning! How's the commute treating you these days?" },
+        { "speaker": "user", "text": "Not bad, actually. I switched to taking the train and it's been way better." }
+      ],
+      "expected": "not bad actually i switched to taking the train and its been way better",
+      "tokens": ["not", "bad", "actually", "i", "switched", "to", "taking", "the", "train", "and", "its", "been", "way", "better"],
+      "focusIndices": [2, 4, 7, 13],
+      "focus": [
+        { "word": "actually", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] },
+        { "word": "switched", "tags": ["FINAL_CONSONANT"] },
+        { "word": "the", "tags": ["TH_SOUND"] },
+        { "word": "better", "tags": ["FLAP_T", "VOWEL_REDUCTION"] }
+      ]
+    },
+    {
+      "id": 3,
+      "scenario": "Quick sync before a meeting",
+      "category": "interview",
+      "level": "intermediate",
+      "lines": [
+        { "speaker": "coworker", "text": "Hey, are you ready for the presentation? Need any help with anything?" },
+        { "speaker": "user", "text": "I think I'm good. I just need to review the third slide one more time." }
+      ],
+      "expected": "i think im good i just need to review the third slide one more time",
+      "tokens": ["i", "think", "im", "good", "i", "just", "need", "to", "review", "the", "third", "slide", "one", "more", "time"],
+      "focusIndices": [1, 8, 10],
+      "focus": [
+        { "word": "think", "tags": ["TH_SOUND"] },
+        { "word": "review", "tags": ["STRESS_PATTERN", "V_W_DISTINCTION"] },
+        { "word": "third", "tags": ["TH_SOUND", "R_L_DISTINCTION"] }
+      ]
+    },
+    {
+      "id": 4,
+      "scenario": "Lunch break with a teammate",
+      "category": "social",
+      "level": "beginner",
+      "lines": [
+        { "speaker": "coworker", "text": "Want to grab lunch? There's a new Thai place around the corner." },
+        { "speaker": "user", "text": "Sure, that sounds great. I've been wanting to try something different." }
+      ],
+      "expected": "sure that sounds great ive been wanting to try something different",
+      "tokens": ["sure", "that", "sounds", "great", "ive", "been", "wanting", "to", "try", "something", "different"],
+      "focusIndices": [1, 3, 9, 10],
+      "focus": [
+        { "word": "that", "tags": ["TH_SOUND"] },
+        { "word": "great", "tags": ["FINAL_CONSONANT"] },
+        { "word": "something", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] },
+        { "word": "different", "tags": ["STRESS_PATTERN", "FINAL_CONSONANT"] }
+      ]
+    },
+    {
+      "id": 5,
+      "scenario": "Chatting after a team meeting",
+      "category": "public_speaking",
+      "level": "intermediate",
+      "lines": [
+        { "speaker": "coworker", "text": "What did you think of the new quarterly targets? They seem pretty ambitious." },
+        { "speaker": "user", "text": "Honestly, I think they're achievable if we prioritize the right projects." }
+      ],
+      "expected": "honestly i think theyre achievable if we prioritize the right projects",
+      "tokens": ["honestly", "i", "think", "theyre", "achievable", "if", "we", "prioritize", "the", "right", "projects"],
+      "focusIndices": [0, 2, 4, 7],
+      "focus": [
+        { "word": "honestly", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] },
+        { "word": "think", "tags": ["TH_SOUND"] },
+        { "word": "achievable", "tags": ["STRESS_PATTERN", "VOWEL_SHIFT"] },
+        { "word": "prioritize", "tags": ["STRESS_PATTERN", "R_L_DISTINCTION"] }
+      ]
+    },
+    {
+      "id": 6,
+      "scenario": "Helping a new team member",
+      "category": "customer_service",
+      "level": "beginner",
+      "lines": [
+        { "speaker": "coworker", "text": "I'm still figuring out the expense system. Any tips?" },
+        { "speaker": "user", "text": "Yeah, just make sure you attach the receipt before you submit it." }
+      ],
+      "expected": "yeah just make sure you attach the receipt before you submit it",
+      "tokens": ["yeah", "just", "make", "sure", "you", "attach", "the", "receipt", "before", "you", "submit", "it"],
+      "focusIndices": [5, 7, 10],
+      "focus": [
+        { "word": "attach", "tags": ["STRESS_PATTERN", "FINAL_CONSONANT"] },
+        { "word": "receipt", "tags": ["STRESS_PATTERN", "VOWEL_SHIFT"] },
+        { "word": "submit", "tags": ["STRESS_PATTERN"] }
+      ]
+    },
+    {
+      "id": 7,
+      "scenario": "Client call follow-up",
+      "category": "sales",
+      "level": "intermediate",
+      "lines": [
+        { "speaker": "coworker", "text": "How did the call with the client go? Were they interested?" },
+        { "speaker": "user", "text": "They were really enthusiastic about the proposal. I think we'll close this one." }
+      ],
+      "expected": "they were really enthusiastic about the proposal i think well close this one",
+      "tokens": ["they", "were", "really", "enthusiastic", "about", "the", "proposal", "i", "think", "well", "close", "this", "one"],
+      "focusIndices": [0, 3, 6],
+      "focus": [
+        { "word": "they", "tags": ["TH_SOUND"] },
+        { "word": "enthusiastic", "tags": ["TH_SOUND", "STRESS_PATTERN"] },
+        { "word": "proposal", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] }
+      ]
+    },
+    {
+      "id": 8,
+      "scenario": "Friday afternoon wind-down",
+      "category": "social",
+      "level": "beginner",
+      "lines": [
+        { "speaker": "coworker", "text": "Any plans for the weekend? I'm thinking about checking out that new restaurant." },
+        { "speaker": "user", "text": "Nothing specific yet. I'll probably just relax and catch up on some reading." }
+      ],
+      "expected": "nothing specific yet ill probably just relax and catch up on some reading",
+      "tokens": ["nothing", "specific", "yet", "ill", "probably", "just", "relax", "and", "catch", "up", "on", "some", "reading"],
+      "focusIndices": [0, 1, 4, 6],
+      "focus": [
+        { "word": "nothing", "tags": ["TH_SOUND", "VOWEL_REDUCTION"] },
+        { "word": "specific", "tags": ["STRESS_PATTERN"] },
+        { "word": "probably", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] },
+        { "word": "relax", "tags": ["STRESS_PATTERN", "R_L_DISTINCTION"] }
+      ]
+    },
+    {
+      "id": 9,
+      "scenario": "Discussing a project deadline",
+      "category": "interview",
+      "level": "advanced",
+      "lines": [
+        { "speaker": "coworker", "text": "The deadline got moved up to Thursday. Think we can make it?" },
+        { "speaker": "user", "text": "It'll be tight, but if we split the remaining work between us, we should be fine." }
+      ],
+      "expected": "itll be tight but if we split the remaining work between us we should be fine",
+      "tokens": ["itll", "be", "tight", "but", "if", "we", "split", "the", "remaining", "work", "between", "us", "we", "should", "be", "fine"],
+      "focusIndices": [8, 10, 13],
+      "focus": [
+        { "word": "remaining", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] },
+        { "word": "between", "tags": ["STRESS_PATTERN"] },
+        { "word": "should", "tags": ["VOWEL_REDUCTION"] }
+      ]
+    },
+    {
+      "id": 10,
+      "scenario": "Wrapping up a phone call with a customer",
+      "category": "customer_service",
+      "level": "intermediate",
+      "lines": [
+        { "speaker": "coworker", "text": "Is there anything else I can help you with today?" },
+        { "speaker": "user", "text": "That covers everything. Thank you so much for walking me through this." }
+      ],
+      "expected": "that covers everything thank you so much for walking me through this",
+      "tokens": ["that", "covers", "everything", "thank", "you", "so", "much", "for", "walking", "me", "through", "this"],
+      "focusIndices": [0, 2, 3, 10],
+      "focus": [
+        { "word": "that", "tags": ["TH_SOUND"] },
+        { "word": "everything", "tags": ["STRESS_PATTERN", "TH_SOUND"] },
+        { "word": "thank", "tags": ["TH_SOUND"] },
+        { "word": "through", "tags": ["TH_SOUND", "R_L_DISTINCTION"] }
+      ]
+    },
+    {
+      "id": 11,
+      "scenario": "Introducing yourself at a networking event",
+      "category": "sales",
+      "level": "intermediate",
+      "lines": [
+        { "speaker": "coworker", "text": "Hi! I don't think we've met. What do you do?" },
+        { "speaker": "user", "text": "I work in product development. We're building tools that help small businesses grow." }
+      ],
+      "expected": "i work in product development were building tools that help small businesses grow",
+      "tokens": ["i", "work", "in", "product", "development", "were", "building", "tools", "that", "help", "small", "businesses", "grow"],
+      "focusIndices": [3, 4, 7, 11],
+      "focus": [
+        { "word": "product", "tags": ["STRESS_PATTERN"] },
+        { "word": "development", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] },
+        { "word": "tools", "tags": ["FINAL_CONSONANT"] },
+        { "word": "businesses", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] }
+      ]
+    },
+    {
+      "id": 12,
+      "scenario": "Giving feedback in a one-on-one",
+      "category": "public_speaking",
+      "level": "advanced",
+      "lines": [
+        { "speaker": "coworker", "text": "How do you think the sprint went overall?" },
+        { "speaker": "user", "text": "I thought the collaboration was solid, but we could improve our estimation process." }
+      ],
+      "expected": "i thought the collaboration was solid but we could improve our estimation process",
+      "tokens": ["i", "thought", "the", "collaboration", "was", "solid", "but", "we", "could", "improve", "our", "estimation", "process"],
+      "focusIndices": [1, 3, 9, 11],
+      "focus": [
+        { "word": "thought", "tags": ["TH_SOUND"] },
+        { "word": "collaboration", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] },
+        { "word": "improve", "tags": ["STRESS_PATTERN"] },
+        { "word": "estimation", "tags": ["STRESS_PATTERN", "VOWEL_REDUCTION"] }
+      ]
+    }
+  ]
+}

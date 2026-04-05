@@ -2,11 +2,13 @@
 
 import { useState, useCallback, useMemo } from "react";
 import sentencesData from "@/data/sentences.json";
+import conversationsData from "@/data/conversations.json";
 import type { Sentence, Category, AnalyzedWord, SpeechResult, AnalyzeResponse } from "@/lib/types";
 import { analyzeTranscript } from "@/lib/analyzer";
 import { markSentenceCompleted, saveWordAttempt } from "@/lib/progress";
 import { startListening, stopListening, isSpeechSupported } from "@/lib/speech";
 import { ModulePicker } from "@/components/ModulePicker";
+import { ConversationMode } from "@/components/ConversationMode";
 import { SentenceDisplay } from "@/components/SentenceDisplay";
 import { MicButton } from "@/components/MicButton";
 import { TranscriptView } from "@/components/TranscriptView";
@@ -17,6 +19,7 @@ import { ProgressDashboard } from "@/components/ProgressDashboard";
 
 type AppState =
   | "module-select"
+  | "conversation"
   | "idle"
   | "recording"
   | "analyzing"
@@ -53,6 +56,10 @@ export default function Home() {
     setSelectedModule(category);
     setSentenceIndex(0);
     setState("idle");
+  }, []);
+
+  const handleConversationMode = useCallback(() => {
+    setState("conversation");
   }, []);
 
   const handleChangeModule = useCallback(() => {
@@ -170,7 +177,22 @@ export default function Home() {
 
   // Module selection screen
   if (state === "module-select") {
-    return <ModulePicker onSelect={handleModuleSelect} />;
+    return (
+      <ModulePicker
+        onSelect={handleModuleSelect}
+        onConversationMode={handleConversationMode}
+      />
+    );
+  }
+
+  // Conversation practice mode
+  if (state === "conversation") {
+    return (
+      <ConversationMode
+        conversations={conversationsData.conversations as any}
+        onBack={handleChangeModule}
+      />
+    );
   }
 
   // Practice mode
