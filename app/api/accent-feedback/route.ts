@@ -43,9 +43,10 @@ export async function POST(request: NextRequest) {
       GradingSystem: "HundredMark",
       Granularity: "Phoneme",
       Dimension: "Comprehensive",
-      EnableMiscue: true,
+      EnableMiscue: "True",
     };
-    const pronHeader = Buffer.from(JSON.stringify(pronAssessmentParams)).toString("base64");
+    // Base64 encode without padding/newlines
+    const pronHeader = Buffer.from(JSON.stringify(pronAssessmentParams)).toString("base64").replace(/=+$/, "").replace(/\n/g, "");
 
     const response = await fetch(
       `https://${speechRegion}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=en-US`,
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     const nBest = result.NBest?.[0];
     if (!nBest?.PronunciationAssessment) {
-      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[6] No pronunciation data in Azure response`, example: "" });
+      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[6] NBest: ${JSON.stringify(nBest || result).slice(0, 300)}`, example: "" });
     }
 
     const assessment = nBest.PronunciationAssessment;
