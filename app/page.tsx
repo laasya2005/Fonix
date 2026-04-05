@@ -285,6 +285,7 @@ export default function Home() {
         <WordDetailCard
           word={selectedWord}
           recordedAudioUrl={recordedAudioUrl}
+          sentenceText={sentence.text}
           onClose={handleBackToResults}
           onPractice={handlePractice}
         />

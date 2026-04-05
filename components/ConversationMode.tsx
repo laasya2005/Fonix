@@ -333,6 +333,7 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
         <WordDetailCard
           word={selectedWord}
           recordedAudioUrl={recordedAudioUrl}
+          sentenceText={userLine?.text}
           onClose={handleBackToResults}
           onPractice={handlePractice}
         />
