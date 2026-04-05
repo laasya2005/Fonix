@@ -14,24 +14,9 @@ interface PracticeModeProps {
 }
 
 const BAND_CONFIG = {
-  [Band.GREAT]: {
-    label: "Great!",
-    bgClass: "bg-indigo-50 border-indigo-200",
-    textClass: "text-indigo-700",
-    badgeClass: "bg-indigo-100 text-indigo-800",
-  },
-  [Band.IMPROVING]: {
-    label: "Improving",
-    bgClass: "bg-amber-50 border-amber-200",
-    textClass: "text-amber-700",
-    badgeClass: "bg-amber-100 text-amber-800",
-  },
-  [Band.NEEDS_PRACTICE]: {
-    label: "Keep trying",
-    bgClass: "bg-rose-50 border-rose-200",
-    textClass: "text-rose-700",
-    badgeClass: "bg-rose-100 text-rose-800",
-  },
+  [Band.GREAT]: { label: "Excellent!", color: "var(--success)", bg: "var(--success-soft)", border: "rgba(52,211,153,0.2)" },
+  [Band.IMPROVING]: { label: "Getting closer", color: "var(--accent)", bg: "var(--accent-soft)", border: "rgba(232,185,49,0.2)" },
+  [Band.NEEDS_PRACTICE]: { label: "Keep trying", color: "var(--warn)", bg: "var(--warn-soft)", border: "rgba(251,146,60,0.2)" },
 };
 
 export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps) {
@@ -42,12 +27,7 @@ export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps
   const [isEvaluating, setIsEvaluating] = useState(false);
 
   const handleToggle = useCallback(() => {
-    if (isRecording) {
-      stopListening();
-      setIsRecording(false);
-      return;
-    }
-
+    if (isRecording) { stopListening(); setIsRecording(false); return; }
     if (!isSpeechSupported()) return;
 
     setResult(null);
@@ -62,12 +42,7 @@ export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps
         const res = await fetch("/api/evaluate-word", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            word: word.word,
-            userSaid: speechResult.transcript,
-            previousBand,
-            attemptNumber,
-          }),
+          body: JSON.stringify({ word: word.word, userSaid: speechResult.transcript, previousBand, attemptNumber }),
         });
 
         const evalResult = (await res.json()) as EvaluateWordResponse;
@@ -75,77 +50,71 @@ export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps
         setIsEvaluating(false);
         setPreviousBand(evalResult.band);
         setAttemptNumber((n) => n + 1);
-
-        // Save to progress (tags are empty here — populated from sentence analysis elsewhere)
         saveWordAttempt(word.word, evalResult.band, []);
       },
-      onError: () => {
-        setIsRecording(false);
-      },
+      onError: () => { setIsRecording(false); },
     });
   }, [isRecording, word, previousBand, attemptNumber]);
 
   const config = result ? BAND_CONFIG[result.band] : null;
 
   return (
-    <div className="bg-white p-5 min-h-[calc(100vh-72px)]">
-      <button
-        onClick={onBack}
-        className="text-sm text-slate-400 hover:text-slate-600 mb-4"
-      >
+    <div style={{ background: 'var(--bg)', flex: 1, padding: '1.25rem', display: 'flex', flexDirection: 'column' }}>
+      <button onClick={onBack} className="touch-manipulation" style={{
+        fontSize: '0.75rem', color: 'var(--text-dim)', background: 'none', border: 'none',
+        cursor: 'pointer', marginBottom: '1.5rem', padding: 0,
+      }}>
         &larr; Back to sentence
       </button>
 
-      <div className="text-center mb-6">
-        <h2 className="text-3xl font-bold text-slate-800 mb-2">{word.word}</h2>
-        <span className="text-indigo-600 font-mono text-sm bg-indigo-50 px-3 py-1 rounded-full">
+      <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.5rem' }}>
+          {word.word}
+        </h2>
+        <span style={{ fontFamily: 'monospace', fontSize: '0.9rem', color: 'var(--accent)', background: 'var(--accent-soft)', padding: '0.3rem 0.75rem', borderRadius: '2rem', border: '1px solid rgba(232,185,49,0.2)' }}>
           {word.ipa}
         </span>
-        <p className="text-sm text-slate-500 mt-3">{word.tip}</p>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.75rem', lineHeight: 1.5 }}>{word.tip}</p>
       </div>
 
-      <MicButton
-        isRecording={isRecording}
-        onToggle={handleToggle}
-        disabled={isEvaluating}
-      />
+      <MicButton isRecording={isRecording} onToggle={handleToggle} disabled={isEvaluating} />
 
       {isEvaluating && (
-        <div className="text-center">
-          <p className="text-sm text-slate-400">Evaluating...</p>
-        </div>
+        <p style={{ textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-dim)' }}>Evaluating...</p>
       )}
 
       {result && config && (
-        <div className={`mt-4 p-4 rounded-xl border ${config.bgClass}`}>
-          <div className="flex items-center gap-2 mb-2">
-            <span
-              className={`text-xs font-semibold px-2 py-0.5 rounded-full ${config.badgeClass}`}
-            >
+        <div className="animate-fade-in" style={{
+          marginTop: '0.75rem', padding: '1rem', borderRadius: '0.75rem',
+          background: config.bg, border: `1px solid ${config.border}`,
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+            <span style={{ fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '0.3rem', background: config.bg, color: config.color, border: `1px solid ${config.border}` }}>
               {config.label}
             </span>
-            <span className="text-xs text-slate-400">
-              Attempt {attemptNumber - 1}
-            </span>
+            <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>Attempt {attemptNumber - 1}</span>
           </div>
-          <p className={`text-sm ${config.textClass}`}>{result.feedback}</p>
+          <p style={{ fontSize: '0.8rem', color: 'var(--text)' }}>{result.feedback}</p>
         </div>
       )}
 
       {result && (
-        <div className="flex gap-3 mt-4">
+        <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
           {result.keepGoing && (
-            <button
-              onClick={handleToggle}
-              className="flex-1 py-3 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white font-medium text-sm"
-            >
+            <button onClick={handleToggle} className="touch-manipulation" style={{
+              flex: 1, padding: '0.75rem', borderRadius: '0.6rem', border: 'none',
+              background: 'linear-gradient(135deg, var(--accent), #d4a020)',
+              color: '#0a0a0f', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+            }}>
               Try again
             </button>
           )}
-          <button
-            onClick={onNextSentence}
-            className={`${result.keepGoing ? "flex-1" : "w-full"} py-3 rounded-xl border-2 border-indigo-200 text-indigo-600 font-medium text-sm hover:bg-indigo-50`}
-          >
+          <button onClick={onNextSentence} className="touch-manipulation" style={{
+            flex: result.keepGoing ? 1 : undefined, width: result.keepGoing ? undefined : '100%',
+            padding: '0.75rem', borderRadius: '0.6rem',
+            border: '1px solid var(--border)', background: 'var(--surface-raised)',
+            color: 'var(--text)', fontWeight: 600, fontSize: '0.85rem', cursor: 'pointer',
+          }}>
             Next sentence
           </button>
         </div>

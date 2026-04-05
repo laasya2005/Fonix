@@ -205,28 +205,25 @@ export default function Home() {
   return (
     <>
       {/* Progress bar */}
-      <div className="px-4 py-3 bg-white border-b border-slate-100">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[11px] font-medium text-slate-500">
+      <div style={{ padding: '0.65rem 1rem', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+          <span style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--text-dim)' }}>
             {currentNum} / {totalSentences}
           </span>
           <button
             onClick={() => setState("progress")}
-            className="text-[11px] font-medium text-indigo-500 hover:text-indigo-700 transition-colors"
+            style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer' }}
           >
             Progress
           </button>
         </div>
-        <div className="w-full bg-indigo-100 rounded-full h-1">
-          <div
-            className="bg-indigo-500 h-1 rounded-full transition-all duration-500"
-            style={{ width: `${(currentNum / totalSentences) * 100}%` }}
-          />
+        <div style={{ width: '100%', background: 'var(--surface-raised)', borderRadius: '1rem', height: '0.2rem' }}>
+          <div style={{ background: 'var(--accent)', height: '0.2rem', borderRadius: '1rem', transition: 'width 0.5s ease', width: `${(currentNum / totalSentences) * 100}%` }} />
         </div>
       </div>
 
       {/* Main content */}
-      <div className="bg-white p-4 pb-2 flex-1">
+      <div style={{ padding: '1.25rem', flex: 1 }}>
         <SentenceDisplay
           sentence={sentence}
           onChangeModule={handleChangeModule}
@@ -259,10 +256,10 @@ export default function Home() {
       </div>
 
       {/* Skip */}
-      <div className="bg-white pb-4 pt-1 text-center">
+      <div style={{ paddingBottom: '1rem', paddingTop: '0.25rem', textAlign: 'center' }}>
         <button
           onClick={handleNextSentence}
-          className="text-[11px] text-slate-400 hover:text-slate-600 transition-colors"
+          style={{ fontSize: '0.7rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}
         >
           Skip this sentence
         </button>

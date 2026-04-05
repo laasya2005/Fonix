@@ -22,9 +22,11 @@ export function TranscriptView({
 }: TranscriptViewProps) {
   if (isRecording) {
     return (
-      <div className="border-t border-slate-100 pt-4">
-        <p className="text-xs text-slate-400 mb-2">You&apos;re saying:</p>
-        <p className="text-base text-slate-600 italic min-h-[2rem]">
+      <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', marginTop: '0.5rem' }}>
+        <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.4rem', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+          Listening...
+        </p>
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', minHeight: '1.5rem' }}>
           {interimText || "..."}
         </p>
       </div>
@@ -33,13 +35,23 @@ export function TranscriptView({
 
   if (isAnalyzing) {
     return (
-      <div className="border-t border-slate-100 pt-4">
-        <p className="text-xs text-slate-400 mb-2">Analyzing...</p>
-        <div className="flex gap-1">
-          <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" />
-          <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.1s]" />
-          <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.2s]" />
+      <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', marginTop: '0.5rem' }}>
+        <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+          Analyzing your pronunciation...
+        </p>
+        <div style={{ display: 'flex', gap: '0.3rem' }}>
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              style={{
+                width: '0.4rem', height: '0.4rem', borderRadius: '50%',
+                background: 'var(--accent)',
+                animation: `bounce 0.6s ${i * 0.15}s infinite alternate`,
+              }}
+            />
+          ))}
         </div>
+        <style>{`@keyframes bounce { to { transform: translateY(-6px); opacity: 0.3; } }`}</style>
       </div>
     );
   }
@@ -54,33 +66,47 @@ export function TranscriptView({
   }
 
   return (
-    <div className="border-t border-slate-100 pt-4">
-      <p className="text-xs text-slate-400 mb-2">Your attempt:</p>
-      <p className="text-base leading-loose">
+    <div style={{ borderTop: '1px solid var(--border)', paddingTop: '1rem', marginTop: '0.5rem' }}>
+      <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+        Your pronunciation
+      </p>
+      <p style={{ fontSize: '0.95rem', lineHeight: 2 }}>
         {tokens.map((token, i) => {
           const analyzed = wordMap.get(i);
           if (!analyzed) {
             return (
-              <span key={i} className="text-slate-800">
+              <span key={i} style={{ color: 'var(--text-muted)' }}>
                 {token}{" "}
               </span>
             );
           }
 
-          const isNeedsPractice = analyzed.status === Band.NEEDS_PRACTICE;
-          const colorClass = isNeedsPractice
-            ? "bg-rose-100 text-rose-700 hover:bg-rose-200"
-            : "bg-amber-50 text-amber-700 hover:bg-amber-100";
+          const needsPractice = analyzed.status === Band.NEEDS_PRACTICE;
 
           return (
             <button
               key={i}
               onClick={() => onWordClick(analyzed)}
-              className={`${colorClass} px-1.5 py-0.5 rounded-md cursor-pointer transition-colors text-base font-medium inline-flex items-center gap-1`}
+              className="touch-manipulation"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+                padding: '0.2rem 0.5rem',
+                borderRadius: '0.4rem',
+                border: `1px solid ${needsPractice ? 'var(--warn)' : 'var(--accent)'}`,
+                background: needsPractice ? 'var(--warn-soft)' : 'var(--accent-soft)',
+                color: needsPractice ? 'var(--warn)' : 'var(--accent)',
+                fontSize: '0.95rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                marginRight: '0.25rem',
+              }}
             >
               {token}
-              <span className="text-[10px] opacity-60">
-                {isNeedsPractice ? "Practice" : "Review"}
+              <span style={{ fontSize: '0.55rem', opacity: 0.7 }}>
+                {needsPractice ? "fix" : "review"}
               </span>
             </button>
           );

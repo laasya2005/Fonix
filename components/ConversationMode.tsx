@@ -179,59 +179,52 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
   return (
     <>
       {/* Header */}
-      <div className="px-4 py-3 bg-white border-b border-slate-100">
-        <div className="flex items-center justify-between mb-1.5">
-          <button
-            onClick={onBack}
-            className="text-[11px] font-medium text-slate-400 hover:text-slate-600 transition-colors"
-          >
+      <div style={{ padding: '0.65rem 1rem', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+          <button onClick={onBack} style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}>
             &larr; Modules
           </button>
-          <span className="text-[11px] font-medium text-slate-500">
+          <span style={{ fontSize: '0.65rem', fontWeight: 600, color: 'var(--text-dim)' }}>
             {currentNum} / {totalConvos}
           </span>
         </div>
-        <div className="w-full bg-indigo-100 rounded-full h-1">
-          <div
-            className="bg-indigo-500 h-1 rounded-full transition-all duration-500"
-            style={{ width: `${(currentNum / totalConvos) * 100}%` }}
-          />
+        <div style={{ width: '100%', background: 'var(--surface-raised)', borderRadius: '1rem', height: '0.2rem' }}>
+          <div style={{ background: 'var(--accent)', height: '0.2rem', borderRadius: '1rem', transition: 'width 0.5s ease', width: `${(currentNum / totalConvos) * 100}%` }} />
         </div>
       </div>
 
-      <div className="bg-white p-4 flex-1">
+      <div style={{ padding: '1.25rem', flex: 1 }}>
         {/* Scenario */}
-        <div className="flex items-center gap-2 mb-4">
-          <span className="text-xs font-medium uppercase tracking-wide text-indigo-500 bg-indigo-50 px-2.5 py-1 rounded-full">
-            💬 Conversation
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+          <span style={{ fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent)', background: 'var(--accent-soft)', padding: '0.25rem 0.6rem', borderRadius: '0.3rem', border: '1px solid rgba(232,185,49,0.2)' }}>
+            Conversation
           </span>
-          <span className="text-xs text-slate-400">{convo.level}</span>
+          <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>{convo.level}</span>
         </div>
-        <p className="text-sm text-slate-500 mb-5">{convo.scenario}</p>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '1.25rem', fontStyle: 'italic' }}>{convo.scenario}</p>
 
         {/* Coworker's line */}
         {coworkerLine && (
-          <div className="flex gap-3 mb-5">
-            <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-base shrink-0">
-              🧑‍💼
+          <div style={{ display: 'flex', gap: '0.65rem', marginBottom: '1.25rem' }}>
+            <div style={{ width: '2rem', height: '2rem', borderRadius: '50%', background: 'var(--surface-raised)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', flexShrink: 0 }}>
+              C
             </div>
-            <div className="flex-1">
-              <p className="text-[10px] uppercase tracking-wide text-slate-400 mb-1 font-semibold">
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.3rem' }}>
                 Coworker
               </p>
-              <div className="bg-slate-50 rounded-xl rounded-tl-sm p-3 border border-slate-100">
-                <p className="text-sm text-slate-700 leading-relaxed">
+              <div style={{ background: 'var(--surface)', borderRadius: '0.65rem', borderTopLeftRadius: '0.15rem', padding: '0.75rem', border: '1px solid var(--border)' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text)', lineHeight: 1.5 }}>
                   {coworkerLine.text}
                 </p>
               </div>
               <button
                 onClick={playCoworker}
                 disabled={coworkerPlaying}
-                className="mt-1.5 text-xs text-indigo-500 hover:text-indigo-700 disabled:opacity-50 flex items-center gap-1"
+                className="touch-manipulation"
+                style={{ marginTop: '0.35rem', fontSize: '0.7rem', color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem', opacity: coworkerPlaying ? 0.5 : 1 }}
               >
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
-                </svg>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
                 {coworkerPlaying ? "Playing..." : "Listen"}
               </button>
             </div>
@@ -240,16 +233,16 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
 
         {/* User's line to practice */}
         {userLine && (
-          <div className="flex gap-3 mb-4">
-            <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-base shrink-0">
-              🎤
+          <div style={{ display: 'flex', gap: '0.65rem', marginBottom: '0.75rem' }}>
+            <div style={{ width: '2rem', height: '2rem', borderRadius: '50%', background: 'var(--accent-soft)', border: '1px solid rgba(232,185,49,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', flexShrink: 0, color: 'var(--accent)' }}>
+              Y
             </div>
-            <div className="flex-1">
-              <p className="text-[10px] uppercase tracking-wide text-indigo-400 mb-1 font-semibold">
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent)', fontWeight: 600, marginBottom: '0.3rem' }}>
                 Your turn — say this
               </p>
-              <div className="bg-indigo-50 rounded-xl rounded-tl-sm p-3 border border-indigo-100">
-                <p className="text-sm text-indigo-800 leading-relaxed font-medium">
+              <div style={{ background: 'var(--accent-soft)', borderRadius: '0.65rem', borderTopLeftRadius: '0.15rem', padding: '0.75rem', border: '1px solid rgba(232,185,49,0.2)' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--accent)', lineHeight: 1.5, fontWeight: 500, fontStyle: 'italic' }}>
                   &ldquo;{userLine.text}&rdquo;
                 </p>
               </div>
@@ -276,31 +269,34 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
 
         {/* Results */}
         {state === "results" && (
-          <div className="mt-4 space-y-3">
+          <div className="animate-fade-in" style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
             {allCorrect ? (
-              <div className="p-4 bg-indigo-50 rounded-xl text-center">
-                <p className="text-indigo-800 font-semibold mb-1">
-                  Perfect! That sounded natural.
+              <div style={{ padding: '1rem', background: 'var(--success-soft)', borderRadius: '0.75rem', border: '1px solid rgba(52,211,153,0.2)', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--success)', marginBottom: '0.15rem' }}>
+                  Natural sounding!
                 </p>
-                <p className="text-sm text-indigo-600">
-                  Great conversational pronunciation!
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  Great conversational pronunciation.
                 </p>
               </div>
             ) : (
               <>
-                <div className="p-3 bg-indigo-50 rounded-xl">
-                  <p className="text-sm text-indigo-700">{encouragement}</p>
-                </div>
+                {encouragement && (
+                  <div style={{ padding: '0.75rem', background: 'var(--purple-soft)', borderRadius: '0.6rem', border: '1px solid rgba(124,92,252,0.15)' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--purple)' }}>{encouragement}</p>
+                  </div>
+                )}
                 {summary && (
-                  <div className="p-3 bg-amber-50 rounded-xl">
-                    <p className="text-sm text-amber-800">{summary}</p>
+                  <div style={{ padding: '0.75rem', background: 'var(--warn-soft)', borderRadius: '0.6rem', border: '1px solid rgba(251,146,60,0.15)' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--warn)' }}>{summary}</p>
                   </div>
                 )}
               </>
             )}
             <button
               onClick={handleNext}
-              className="w-full py-3 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white font-medium text-sm"
+              className="touch-manipulation"
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '0.6rem', border: 'none', background: 'linear-gradient(135deg, var(--accent), #d4a020)', color: '#0a0a0f', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}
             >
               Next conversation
             </button>
@@ -309,10 +305,10 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
       </div>
 
       {/* Skip */}
-      <div className="bg-white pb-4 pt-1 text-center">
+      <div style={{ paddingBottom: '1rem', paddingTop: '0.25rem', textAlign: 'center' }}>
         <button
           onClick={handleNext}
-          className="text-[11px] text-slate-400 hover:text-slate-600 transition-colors"
+          style={{ fontSize: '0.7rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}
         >
           Skip this conversation
         </button>

@@ -28,48 +28,43 @@ export function ProgressDashboard({ onClose }: ProgressDashboardProps) {
       tagCounts[tag] = (tagCounts[tag] || 0) + 1;
     }
   }
-  const topTags = Object.entries(tagCounts)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 3);
+  const topTags = Object.entries(tagCounts).sort(([, a], [, b]) => b - a).slice(0, 3);
 
   return (
-    <div className="bg-white p-5 min-h-[calc(100vh-72px)]">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-slate-800">Your Progress</h2>
-        <button
-          onClick={onClose}
-          className="text-sm text-slate-400 hover:text-slate-600"
-        >
-          Close
-        </button>
+    <div style={{ background: 'var(--bg)', flex: 1, padding: '1.25rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.25rem', fontWeight: 700, color: 'var(--text)' }}>Your Progress</h2>
+        <button onClick={onClose} className="touch-manipulation" style={{
+          fontSize: '0.75rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer',
+        }}>Close</button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        <div className="bg-indigo-50 rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-indigo-700">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', marginBottom: '1.25rem' }}>
+        <div style={{ background: 'var(--surface)', borderRadius: '0.75rem', padding: '1rem', textAlign: 'center', border: '1px solid var(--border)' }}>
+          <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 700, color: 'var(--accent)' }}>
             {progress.sentencesCompleted.length}
           </p>
-          <p className="text-xs text-indigo-500">Sentences</p>
+          <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Sentences</p>
         </div>
-        <div className="bg-indigo-50 rounded-xl p-3 text-center">
-          <p className="text-2xl font-bold text-indigo-700">
+        <div style={{ background: 'var(--surface)', borderRadius: '0.75rem', padding: '1rem', textAlign: 'center', border: '1px solid var(--border)' }}>
+          <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 700, color: 'var(--accent)' }}>
             {Object.keys(progress.wordsAttempted).length}
           </p>
-          <p className="text-xs text-indigo-500">Words practiced</p>
+          <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Words practiced</p>
         </div>
       </div>
 
       {topTags.length > 0 && (
-        <div className="mb-6">
-          <h3 className="text-sm font-semibold text-slate-600 mb-2">
+        <div style={{ marginBottom: '1.25rem' }}>
+          <h3 style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
             Areas to improve
           </h3>
-          <div className="flex flex-wrap gap-2">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
             {topTags.map(([tag, count]) => (
-              <span
-                key={tag}
-                className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full"
-              >
+              <span key={tag} style={{
+                fontSize: '0.7rem', background: 'var(--warn-soft)', color: 'var(--warn)',
+                padding: '0.25rem 0.6rem', borderRadius: '2rem', border: '1px solid rgba(251,146,60,0.15)',
+              }}>
                 {TAG_LABELS[tag] || tag} ({count})
               </span>
             ))}
@@ -79,32 +74,25 @@ export function ProgressDashboard({ onClose }: ProgressDashboardProps) {
 
       {struggled.length > 0 && (
         <div>
-          <h3 className="text-sm font-semibold text-slate-600 mb-2">
+          <h3 style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
             Words to practice
           </h3>
-          <div className="space-y-2">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
             {struggled.slice(0, 8).map((w) => (
-              <div
-                key={w.word}
-                className="flex items-center justify-between py-1"
-              >
-                <span className="text-sm font-medium text-slate-700">
-                  {w.word}
-                </span>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-400">
-                    {w.attempts} attempts
-                  </span>
-                  <span
-                    className={`text-xs px-2 py-0.5 rounded-full ${
-                      w.band === Band.NEEDS_PRACTICE
-                        ? "bg-rose-100 text-rose-700"
-                        : "bg-amber-100 text-amber-700"
-                    }`}
-                  >
-                    {w.band === Band.NEEDS_PRACTICE
-                      ? "Needs practice"
-                      : "Improving"}
+              <div key={w.word} style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '0.6rem 0.75rem', background: 'var(--surface)', borderRadius: '0.5rem',
+                border: '1px solid var(--border)',
+              }}>
+                <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)' }}>{w.word}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>{w.attempts}x</span>
+                  <span style={{
+                    fontSize: '0.6rem', fontWeight: 600, padding: '0.15rem 0.4rem', borderRadius: '0.25rem',
+                    background: w.band === Band.NEEDS_PRACTICE ? 'var(--warn-soft)' : 'var(--accent-soft)',
+                    color: w.band === Band.NEEDS_PRACTICE ? 'var(--warn)' : 'var(--accent)',
+                  }}>
+                    {w.band === Band.NEEDS_PRACTICE ? "Practice" : "Improving"}
                   </span>
                 </div>
               </div>
@@ -114,8 +102,8 @@ export function ProgressDashboard({ onClose }: ProgressDashboardProps) {
       )}
 
       {struggled.length === 0 && (
-        <p className="text-sm text-slate-400 text-center py-4">
-          No data yet. Complete some sentences to see your progress!
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', textAlign: 'center', padding: '2rem 0' }}>
+          No data yet. Complete some sentences to see your progress.
         </p>
       )}
     </div>
