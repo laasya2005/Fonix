@@ -9,7 +9,7 @@ type Mode = "menu" | "shadowing" | "drill-select" | "drill";
 type PracticeState = "ready" | "playing-model" | "recording" | "comparing" | "feedback";
 
 interface AccentFeedback {
-  focus: string;
+  verdict: "pass" | "close" | "needs_work";
   feedback: string;
   example: string;
 }
@@ -181,18 +181,27 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
         formData.append("audio", result.blob, "recording.webm");
       }
 
+      let feedbackResult: AccentFeedback = { verdict: "close", feedback: "Try to match the American pronunciation.", example: "" };
       try {
         const res = await fetch("/api/accent-feedback", {
           method: "POST",
           body: formData,
         });
-        const data = await res.json();
-        setAccentFeedback(data);
+        feedbackResult = await res.json();
       } catch {
-        setAccentFeedback({ focus: "general", feedback: "Try to match the American pronunciation.", example: "" });
+        // use default
       }
+      setAccentFeedback(feedbackResult);
       setLoadingFeedback(false);
-      awardXP(10, { sentenceCompleted: true });
+
+      // Award XP based on verdict
+      if (feedbackResult.verdict === "pass") {
+        awardXP(25, { sentenceCompleted: true, perfectScore: true });
+      } else if (feedbackResult.verdict === "close") {
+        awardXP(10, { sentenceCompleted: true });
+      } else {
+        awardXP(5, { sentenceCompleted: true });
+      }
       return;
     }
 
@@ -490,35 +499,52 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
           </div>
         )}
 
-        {/* Step 4: AI Accent Feedback */}
+        {/* Step 4: Verdict */}
         {loadingFeedback && (
           <div className="animate-fade-in" style={{
             background: 'var(--surface-raised)', borderRadius: '0.75rem',
             padding: '0.75rem', textAlign: 'center', marginBottom: '0.5rem',
           }}>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Analyzing your accent...</p>
+            <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Checking your pronunciation...</p>
           </div>
         )}
 
-        {accentFeedback && (
-          <div className="animate-fade-in" style={{
-            background: 'var(--surface)', borderRadius: '0.85rem',
-            border: '1px solid var(--border)', padding: '0.85rem',
-            marginBottom: '0.5rem',
-          }}>
-            <p style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.35rem' }}>
-              Accent tip
-            </p>
-            <p style={{ fontSize: '0.78rem', color: 'var(--text)', lineHeight: 1.5, marginBottom: '0.3rem' }}>
-              {accentFeedback.feedback}
-            </p>
-            {accentFeedback.example && (
-              <p style={{ fontSize: '0.72rem', color: 'var(--accent)', fontWeight: 600 }}>
-                {accentFeedback.example}
+        {accentFeedback && (() => {
+          const v = accentFeedback.verdict;
+          const verdictConfig = {
+            pass: { label: "Good", color: 'var(--success)', bg: 'var(--success-soft)', border: 'rgba(16,185,129,0.15)' },
+            close: { label: "Almost", color: 'var(--warn)', bg: 'var(--warn-soft)', border: 'rgba(245,158,11,0.15)' },
+            needs_work: { label: "Try again", color: 'var(--error)', bg: 'var(--error-soft)', border: 'rgba(239,68,68,0.15)' },
+          };
+          const cfg = verdictConfig[v] || verdictConfig.close;
+
+          return (
+            <div className="animate-fade-in" style={{
+              background: cfg.bg, borderRadius: '0.85rem',
+              border: `1px solid ${cfg.border}`, padding: '0.85rem',
+              marginBottom: '0.5rem',
+            }}>
+              {/* Verdict label */}
+              <p style={{
+                fontSize: '0.88rem', fontWeight: 700, color: cfg.color, marginBottom: '0.3rem',
+              }}>
+                {cfg.label}
               </p>
-            )}
-          </div>
-        )}
+
+              {/* Feedback */}
+              <p style={{ fontSize: '0.75rem', color: 'var(--text)', lineHeight: 1.5, marginBottom: accentFeedback.example ? '0.3rem' : 0 }}>
+                {accentFeedback.feedback}
+              </p>
+
+              {/* Example — only for close/needs_work */}
+              {accentFeedback.example && (
+                <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600, fontStyle: 'italic' }}>
+                  {accentFeedback.example}
+                </p>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Action buttons */}
         {(practiceState === "comparing" || accentFeedback) && (

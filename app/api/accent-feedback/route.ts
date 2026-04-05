@@ -10,8 +10,6 @@ export async function POST(request: NextRequest) {
 
   const openai = getOpenAIClient();
 
-  // Step 1: Use Whisper to get phonetic-level transcription
-  // (Used as a TOOL for accent analysis, not as the primary feature)
   let heardText = targetWord || targetSentence;
   if (audioFile && audioFile.size > 0) {
     try {
@@ -19,16 +17,14 @@ export async function POST(request: NextRequest) {
         model: "whisper-1",
         file: audioFile,
         language: "en",
-        // Prompt Whisper to capture pronunciation variants
         prompt: `Non-native speaker attempting American English pronunciation of: "${targetWord || targetSentence}". Transcribe exactly what you hear, including mispronunciations.`,
       });
       heardText = whisperResponse.text.trim();
     } catch {
-      // Whisper unavailable — provide generic feedback
+      // Whisper unavailable
     }
   }
 
-  // Step 2: GPT analyzes accent differences (NOT grammar)
   const isWord = !!targetWord;
   const target = targetWord || targetSentence;
 
@@ -37,30 +33,32 @@ export async function POST(request: NextRequest) {
 Whisper heard: "${heardText}"
 ${tip ? `Known focus area: ${tip}` : ""}
 
-YOUR TASK — ACCENT ONLY, NOT GRAMMAR:
-1. Identify exactly 1 specific pronunciation issue (the most important one)
-2. Focus ONLY on how they SOUND, not what words they used
-3. Prioritize these American English features:
-   - Flap T: "water" should sound like "wah-der" not "wah-ter"
-   - TH sound: tongue between teeth, not substituting T/D
-   - American R: tongue curls back, doesn't tap roof
-   - V vs W: V = teeth on lip, W = rounded lips
-   - Vowel sounds: American vowels differ from British/Indian
-   - Word stress: which syllable gets emphasis
-   - Rhythm and linking: how words blend together
+YOUR TASK — give a clear VERDICT on their pronunciation:
 
-4. Give feedback as if speaking directly to the person:
-   - Be specific about mouth/tongue position
-   - Use "say it like..." examples
-   - Keep it to 1-2 short sentences max
+1. First, decide: did they pronounce it with a good American accent?
+   - "pass" = sounds American enough, good job
+   - "close" = almost there, one small thing to fix
+   - "needs_work" = clearly non-American pronunciation, specific issue to fix
 
-${isWord ? "This is a single word drill — focus on the exact sound." : "This is a sentence — focus on the most important sound issue."}
+2. If "pass": give a short encouragement ("Great American R sound!" or "Perfect TH!")
+3. If "close" or "needs_work": identify exactly 1 issue and give a specific fix
+
+Focus ONLY on accent/pronunciation features:
+- Flap T: "water" = "wah-der" not "wah-ter"
+- TH sound: tongue between teeth
+- American R: tongue curls back
+- V vs W: V = teeth on lip, W = rounded lips
+- Vowel sounds
+- Word stress
+- Connected speech
+
+${isWord ? "This is a single word — judge the specific sound strictly." : "This is a sentence — judge overall American accent quality."}
 
 Respond in JSON:
 {
-  "focus": "th_sound|flap_t|v_w|r_sound|stress|vowel|linking",
-  "feedback": "Your specific coaching tip (1-2 sentences)",
-  "example": "Say it like: ___"
+  "verdict": "pass|close|needs_work",
+  "feedback": "1 sentence — what was good or what to fix",
+  "example": "Say it like: ___  (only if close or needs_work, empty string if pass)"
 }`;
 
   const completion = await openai.chat.completions.create({
@@ -68,14 +66,14 @@ Respond in JSON:
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },
     temperature: 0.3,
-    max_tokens: 150,
+    max_tokens: 120,
   });
 
   const content = completion.choices[0]?.message?.content;
   if (!content) {
     return NextResponse.json({
-      focus: "general",
-      feedback: "Try to match the American pronunciation as closely as you can.",
+      verdict: "close",
+      feedback: "Try to match the American pronunciation more closely.",
       example: "",
     });
   }
