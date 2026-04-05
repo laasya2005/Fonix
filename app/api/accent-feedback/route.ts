@@ -24,13 +24,16 @@ export async function POST(request: NextRequest) {
   const speechKey = process.env.AZURE_SPEECH_KEY;
   const speechRegion = process.env.AZURE_SPEECH_REGION || "eastus";
 
-  if (!speechKey || !audioFile || audioFile.size === 0) {
-    const catTip = SOUND_TIPS[soundCategory || ""] || "Listen to both recordings and compare.";
-    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: catTip, example: "" });
+  if (!speechKey) {
+    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "Azure Speech key not configured.", example: "" });
+  }
+  if (!audioFile || audioFile.size === 0) {
+    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "No audio received. Try recording again.", example: "" });
   }
 
   try {
     const audioBuffer = await audioFile.arrayBuffer();
+    console.log(`Audio received: ${audioBuffer.byteLength} bytes, type: ${audioFile.type}, target: "${target}"`);
 
     // Azure Pronunciation Assessment via REST API (no SDK needed)
     const pronAssessmentParams = {
@@ -60,11 +63,11 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const errText = await response.text();
       console.error("Azure Speech error:", response.status, errText);
-      const catTip = SOUND_TIPS[soundCategory || ""] || "Listen to both recordings and compare.";
-      return NextResponse.json({ verdict: "compare", overallScore: null, feedback: catTip, example: `Azure error: ${response.status}` });
+      return NextResponse.json({ verdict: "compare", overallScore: null, feedback: `Azure error ${response.status}: ${errText.slice(0, 150)}`, example: "" });
     }
 
     const result = await response.json();
+    console.log("Azure result:", JSON.stringify(result).slice(0, 500));
 
     if (result.RecognitionStatus !== "Success") {
       return NextResponse.json({
@@ -143,7 +146,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error("Accent feedback error:", err);
-    const catTip = SOUND_TIPS[soundCategory || ""] || "Listen to both recordings and compare.";
-    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: catTip, example: "" });
+    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: `Error: ${String(err).slice(0, 200)}`, example: "" });
   }
 }
