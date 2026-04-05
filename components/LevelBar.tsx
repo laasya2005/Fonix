@@ -10,8 +10,8 @@ interface LevelBarProps {
 export function LevelBar({ xp, level }: LevelBarProps) {
   const currentLevel = LEVELS.find((l) => l.level === level) || LEVELS[0];
   const nextLevel = LEVELS.find((l) => l.level === level + 1);
-  const xpInLevel = xp - currentLevel.xpRequired;
-  const xpForNext = nextLevel ? nextLevel.xpRequired - currentLevel.xpRequired : 0;
+  const xpInLevel = xp - currentLevel.minXP;
+  const xpForNext = nextLevel ? nextLevel.minXP - currentLevel.minXP : 0;
   const pct = nextLevel ? Math.min((xpInLevel / xpForNext) * 100, 100) : 100;
 
   return (
@@ -29,7 +29,7 @@ export function LevelBar({ xp, level }: LevelBarProps) {
           </span>
         </div>
         <span style={{ fontSize: '0.6rem', color: 'var(--text-dim)', fontWeight: 500 }}>
-          {xp} XP {nextLevel ? `/ ${nextLevel.xpRequired}` : ""}
+          {xp} XP {nextLevel ? `/ ${nextLevel.minXP}` : ""}
         </span>
       </div>
       <div style={{ width: '100%', height: '0.35rem', borderRadius: '1rem', background: 'var(--surface-raised)', overflow: 'hidden' }}>
@@ -40,7 +40,7 @@ export function LevelBar({ xp, level }: LevelBarProps) {
       </div>
       {nextLevel && (
         <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)', marginTop: '0.3rem' }}>
-          {nextLevel.xpRequired - xp} XP to {nextLevel.name}
+          {nextLevel.minXP - xp} XP to {nextLevel.name}
         </p>
       )}
     </div>
