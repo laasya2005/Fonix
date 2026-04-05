@@ -18,6 +18,7 @@ import { AICoach } from "@/components/AICoach";
 import { PronunciationTrainer } from "@/components/PronunciationTrainer";
 import { BadgePopup } from "@/components/BadgePopup";
 import { LevelUpPopup } from "@/components/LevelUpPopup";
+import { AuthGate } from "@/components/AuthGate";
 
 type AppState =
   | "module-select"
@@ -37,7 +38,7 @@ const allSentences = (sentencesData.sentences as Sentence[]).sort(
   (a, b) => (LEVEL_ORDER[a.level] ?? 0) - (LEVEL_ORDER[b.level] ?? 0) || a.difficulty - b.difficulty
 );
 
-export default function Home() {
+function AppContent() {
   const [state, setState] = useState<AppState>("module-select");
   const [selectedModule, setSelectedModule] = useState<Category | null>(null);
   const [sentenceIndex, setSentenceIndex] = useState(0);
@@ -369,5 +370,13 @@ export default function Home() {
       {/* Level up popup */}
       {levelUpPopup && <LevelUpPopup newLevel={levelUpPopup} onClose={() => setLevelUpPopup(null)} />}
     </>
+  );
+}
+
+export default function Home() {
+  return (
+    <AuthGate>
+      {() => <AppContent />}
+    </AuthGate>
   );
 }
