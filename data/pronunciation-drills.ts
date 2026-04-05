@@ -8,6 +8,7 @@ export interface SoundCategory {
   id: string;
   name: string;
   description: string;
+  minLevel: number;
   words: DrillWord[];
 }
 
@@ -15,6 +16,7 @@ export interface ShadowingSentence {
   text: string;
   focus: string[];
   tip: string;
+  minLevel: number;
 }
 
 export const SOUND_CATEGORIES: SoundCategory[] = [
@@ -22,6 +24,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "th_sound",
     name: "TH Sound",
     description: "Tongue between teeth — voiced and voiceless",
+    minLevel: 1,
     words: [
       { text: "think", phonetic: "/θɪŋk/", tip: "Tongue between teeth, blow air — not 'tink'" },
       { text: "this", phonetic: "/ðɪs/", tip: "Same position but vibrate your throat" },
@@ -41,6 +44,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "flap_t",
     name: "Flap T",
     description: "Americans turn T into a soft D between vowels",
+    minLevel: 1,
     words: [
       { text: "water", phonetic: "/ˈwɑːɾɚ/", tip: "Say 'wah-der' — T becomes a quick D tap" },
       { text: "better", phonetic: "/ˈbeɾɚ/", tip: "Say 'beh-der' — soft, quick tongue tap" },
@@ -60,6 +64,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "v_w",
     name: "V vs W",
     description: "V = teeth on lip, W = rounded lips",
+    minLevel: 1,
     words: [
       { text: "vine", phonetic: "/vaɪn/", tip: "Upper teeth touch lower lip, then release" },
       { text: "wine", phonetic: "/waɪn/", tip: "Round lips like blowing a candle — no teeth" },
@@ -79,6 +84,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "r_sound",
     name: "R Sound",
     description: "American R — tongue curls back, never taps",
+    minLevel: 2,
     words: [
       { text: "car", phonetic: "/kɑːr/", tip: "Curl tongue tip back, don't tap the roof" },
       { text: "work", phonetic: "/wɜːrk/", tip: "Tongue pulls back and bunches up" },
@@ -98,6 +104,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "l_sound",
     name: "L Sound",
     description: "Light L vs Dark L — tongue tip touches ridge",
+    minLevel: 2,
     words: [
       { text: "light", phonetic: "/laɪt/", tip: "Tongue tip touches the ridge behind upper teeth" },
       { text: "full", phonetic: "/fʊl/", tip: "Dark L — tongue tip up, back of tongue raised" },
@@ -117,6 +124,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "stress",
     name: "Word Stress",
     description: "Which syllable gets the emphasis",
+    minLevel: 3,
     words: [
       { text: "develop", phonetic: "/dɪˈvɛləp/", tip: "de-VEL-op — stress on the second syllable" },
       { text: "comfortable", phonetic: "/ˈkʌmftɚbəl/", tip: "COMF-ter-bul — 3 syllables, not 4" },
@@ -136,6 +144,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "vowels",
     name: "Vowel Sounds",
     description: "American vowels differ from other accents",
+    minLevel: 2,
     words: [
       { text: "hot", phonetic: "/hɑːt/", tip: "American: open 'ah' sound — not British 'o'" },
       { text: "cat", phonetic: "/kæt/", tip: "Wide open mouth — 'æ' sound, not 'eh'" },
@@ -155,6 +164,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "connected",
     name: "Connected Speech",
     description: "How words blend together in natural American English",
+    minLevel: 4,
     words: [
       { text: "got it", phonetic: "/ˈɡɑːɾɪt/", tip: "Blends into 'gah-dit' — one smooth sound" },
       { text: "want to", phonetic: "/ˈwɑːnə/", tip: "Say 'wanna' — T disappears completely" },
@@ -174,6 +184,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "final_consonants",
     name: "Final Consonants",
     description: "Don't drop the ending sounds",
+    minLevel: 3,
     words: [
       { text: "helped", phonetic: "/hɛlpt/", tip: "Say the final 'pt' — don't drop the T" },
       { text: "asked", phonetic: "/æskt/", tip: "Three consonants at the end: S-K-T" },
@@ -193,6 +204,7 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     id: "schwa",
     name: "Schwa Sound",
     description: "The most common vowel in English — the lazy 'uh'",
+    minLevel: 3,
     words: [
       { text: "about", phonetic: "/əˈbaʊt/", tip: "First syllable: lazy 'uh' not 'ay'" },
       { text: "banana", phonetic: "/bəˈnænə/", tip: "Three schwas — buh-NAN-uh" },
@@ -211,22 +223,26 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
 ];
 
 export const SHADOWING_SENTENCES: ShadowingSentence[] = [
-  { text: "I got it", focus: ["flap_t", "connected"], tip: "'Got it' blends into 'gah-dit' — the T is soft" },
-  { text: "Better late than never", focus: ["flap_t", "th_sound"], tip: "'Better' is 'beh-der', 'than' needs tongue between teeth" },
-  { text: "Can I get a glass of water", focus: ["flap_t", "connected"], tip: "'Water' is 'wah-der', 'get a' becomes 'geh-duh'" },
-  { text: "I think that works", focus: ["th_sound"], tip: "Two TH sounds — tongue between teeth for both" },
-  { text: "What are you working on", focus: ["r_sound", "connected"], tip: "'What are you' blends into 'wuh-der-you'" },
-  { text: "I have three years of experience", focus: ["th_sound", "r_sound", "stress"], tip: "'Three' with TH, 'years' with American R, stress on 'exPERience'" },
-  { text: "The weather is really nice today", focus: ["th_sound", "flap_t", "r_sound"], tip: "'Weather' is 'weh-der' with TH, 'really' has American R" },
-  { text: "I visited the city last week", focus: ["v_w", "flap_t"], tip: "'Visited' starts with V (teeth on lip), 'city' is 'si-dee'" },
-  { text: "We had a very good time", focus: ["v_w"], tip: "'Very' — upper teeth touch lower lip, vibrate" },
-  { text: "Let me think about it", focus: ["th_sound", "connected"], tip: "'Let me' becomes 'lemme', 'think' with TH, 'about' starts with schwa" },
-  { text: "That was a great presentation", focus: ["th_sound", "stress"], tip: "'That' with TH, stress on 'presen-TAY-tion'" },
-  { text: "I would rather not", focus: ["r_sound", "flap_t"], tip: "'Rather' has American R + 'ra-der' soft T" },
-  { text: "Do you want to grab a coffee", focus: ["connected", "flap_t"], tip: "'Want to' becomes 'wanna', 'grab a' links together" },
-  { text: "I should have called earlier", focus: ["connected", "schwa"], tip: "'Should have' becomes 'should-uv', 'earlier' has R" },
-  { text: "Actually it is kind of difficult", focus: ["connected", "schwa", "l_sound"], tip: "'Kind of' becomes 'kinda', 'actually' — don't drop the L" },
-  { text: "We are going to need more people", focus: ["connected", "schwa"], tip: "'Going to' becomes 'gonna', 'people' ends with dark L" },
-  { text: "I worked on developing that feature", focus: ["final_consonants", "stress", "flap_t"], tip: "'Worked' — say the final KT, 'developing' — stress on VEL" },
-  { text: "Can you give me a little more time", focus: ["connected", "flap_t"], tip: "'Give me' becomes 'gimme', 'little' is 'li-dul'" },
+  // Level 1 — basic sounds
+  { text: "I think that works", focus: ["th_sound"], tip: "Two TH sounds — tongue between teeth for both", minLevel: 1 },
+  { text: "Better late than never", focus: ["flap_t", "th_sound"], tip: "'Better' is 'beh-der', 'than' needs tongue between teeth", minLevel: 1 },
+  { text: "We had a very good time", focus: ["v_w"], tip: "'Very' — upper teeth touch lower lip, vibrate", minLevel: 1 },
+  { text: "I visited the city last week", focus: ["v_w", "flap_t"], tip: "'Visited' starts with V (teeth on lip), 'city' is 'si-dee'", minLevel: 1 },
+  { text: "Can I get a glass of water", focus: ["flap_t"], tip: "'Water' is 'wah-der', 'get a' becomes 'geh-duh'", minLevel: 1 },
+  // Level 2 — R, L, vowels
+  { text: "What are you working on", focus: ["r_sound"], tip: "'Working' has the American R — tongue curls back", minLevel: 2 },
+  { text: "The weather is really nice today", focus: ["th_sound", "flap_t", "r_sound"], tip: "'Weather' is 'weh-der' with TH, 'really' has American R", minLevel: 2 },
+  { text: "I would rather not", focus: ["r_sound", "flap_t"], tip: "'Rather' has American R + 'ra-der' soft T", minLevel: 2 },
+  { text: "I have three years of experience", focus: ["th_sound", "r_sound", "stress"], tip: "'Three' with TH, 'years' with American R, stress on 'exPERience'", minLevel: 2 },
+  // Level 3 — stress, schwa, final consonants
+  { text: "That was a great presentation", focus: ["th_sound", "stress"], tip: "'That' with TH, stress on 'presen-TAY-tion'", minLevel: 3 },
+  { text: "I worked on developing that feature", focus: ["final_consonants", "stress", "flap_t"], tip: "'Worked' — say the final KT, 'developing' — stress on VEL", minLevel: 3 },
+  { text: "Let me think about it", focus: ["th_sound", "schwa"], tip: "'Think' with TH, 'about' starts with schwa 'uh'", minLevel: 3 },
+  { text: "Actually it is kind of difficult", focus: ["schwa", "l_sound"], tip: "'Actually' — don't drop the L, 'difficult' has schwa", minLevel: 3 },
+  // Level 4 — connected speech, fluency
+  { text: "I got it", focus: ["flap_t", "connected"], tip: "'Got it' blends into 'gah-dit' — one smooth sound", minLevel: 4 },
+  { text: "Do you want to grab a coffee", focus: ["connected", "flap_t"], tip: "'Want to' becomes 'wanna', 'grab a' links together", minLevel: 4 },
+  { text: "I should have called earlier", focus: ["connected", "schwa"], tip: "'Should have' becomes 'should-uv', 'earlier' has R", minLevel: 4 },
+  { text: "We are going to need more people", focus: ["connected", "schwa"], tip: "'Going to' becomes 'gonna', 'people' ends with dark L", minLevel: 4 },
+  { text: "Can you give me a little more time", focus: ["connected", "flap_t"], tip: "'Give me' becomes 'gimme', 'little' is 'li-dul'", minLevel: 4 },
 ];

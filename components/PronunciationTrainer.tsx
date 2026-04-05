@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import { startRecording, stopRecording, cancelRecording } from "@/lib/audio-recorder";
-import { awardXP } from "@/lib/gamification";
+import { awardXP, getGamificationState, LEVELS } from "@/lib/gamification";
 import { SOUND_CATEGORIES, SHADOWING_SENTENCES, type SoundCategory, type DrillWord, type ShadowingSentence } from "@/data/pronunciation-drills";
 
 type Mode = "menu" | "shadowing" | "drill-select" | "drill";
@@ -22,6 +22,16 @@ interface PronunciationTrainerProps {
 export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrainerProps) {
   const [mode, setMode] = useState<Mode>(initialMode || "menu");
   const [practiceState, setPracticeState] = useState<PracticeState>("ready");
+  const [userLevel, setUserLevel] = useState(1);
+
+  // Load user level
+  useEffect(() => {
+    setUserLevel(getGamificationState().level);
+  }, []);
+
+  // Filter content by level
+  const availableSentences = SHADOWING_SENTENCES.filter((s) => s.minLevel <= userLevel);
+  const availableCategories = SOUND_CATEGORIES; // show all, but lock ones above level
 
   // Shadowing state
   const [sentenceIndex, setSentenceIndex] = useState(0);
@@ -40,7 +50,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  const currentSentence = SHADOWING_SENTENCES[sentenceIndex % SHADOWING_SENTENCES.length];
+  const currentSentence = availableSentences[sentenceIndex % availableSentences.length];
   const currentDrillWord = selectedCategory?.words[drillIndex % (selectedCategory?.words.length || 1)];
   const currentText = mode === "shadowing" ? currentSentence.text : currentDrillWord?.text || "";
   const currentTip = mode === "shadowing" ? currentSentence.tip : currentDrillWord?.tip || "";
@@ -296,25 +306,39 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
           </h2>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-            {SOUND_CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => { setSelectedCategory(cat); setDrillIndex(0); setMode("drill"); }}
-                className="touch-manipulation"
-                style={{
-                  width: '100%', padding: '0.85rem 1rem', borderRadius: '0.75rem',
-                  border: '1px solid var(--border)', background: 'var(--surface)',
-                  textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease',
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                }}
-              >
-                <div>
-                  <p style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text)' }}>{cat.name}</p>
-                  <p style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>{cat.description} &middot; {cat.words.length} words</p>
-                </div>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
-              </button>
-            ))}
+            {SOUND_CATEGORIES.map((cat) => {
+              const locked = cat.minLevel > userLevel;
+              const levelName = LEVELS.find((l) => l.level === cat.minLevel)?.name || "";
+              return (
+                <button
+                  key={cat.id}
+                  onClick={locked ? undefined : () => { setSelectedCategory(cat); setDrillIndex(0); setMode("drill"); }}
+                  className="touch-manipulation"
+                  style={{
+                    width: '100%', padding: '0.85rem 1rem', borderRadius: '0.75rem',
+                    border: '1px solid var(--border)', background: 'var(--surface)',
+                    textAlign: 'left', cursor: locked ? 'default' : 'pointer',
+                    transition: 'all 0.2s ease',
+                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    opacity: locked ? 0.45 : 1,
+                  }}
+                >
+                  <div>
+                    <p style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text)' }}>{cat.name}</p>
+                    <p style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>
+                      {locked ? `Unlocks at Lv.${cat.minLevel} ${levelName}` : `${cat.description} \u00b7 ${cat.words.length} words`}
+                    </p>
+                  </div>
+                  {locked ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth={2}>
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -322,7 +346,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
   }
 
   // ═══ PRACTICE VIEW (shadowing or drill) ═══
-  const totalItems = mode === "shadowing" ? SHADOWING_SENTENCES.length : (selectedCategory?.words.length || 0);
+  const totalItems = mode === "shadowing" ? availableSentences.length : (selectedCategory?.words.length || 0);
   const currentIdx = mode === "shadowing" ? (sentenceIndex % totalItems) + 1 : (drillIndex % totalItems) + 1;
 
   return (
