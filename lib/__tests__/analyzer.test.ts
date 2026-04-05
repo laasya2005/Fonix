@@ -7,7 +7,7 @@ const makeSentence = (overrides?: Partial<Sentence>): Sentence => ({
   text: "The water is cold.",
   expected: "the water is cold",
   tokens: ["the", "water", "is", "cold"],
-  category: "daily",
+  category: "social",
   level: "beginner",
   difficulty: 1,
   focusIndices: [1, 3],
@@ -56,7 +56,7 @@ describe("analyzeTranscript", () => {
     expect(result.flaggedWords[0].reason).toBe(FlagReason.LOW_CONFIDENCE);
   });
 
-  test("flags known difficulty words from focusIndices", () => {
+  test("does not flag known difficulty words when spoken correctly with high confidence", () => {
     const sentence = makeSentence();
     const speech: SpeechResult = {
       transcript: "the water is cold",
@@ -68,11 +68,8 @@ describe("analyzeTranscript", () => {
       ],
     };
     const result = analyzeTranscript(sentence, speech);
-    expect(result.flaggedWords).toHaveLength(2);
-    expect(result.flaggedWords.map((w) => w.expected)).toEqual(
-      expect.arrayContaining(["water", "cold"])
-    );
-    expect(result.flaggedWords[0].reason).toBe(FlagReason.KNOWN_DIFFICULTY);
+    expect(result.allCorrect).toBe(true);
+    expect(result.flaggedWords).toHaveLength(0);
   });
 
   test("returns allCorrect true when no flags and no focus words", () => {

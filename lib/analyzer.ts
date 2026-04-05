@@ -56,12 +56,9 @@ export function analyzeTranscript(
     }
   }
 
-  // If there are hard flags (mismatch or low confidence), use those only.
-  // Otherwise fall back to known difficulty words.
-  const flagged =
-    hardFlagged.length > 0 ? hardFlagged : knownDifficultyFlagged;
+  // Only use hard flags (mismatch or low confidence).
+  // Known difficulty words that were pronounced correctly should NOT be flagged.
+  hardFlagged.sort((a, b) => a.confidence - b.confidence);
 
-  flagged.sort((a, b) => a.confidence - b.confidence);
-
-  return { flaggedWords: flagged, allCorrect: flagged.length === 0 };
+  return { flaggedWords: hardFlagged, allCorrect: hardFlagged.length === 0 };
 }
