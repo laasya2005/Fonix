@@ -1,0 +1,1939 @@
+{
+  "sentences": [
+    {
+      "id": 1,
+      "text": "The water is cold.",
+      "expected": "the water is cold",
+      "tokens": [
+        "the",
+        "water",
+        "is",
+        "cold"
+      ],
+      "category": "daily",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        3
+      ],
+      "focus": [
+        {
+          "word": "water",
+          "tags": [
+            "FLAP_T",
+            "VOWEL_SHIFT"
+          ]
+        },
+        {
+          "word": "cold",
+          "tags": [
+            "FINAL_CONSONANT"
+          ]
+        }
+      ],
+      "hint": "Focus on 'water' (soft T) and 'cold' (clear ending)"
+    },
+    {
+      "id": 2,
+      "text": "I need to buy some bread.",
+      "expected": "i need to buy some bread",
+      "tokens": [
+        "i",
+        "need",
+        "to",
+        "buy",
+        "some",
+        "bread"
+      ],
+      "category": "daily",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        5
+      ],
+      "focus": [
+        {
+          "word": "need",
+          "tags": [
+            "FINAL_CONSONANT"
+          ]
+        },
+        {
+          "word": "bread",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "Say the D in 'need' and roll the R in 'bread'"
+    },
+    {
+      "id": 3,
+      "text": "The dog is very friendly.",
+      "expected": "the dog is very friendly",
+      "tokens": [
+        "the",
+        "dog",
+        "is",
+        "very",
+        "friendly"
+      ],
+      "category": "daily",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        3,
+        4
+      ],
+      "focus": [
+        {
+          "word": "very",
+          "tags": [
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "friendly",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'very' starts with V not W; 'friendly' has an R sound"
+    },
+    {
+      "id": 4,
+      "text": "I want to go to the park.",
+      "expected": "i want to go to the park",
+      "tokens": [
+        "i",
+        "want",
+        "to",
+        "go",
+        "to",
+        "the",
+        "park"
+      ],
+      "category": "daily",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        2
+      ],
+      "focus": [
+        {
+          "word": "want",
+          "tags": [
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "to",
+          "tags": [
+            "VOWEL_REDUCTION"
+          ]
+        }
+      ],
+      "hint": "'want' starts with W; 'to' is reduced to 'tuh' in speech"
+    },
+    {
+      "id": 5,
+      "text": "She loves to read books.",
+      "expected": "she loves to read books",
+      "tokens": [
+        "she",
+        "loves",
+        "to",
+        "read",
+        "books"
+      ],
+      "category": "daily",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        3
+      ],
+      "focus": [
+        {
+          "word": "loves",
+          "tags": [
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "read",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'loves' has a V sound; 'read' starts with R not L"
+    },
+    {
+      "id": 6,
+      "text": "The weather is nice today.",
+      "expected": "the weather is nice today",
+      "tokens": [
+        "the",
+        "weather",
+        "is",
+        "nice",
+        "today"
+      ],
+      "category": "daily",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        4
+      ],
+      "focus": [
+        {
+          "word": "weather",
+          "tags": [
+            "V_W_DISTINCTION",
+            "TH_SOUND"
+          ]
+        },
+        {
+          "word": "today",
+          "tags": [
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'weather' starts with W and has TH; stress 'toDAY'"
+    },
+    {
+      "id": 7,
+      "text": "I think this is a good idea.",
+      "expected": "i think this is a good idea",
+      "tokens": [
+        "i",
+        "think",
+        "this",
+        "is",
+        "a",
+        "good",
+        "idea"
+      ],
+      "category": "daily",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        2
+      ],
+      "focus": [
+        {
+          "word": "think",
+          "tags": [
+            "TH_SOUND"
+          ]
+        },
+        {
+          "word": "this",
+          "tags": [
+            "TH_SOUND"
+          ]
+        }
+      ],
+      "hint": "Both 'think' and 'this' start with TH sounds"
+    },
+    {
+      "id": 8,
+      "text": "I usually eat breakfast at seven.",
+      "expected": "i usually eat breakfast at seven",
+      "tokens": [
+        "i",
+        "usually",
+        "eat",
+        "breakfast",
+        "at",
+        "seven"
+      ],
+      "category": "daily",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        1,
+        3
+      ],
+      "focus": [
+        {
+          "word": "usually",
+          "tags": [
+            "STRESS_PATTERN",
+            "VOWEL_REDUCTION"
+          ]
+        },
+        {
+          "word": "breakfast",
+          "tags": [
+            "FINAL_CONSONANT"
+          ]
+        }
+      ],
+      "hint": "Stress 'U-su-al-ly'; clearly end 'breakfast'"
+    },
+    {
+      "id": 9,
+      "text": "The bottle of water is on the table.",
+      "expected": "the bottle of water is on the table",
+      "tokens": [
+        "the",
+        "bottle",
+        "of",
+        "water",
+        "is",
+        "on",
+        "the",
+        "table"
+      ],
+      "category": "daily",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        1,
+        3
+      ],
+      "focus": [
+        {
+          "word": "bottle",
+          "tags": [
+            "FLAP_T"
+          ]
+        },
+        {
+          "word": "water",
+          "tags": [
+            "FLAP_T",
+            "VOWEL_SHIFT"
+          ]
+        }
+      ],
+      "hint": "Both 'bottle' and 'water' have a flap T in the middle"
+    },
+    {
+      "id": 10,
+      "text": "I already finished all the letters.",
+      "expected": "i already finished all the letters",
+      "tokens": [
+        "i",
+        "already",
+        "finished",
+        "all",
+        "the",
+        "letters"
+      ],
+      "category": "daily",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        1,
+        5
+      ],
+      "focus": [
+        {
+          "word": "already",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "letters",
+          "tags": [
+            "R_L_DISTINCTION",
+            "FLAP_T"
+          ]
+        }
+      ],
+      "hint": "'already' and 'letters' both need clear R and L sounds"
+    },
+    {
+      "id": 11,
+      "text": "We would rather walk than drive.",
+      "expected": "we would rather walk than drive",
+      "tokens": [
+        "we",
+        "would",
+        "rather",
+        "walk",
+        "than",
+        "drive"
+      ],
+      "category": "daily",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        2,
+        3
+      ],
+      "focus": [
+        {
+          "word": "rather",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "walk",
+          "tags": [
+            "FINAL_CONSONANT",
+            "VOWEL_SHIFT"
+          ]
+        }
+      ],
+      "hint": "'rather' has TH; 'walk' ends with a clear K sound"
+    },
+    {
+      "id": 12,
+      "text": "Could you please turn down the volume?",
+      "expected": "could you please turn down the volume",
+      "tokens": [
+        "could",
+        "you",
+        "please",
+        "turn",
+        "down",
+        "the",
+        "volume"
+      ],
+      "category": "daily",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        6,
+        4
+      ],
+      "focus": [
+        {
+          "word": "volume",
+          "tags": [
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "down",
+          "tags": [
+            "FINAL_CONSONANT"
+          ]
+        }
+      ],
+      "hint": "'volume' starts with V not W; end 'down' clearly"
+    },
+    {
+      "id": 13,
+      "text": "I really like the rhythm of this song.",
+      "expected": "i really like the rhythm of this song",
+      "tokens": [
+        "i",
+        "really",
+        "like",
+        "the",
+        "rhythm",
+        "of",
+        "this",
+        "song"
+      ],
+      "category": "daily",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        1,
+        4
+      ],
+      "focus": [
+        {
+          "word": "really",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "rhythm",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'really' starts with R; 'rhythm' has both R and TH"
+    },
+    {
+      "id": 14,
+      "text": "The river runs through the valley.",
+      "expected": "the river runs through the valley",
+      "tokens": [
+        "the",
+        "river",
+        "runs",
+        "through",
+        "the",
+        "valley"
+      ],
+      "category": "daily",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        1,
+        5
+      ],
+      "focus": [
+        {
+          "word": "river",
+          "tags": [
+            "R_L_DISTINCTION",
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "valley",
+          "tags": [
+            "V_W_DISTINCTION",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'river' has R and V; 'valley' has V and L"
+    },
+    {
+      "id": 15,
+      "text": "Three little birds sat on the wire.",
+      "expected": "three little birds sat on the wire",
+      "tokens": [
+        "three",
+        "little",
+        "birds",
+        "sat",
+        "on",
+        "the",
+        "wire"
+      ],
+      "category": "daily",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        0,
+        1
+      ],
+      "focus": [
+        {
+          "word": "three",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "little",
+          "tags": [
+            "R_L_DISTINCTION",
+            "FLAP_T"
+          ]
+        }
+      ],
+      "hint": "'three' has TH then R; 'little' has a flap T"
+    },
+    {
+      "id": 16,
+      "text": "The author thoroughly reviewed everything.",
+      "expected": "the author thoroughly reviewed everything",
+      "tokens": [
+        "the",
+        "author",
+        "thoroughly",
+        "reviewed",
+        "everything"
+      ],
+      "category": "daily",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        1,
+        2
+      ],
+      "focus": [
+        {
+          "word": "author",
+          "tags": [
+            "TH_SOUND",
+            "VOWEL_SHIFT"
+          ]
+        },
+        {
+          "word": "thoroughly",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "Both words have TH sounds; 'thoroughly' also needs a clear R"
+    },
+    {
+      "id": 17,
+      "text": "Virtually everything we rely on runs on electricity.",
+      "expected": "virtually everything we rely on runs on electricity",
+      "tokens": [
+        "virtually",
+        "everything",
+        "we",
+        "rely",
+        "on",
+        "runs",
+        "on",
+        "electricity"
+      ],
+      "category": "daily",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        0,
+        3
+      ],
+      "focus": [
+        {
+          "word": "virtually",
+          "tags": [
+            "V_W_DISTINCTION",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "rely",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'virtually' starts with V and has R+L; 'rely' starts with R"
+    },
+    {
+      "id": 18,
+      "text": "The refrigerator stopped working yesterday.",
+      "expected": "the refrigerator stopped working yesterday",
+      "tokens": [
+        "the",
+        "refrigerator",
+        "stopped",
+        "working",
+        "yesterday"
+      ],
+      "category": "daily",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        1,
+        3
+      ],
+      "focus": [
+        {
+          "word": "refrigerator",
+          "tags": [
+            "R_L_DISTINCTION",
+            "FLAP_T",
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "working",
+          "tags": [
+            "V_W_DISTINCTION",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'refrigerator' is long with R+L+flap T; 'working' starts with W"
+    },
+    {
+      "id": 19,
+      "text": "We thoroughly enjoyed the theatrical performance.",
+      "expected": "we thoroughly enjoyed the theatrical performance",
+      "tokens": [
+        "we",
+        "thoroughly",
+        "enjoyed",
+        "the",
+        "theatrical",
+        "performance"
+      ],
+      "category": "daily",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        1,
+        4
+      ],
+      "focus": [
+        {
+          "word": "thoroughly",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "theatrical",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "Both words start with TH and contain R or L sounds"
+    },
+    {
+      "id": 20,
+      "text": "I am happy to be here.",
+      "expected": "i am happy to be here",
+      "tokens": [
+        "i",
+        "am",
+        "happy",
+        "to",
+        "be",
+        "here"
+      ],
+      "category": "interview",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        2,
+        5
+      ],
+      "focus": [
+        {
+          "word": "happy",
+          "tags": [
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "here",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "Stress 'HAP-py'; end 'here' with a clear R"
+    },
+    {
+      "id": 21,
+      "text": "I love working with people.",
+      "expected": "i love working with people",
+      "tokens": [
+        "i",
+        "love",
+        "working",
+        "with",
+        "people"
+      ],
+      "category": "interview",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        2
+      ],
+      "focus": [
+        {
+          "word": "love",
+          "tags": [
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "working",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'love' has a V sound; 'working' has R not L"
+    },
+    {
+      "id": 22,
+      "text": "I learn very fast.",
+      "expected": "i learn very fast",
+      "tokens": [
+        "i",
+        "learn",
+        "very",
+        "fast"
+      ],
+      "category": "interview",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        2
+      ],
+      "focus": [
+        {
+          "word": "learn",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "very",
+          "tags": [
+            "V_W_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'learn' starts with L; 'very' starts with V not W"
+    },
+    {
+      "id": 23,
+      "text": "I think I am a good team player.",
+      "expected": "i think i am a good team player",
+      "tokens": [
+        "i",
+        "think",
+        "i",
+        "am",
+        "a",
+        "good",
+        "team",
+        "player"
+      ],
+      "category": "interview",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        1,
+        6
+      ],
+      "focus": [
+        {
+          "word": "think",
+          "tags": [
+            "TH_SOUND"
+          ]
+        },
+        {
+          "word": "team",
+          "tags": [
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'think' has a TH sound; stress 'TEAM'"
+    },
+    {
+      "id": 24,
+      "text": "I would like to thank you for this opportunity.",
+      "expected": "i would like to thank you for this opportunity",
+      "tokens": [
+        "i",
+        "would",
+        "like",
+        "to",
+        "thank",
+        "you",
+        "for",
+        "this",
+        "opportunity"
+      ],
+      "category": "interview",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        4,
+        8
+      ],
+      "focus": [
+        {
+          "word": "thank",
+          "tags": [
+            "TH_SOUND"
+          ]
+        },
+        {
+          "word": "opportunity",
+          "tags": [
+            "STRESS_PATTERN",
+            "VOWEL_REDUCTION"
+          ]
+        }
+      ],
+      "hint": "'thank' has TH; stress 'op-por-TU-ni-ty'"
+    },
+    {
+      "id": 25,
+      "text": "My greatest strength is my attention to detail.",
+      "expected": "my greatest strength is my attention to detail",
+      "tokens": [
+        "my",
+        "greatest",
+        "strength",
+        "is",
+        "my",
+        "attention",
+        "to",
+        "detail"
+      ],
+      "category": "interview",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        2,
+        5
+      ],
+      "focus": [
+        {
+          "word": "strength",
+          "tags": [
+            "TH_SOUND",
+            "FINAL_CONSONANT"
+          ]
+        },
+        {
+          "word": "attention",
+          "tags": [
+            "FLAP_T",
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'strength' ends with TH; 'atTENtion' has a flap T"
+    },
+    {
+      "id": 26,
+      "text": "I thrive in both collaborative and independent roles.",
+      "expected": "i thrive in both collaborative and independent roles",
+      "tokens": [
+        "i",
+        "thrive",
+        "in",
+        "both",
+        "collaborative",
+        "and",
+        "independent",
+        "roles"
+      ],
+      "category": "interview",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        1,
+        7
+      ],
+      "focus": [
+        {
+          "word": "thrive",
+          "tags": [
+            "TH_SOUND",
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "roles",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'thrive' has TH and V; 'roles' starts with R"
+    },
+    {
+      "id": 27,
+      "text": "I always deliver results on time.",
+      "expected": "i always deliver results on time",
+      "tokens": [
+        "i",
+        "always",
+        "deliver",
+        "results",
+        "on",
+        "time"
+      ],
+      "category": "interview",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        2,
+        3
+      ],
+      "focus": [
+        {
+          "word": "deliver",
+          "tags": [
+            "R_L_DISTINCTION",
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "results",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'deliver' has L then V; stress 'reSULTS'"
+    },
+    {
+      "id": 28,
+      "text": "I have a lot of relevant experience in this field.",
+      "expected": "i have a lot of relevant experience in this field",
+      "tokens": [
+        "i",
+        "have",
+        "a",
+        "lot",
+        "of",
+        "relevant",
+        "experience",
+        "in",
+        "this",
+        "field"
+      ],
+      "category": "interview",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        5,
+        6
+      ],
+      "focus": [
+        {
+          "word": "relevant",
+          "tags": [
+            "R_L_DISTINCTION",
+            "VOWEL_REDUCTION"
+          ]
+        },
+        {
+          "word": "experience",
+          "tags": [
+            "STRESS_PATTERN",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'relevant' has R+L; stress 'exPEri-ence'"
+    },
+    {
+      "id": 29,
+      "text": "I really value transparency and open communication.",
+      "expected": "i really value transparency and open communication",
+      "tokens": [
+        "i",
+        "really",
+        "value",
+        "transparency",
+        "and",
+        "open",
+        "communication"
+      ],
+      "category": "interview",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        1,
+        2,
+        3
+      ],
+      "focus": [
+        {
+          "word": "really",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "value",
+          "tags": [
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "transparency",
+          "tags": [
+            "TH_SOUND",
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'really' R vs L; 'value' V not W; 'traNSparency' TH sound"
+    },
+    {
+      "id": 30,
+      "text": "Throughout my career I have led three thriving teams.",
+      "expected": "throughout my career i have led three thriving teams",
+      "tokens": [
+        "throughout",
+        "my",
+        "career",
+        "i",
+        "have",
+        "led",
+        "three",
+        "thriving",
+        "teams"
+      ],
+      "category": "interview",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        0,
+        6,
+        7
+      ],
+      "focus": [
+        {
+          "word": "throughout",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "three",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "thriving",
+          "tags": [
+            "TH_SOUND",
+            "V_W_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'throughout', 'three', 'thriving' all start with TH"
+    },
+    {
+      "id": 31,
+      "text": "I developed a thorough understanding of the relevant regulations.",
+      "expected": "i developed a thorough understanding of the relevant regulations",
+      "tokens": [
+        "i",
+        "developed",
+        "a",
+        "thorough",
+        "understanding",
+        "of",
+        "the",
+        "relevant",
+        "regulations"
+      ],
+      "category": "interview",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        3,
+        7
+      ],
+      "focus": [
+        {
+          "word": "thorough",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "relevant",
+          "tags": [
+            "R_L_DISTINCTION",
+            "VOWEL_REDUCTION"
+          ]
+        }
+      ],
+      "hint": "'thorough' has TH+R; 'relevant' needs clear R and L"
+    },
+    {
+      "id": 32,
+      "text": "I transformed the workflow by introducing virtual collaboration tools.",
+      "expected": "i transformed the workflow by introducing virtual collaboration tools",
+      "tokens": [
+        "i",
+        "transformed",
+        "the",
+        "workflow",
+        "by",
+        "introducing",
+        "virtual",
+        "collaboration",
+        "tools"
+      ],
+      "category": "interview",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        1,
+        6
+      ],
+      "focus": [
+        {
+          "word": "transformed",
+          "tags": [
+            "STRESS_PATTERN",
+            "FINAL_CONSONANT"
+          ]
+        },
+        {
+          "word": "virtual",
+          "tags": [
+            "V_W_DISTINCTION",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "Stress 'transFormed'; 'virtual' starts with V and has R+L"
+    },
+    {
+      "id": 33,
+      "text": "My leadership philosophy revolves around trust and growth.",
+      "expected": "my leadership philosophy revolves around trust and growth",
+      "tokens": [
+        "my",
+        "leadership",
+        "philosophy",
+        "revolves",
+        "around",
+        "trust",
+        "and",
+        "growth"
+      ],
+      "category": "interview",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        1,
+        3,
+        5
+      ],
+      "focus": [
+        {
+          "word": "leadership",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "revolves",
+          "tags": [
+            "R_L_DISTINCTION",
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "trust",
+          "tags": [
+            "TH_SOUND",
+            "FINAL_CONSONANT"
+          ]
+        }
+      ],
+      "hint": "'leadership' L+R; 'revolves' R+V; 'trust' ends with T"
+    },
+    {
+      "id": 34,
+      "text": "Hello, can I speak to the manager?",
+      "expected": "hello can i speak to the manager",
+      "tokens": [
+        "hello",
+        "can",
+        "i",
+        "speak",
+        "to",
+        "the",
+        "manager"
+      ],
+      "category": "phone_call",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        3,
+        5
+      ],
+      "focus": [
+        {
+          "word": "speak",
+          "tags": [
+            "FINAL_CONSONANT"
+          ]
+        },
+        {
+          "word": "the",
+          "tags": [
+            "TH_SOUND"
+          ]
+        }
+      ],
+      "hint": "End 'speak' with K; 'the' has a clear TH sound"
+    },
+    {
+      "id": 35,
+      "text": "I would like to make a reservation.",
+      "expected": "i would like to make a reservation",
+      "tokens": [
+        "i",
+        "would",
+        "like",
+        "to",
+        "make",
+        "a",
+        "reservation"
+      ],
+      "category": "phone_call",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        2,
+        6
+      ],
+      "focus": [
+        {
+          "word": "like",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "reservation",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'like' starts with L; stress 'res-er-VA-tion'"
+    },
+    {
+      "id": 36,
+      "text": "What time does the office open?",
+      "expected": "what time does the office open",
+      "tokens": [
+        "what",
+        "time",
+        "does",
+        "the",
+        "office",
+        "open"
+      ],
+      "category": "phone_call",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        0,
+        1
+      ],
+      "focus": [
+        {
+          "word": "what",
+          "tags": [
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "time",
+          "tags": [
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'what' starts with W; stress 'TIME'"
+    },
+    {
+      "id": 37,
+      "text": "Thank you for calling us today.",
+      "expected": "thank you for calling us today",
+      "tokens": [
+        "thank",
+        "you",
+        "for",
+        "calling",
+        "us",
+        "today"
+      ],
+      "category": "phone_call",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        0,
+        5
+      ],
+      "focus": [
+        {
+          "word": "thank",
+          "tags": [
+            "TH_SOUND"
+          ]
+        },
+        {
+          "word": "today",
+          "tags": [
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'thank' has TH; stress 'toDAY'"
+    },
+    {
+      "id": 38,
+      "text": "Can you please hold for a moment?",
+      "expected": "can you please hold for a moment",
+      "tokens": [
+        "can",
+        "you",
+        "please",
+        "hold",
+        "for",
+        "a",
+        "moment"
+      ],
+      "category": "phone_call",
+      "level": "beginner",
+      "difficulty": 1,
+      "focusIndices": [
+        3,
+        6
+      ],
+      "focus": [
+        {
+          "word": "hold",
+          "tags": [
+            "FINAL_CONSONANT"
+          ]
+        },
+        {
+          "word": "moment",
+          "tags": [
+            "STRESS_PATTERN",
+            "FLAP_T"
+          ]
+        }
+      ],
+      "hint": "End 'hold' with D; 'MO-ment' with a soft T"
+    },
+    {
+      "id": 39,
+      "text": "I am calling to verify my recent transaction.",
+      "expected": "i am calling to verify my recent transaction",
+      "tokens": [
+        "i",
+        "am",
+        "calling",
+        "to",
+        "verify",
+        "my",
+        "recent",
+        "transaction"
+      ],
+      "category": "phone_call",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        4,
+        7
+      ],
+      "focus": [
+        {
+          "word": "verify",
+          "tags": [
+            "V_W_DISTINCTION",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "transaction",
+          "tags": [
+            "STRESS_PATTERN",
+            "FINAL_CONSONANT"
+          ]
+        }
+      ],
+      "hint": "'verify' starts with V and has R; stress 'traNSaction'"
+    },
+    {
+      "id": 40,
+      "text": "Could you transfer me to the billing department?",
+      "expected": "could you transfer me to the billing department",
+      "tokens": [
+        "could",
+        "you",
+        "transfer",
+        "me",
+        "to",
+        "the",
+        "billing",
+        "department"
+      ],
+      "category": "phone_call",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        2,
+        6
+      ],
+      "focus": [
+        {
+          "word": "transfer",
+          "tags": [
+            "STRESS_PATTERN",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "billing",
+          "tags": [
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "Stress 'TRANS-fer'; 'billing' has a clear L"
+    },
+    {
+      "id": 41,
+      "text": "I would like to report a problem with my order.",
+      "expected": "i would like to report a problem with my order",
+      "tokens": [
+        "i",
+        "would",
+        "like",
+        "to",
+        "report",
+        "a",
+        "problem",
+        "with",
+        "my",
+        "order"
+      ],
+      "category": "phone_call",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        4,
+        6
+      ],
+      "focus": [
+        {
+          "word": "report",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "problem",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'report' and 'problem' both need clear R sounds"
+    },
+    {
+      "id": 42,
+      "text": "The tracking number is not working on your website.",
+      "expected": "the tracking number is not working on your website",
+      "tokens": [
+        "the",
+        "tracking",
+        "number",
+        "is",
+        "not",
+        "working",
+        "on",
+        "your",
+        "website"
+      ],
+      "category": "phone_call",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        1,
+        5
+      ],
+      "focus": [
+        {
+          "word": "tracking",
+          "tags": [
+            "R_L_DISTINCTION",
+            "FINAL_CONSONANT"
+          ]
+        },
+        {
+          "word": "working",
+          "tags": [
+            "R_L_DISTINCTION",
+            "V_W_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "Both 'tracking' and 'working' have R; 'working' starts with W"
+    },
+    {
+      "id": 43,
+      "text": "I was told that the refund would arrive within three days.",
+      "expected": "i was told that the refund would arrive within three days",
+      "tokens": [
+        "i",
+        "was",
+        "told",
+        "that",
+        "the",
+        "refund",
+        "would",
+        "arrive",
+        "within",
+        "three",
+        "days"
+      ],
+      "category": "phone_call",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        5,
+        9
+      ],
+      "focus": [
+        {
+          "word": "refund",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "three",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "Stress 'RE-fund'; 'three' has TH then R"
+    },
+    {
+      "id": 44,
+      "text": "I have been waiting for over a month now.",
+      "expected": "i have been waiting for over a month now",
+      "tokens": [
+        "i",
+        "have",
+        "been",
+        "waiting",
+        "for",
+        "over",
+        "a",
+        "month",
+        "now"
+      ],
+      "category": "phone_call",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        3,
+        5
+      ],
+      "focus": [
+        {
+          "word": "waiting",
+          "tags": [
+            "FLAP_T",
+            "V_W_DISTINCTION"
+          ]
+        },
+        {
+          "word": "over",
+          "tags": [
+            "VOWEL_SHIFT",
+            "R_L_DISTINCTION"
+          ]
+        }
+      ],
+      "hint": "'waiting' has a flap T; 'over' has a long O and ends in R"
+    },
+    {
+      "id": 45,
+      "text": "There seems to be a misunderstanding about the charges.",
+      "expected": "there seems to be a misunderstanding about the charges",
+      "tokens": [
+        "there",
+        "seems",
+        "to",
+        "be",
+        "a",
+        "misunderstanding",
+        "about",
+        "the",
+        "charges"
+      ],
+      "category": "phone_call",
+      "level": "intermediate",
+      "difficulty": 2,
+      "focusIndices": [
+        0,
+        5
+      ],
+      "focus": [
+        {
+          "word": "there",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "misunderstanding",
+          "tags": [
+            "STRESS_PATTERN",
+            "FINAL_CONSONANT"
+          ]
+        }
+      ],
+      "hint": "'there' has TH; stress 'mis-un-der-STAND-ing'"
+    },
+    {
+      "id": 46,
+      "text": "I would appreciate it if you could expedite the replacement.",
+      "expected": "i would appreciate it if you could expedite the replacement",
+      "tokens": [
+        "i",
+        "would",
+        "appreciate",
+        "it",
+        "if",
+        "you",
+        "could",
+        "expedite",
+        "the",
+        "replacement"
+      ],
+      "category": "phone_call",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        2,
+        9
+      ],
+      "focus": [
+        {
+          "word": "appreciate",
+          "tags": [
+            "STRESS_PATTERN",
+            "VOWEL_SHIFT"
+          ]
+        },
+        {
+          "word": "replacement",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "Stress 'apPREciate'; 'replacement' has R then L"
+    },
+    {
+      "id": 47,
+      "text": "I am reaching out regarding the unresolved issue from last week.",
+      "expected": "i am reaching out regarding the unresolved issue from last week",
+      "tokens": [
+        "i",
+        "am",
+        "reaching",
+        "out",
+        "regarding",
+        "the",
+        "unresolved",
+        "issue",
+        "from",
+        "last",
+        "week"
+      ],
+      "category": "phone_call",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        2,
+        4,
+        6
+      ],
+      "focus": [
+        {
+          "word": "reaching",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "regarding",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "unresolved",
+          "tags": [
+            "R_L_DISTINCTION",
+            "VOWEL_REDUCTION"
+          ]
+        }
+      ],
+      "hint": "Three R words in a row: 'reaching', 'regarding', 'unresolved'"
+    },
+    {
+      "id": 48,
+      "text": "Could you please forward this to the relevant department?",
+      "expected": "could you please forward this to the relevant department",
+      "tokens": [
+        "could",
+        "you",
+        "please",
+        "forward",
+        "this",
+        "to",
+        "the",
+        "relevant",
+        "department"
+      ],
+      "category": "phone_call",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        3,
+        7
+      ],
+      "focus": [
+        {
+          "word": "forward",
+          "tags": [
+            "V_W_DISTINCTION",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "relevant",
+          "tags": [
+            "R_L_DISTINCTION",
+            "VOWEL_REDUCTION"
+          ]
+        }
+      ],
+      "hint": "'forward' starts with F then has W; 'relevant' needs R and L"
+    },
+    {
+      "id": 49,
+      "text": "I was advised to follow up directly with your technical team.",
+      "expected": "i was advised to follow up directly with your technical team",
+      "tokens": [
+        "i",
+        "was",
+        "advised",
+        "to",
+        "follow",
+        "up",
+        "directly",
+        "with",
+        "your",
+        "technical",
+        "team"
+      ],
+      "category": "phone_call",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        2,
+        4,
+        6
+      ],
+      "focus": [
+        {
+          "word": "advised",
+          "tags": [
+            "V_W_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        },
+        {
+          "word": "follow",
+          "tags": [
+            "V_W_DISTINCTION",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "directly",
+          "tags": [
+            "R_L_DISTINCTION",
+            "STRESS_PATTERN"
+          ]
+        }
+      ],
+      "hint": "'advised' V sound; 'follow' F+L; stress 'diRECT-ly'"
+    },
+    {
+      "id": 50,
+      "text": "I thoroughly reviewed the terms and they do not reflect what I agreed to.",
+      "expected": "i thoroughly reviewed the terms and they do not reflect what i agreed to",
+      "tokens": [
+        "i",
+        "thoroughly",
+        "reviewed",
+        "the",
+        "terms",
+        "and",
+        "they",
+        "do",
+        "not",
+        "reflect",
+        "what",
+        "i",
+        "agreed",
+        "to"
+      ],
+      "category": "phone_call",
+      "level": "advanced",
+      "difficulty": 3,
+      "focusIndices": [
+        1,
+        9,
+        12
+      ],
+      "focus": [
+        {
+          "word": "thoroughly",
+          "tags": [
+            "TH_SOUND",
+            "R_L_DISTINCTION"
+          ]
+        },
+        {
+          "word": "reflect",
+          "tags": [
+            "R_L_DISTINCTION",
+            "FINAL_CONSONANT"
+          ]
+        },
+        {
+          "word": "agreed",
+          "tags": [
+            "R_L_DISTINCTION",
+            "VOWEL_SHIFT"
+          ]
+        }
+      ],
+      "hint": "'thoroughly' TH+R; 'reflect' ends with T; 'agreed' ends with D"
+    }
+  ]
+}
