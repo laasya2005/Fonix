@@ -74,23 +74,23 @@ export async function POST(request: NextRequest) {
     }
 
     const nBest = result.NBest?.[0];
-    if (!nBest?.PronunciationAssessment) {
-      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[6] NBest: ${JSON.stringify(nBest || result).slice(0, 300)}`, example: "" });
+    if (!nBest) {
+      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[6] No NBest in response: ${JSON.stringify(result).slice(0, 300)}`, example: "" });
     }
 
-    const assessment = nBest.PronunciationAssessment;
-    const overallScore = Math.round(assessment.PronScore || 0);
+    // Azure REST API returns scores directly on NBest[0], not nested under PronunciationAssessment
+    const overallScore = Math.round(nBest.PronScore ?? nBest.PronunciationAssessment?.PronScore ?? 0);
 
     const wordResults: Array<{ word: string; score: number; phonemes: Array<{ phoneme: string; score: number }> }> = [];
     if (nBest.Words) {
       for (const w of nBest.Words) {
-        const phonemes = (w.Phonemes || []).map((p: { Phoneme: string; PronunciationAssessment?: { AccuracyScore?: number } }) => ({
+        const phonemes = (w.Phonemes || []).map((p: { Phoneme: string; AccuracyScore?: number; PronunciationAssessment?: { AccuracyScore?: number } }) => ({
           phoneme: p.Phoneme,
-          score: Math.round(p.PronunciationAssessment?.AccuracyScore || 0),
+          score: Math.round(p.AccuracyScore ?? p.PronunciationAssessment?.AccuracyScore ?? 0),
         }));
         wordResults.push({
           word: w.Word,
-          score: Math.round(w.PronunciationAssessment?.AccuracyScore || 0),
+          score: Math.round(w.AccuracyScore ?? w.PronunciationAssessment?.AccuracyScore ?? 0),
           phonemes,
         });
       }
