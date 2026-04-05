@@ -6,7 +6,7 @@ import { awardXP, getGamificationState, LEVELS } from "@/lib/gamification";
 import { SOUND_CATEGORIES, SHADOWING_SENTENCES, type SoundCategory, type DrillWord, type ShadowingSentence } from "@/data/pronunciation-drills";
 
 
-type Mode = "menu" | "shadowing" | "drill-select" | "drill";
+type Mode = "menu" | "shadowing" | "drill-select" | "drill" | "drill-complete" | "shadowing-complete";
 type PracticeState = "ready" | "playing-model" | "recording" | "comparing" | "feedback";
 
 interface PhonemeScore {
@@ -54,6 +54,9 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
   // Drill state
   const [selectedCategory, setSelectedCategory] = useState<SoundCategory | null>(null);
   const [drillIndex, setDrillIndex] = useState(0);
+
+  // Drill scores tracking
+  const [drillScores, setDrillScores] = useState<number[]>([]);
 
   // Audio state
   const [userAudioUrl, setUserAudioUrl] = useState<string | null>(null);
@@ -210,6 +213,11 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
       setAccentFeedback(feedbackResult);
       setLoadingFeedback(false);
 
+      // Track score for completion summary
+      if (feedbackResult.overallScore != null) {
+        setDrillScores((prev) => [...prev, feedbackResult.overallScore!]);
+      }
+
       // Award XP based on score
       const score = feedbackResult.overallScore;
       if (score != null && score >= 80) {
@@ -239,11 +247,21 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
     setPracticeState("ready");
 
     if (mode === "shadowing") {
-      setSentenceIndex((i) => i + 1);
-    } else if (mode === "drill") {
-      setDrillIndex((i) => i + 1);
+      const nextIdx = sentenceIndex + 1;
+      if (nextIdx >= availableSentences.length) {
+        setMode("shadowing-complete");
+      } else {
+        setSentenceIndex(nextIdx);
+      }
+    } else if (mode === "drill" && selectedCategory) {
+      const nextIdx = drillIndex + 1;
+      if (nextIdx >= selectedCategory.words.length) {
+        setMode("drill-complete");
+      } else {
+        setDrillIndex(nextIdx);
+      }
     }
-  }, [mode, stopAny]);
+  }, [mode, stopAny, sentenceIndex, drillIndex, availableSentences.length, selectedCategory]);
 
   // Try again
   const handleTryAgain = useCallback(async () => {
@@ -375,9 +393,122 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
     );
   }
 
+  // ═══ COMPLETION SCREEN ═══
+  if (mode === "drill-complete" || mode === "shadowing-complete") {
+    const avgScore = drillScores.length > 0
+      ? Math.round(drillScores.reduce((a, b) => a + b, 0) / drillScores.length)
+      : null;
+    const passed = drillScores.filter((s) => s >= 80).length;
+    const title = mode === "drill-complete"
+      ? `${selectedCategory?.name} Complete`
+      : "Shadowing Complete";
+
+    return (
+      <div className="flex-1" style={{
+        background: 'var(--bg)', display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center', padding: '1.5rem',
+      }}>
+        <div style={{ width: '100%', maxWidth: '24rem', textAlign: 'center' }}>
+          <h2 style={{
+            fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 700,
+            color: 'var(--text)', marginBottom: '0.5rem',
+          }}>
+            {title}
+          </h2>
+
+          {avgScore != null && (
+            <div style={{
+              background: 'var(--surface)', border: '1px solid var(--border)',
+              borderRadius: '0.85rem', padding: '1.25rem', marginBottom: '1rem',
+            }}>
+              <p style={{
+                fontSize: '2.5rem', fontWeight: 800, fontFamily: 'monospace',
+                color: avgScore >= 80 ? 'var(--success)' : avgScore >= 50 ? 'var(--warn)' : 'var(--error)',
+                marginBottom: '0.25rem',
+              }}>
+                {avgScore}
+              </p>
+              <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Average score</p>
+
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '0.75rem' }}>
+                <div>
+                  <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--success)' }}>{passed}</p>
+                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>Passed</p>
+                </div>
+                <div>
+                  <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-muted)' }}>{drillScores.length - passed}</p>
+                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>Need work</p>
+                </div>
+                <div>
+                  <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-muted)' }}>{drillScores.length}</p>
+                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>Total</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {avgScore == null && (
+            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+              All {mode === "drill-complete" ? "words" : "sentences"} completed
+            </p>
+          )}
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {/* Redo this drill */}
+            <button
+              onClick={() => {
+                setDrillIndex(0);
+                setSentenceIndex(0);
+                setDrillScores([]);
+                setPracticeState("ready");
+                setMode(mode === "drill-complete" ? "drill" : "shadowing");
+              }}
+              className="touch-manipulation"
+              style={{
+                width: '100%', padding: '0.75rem', borderRadius: '0.65rem',
+                border: '1px solid var(--border)', background: 'var(--surface)',
+                color: 'var(--text)', fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
+              }}
+            >
+              Practice again
+            </button>
+
+            {/* Pick another drill */}
+            {mode === "drill-complete" && (
+              <button
+                onClick={() => { setDrillScores([]); setMode("drill-select"); }}
+                className="touch-manipulation"
+                style={{
+                  width: '100%', padding: '0.75rem', borderRadius: '0.65rem',
+                  border: '1px solid var(--border)', background: 'var(--surface)',
+                  color: 'var(--text)', fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
+                }}
+              >
+                Pick another sound
+              </button>
+            )}
+
+            {/* Back to dashboard */}
+            <button
+              onClick={() => { setDrillScores([]); onBack(); }}
+              className="touch-manipulation"
+              style={{
+                width: '100%', padding: '0.75rem', borderRadius: '0.65rem',
+                border: '1px solid var(--text)', background: 'var(--text)',
+                color: 'var(--bg)', fontWeight: 600, fontSize: '0.8rem', cursor: 'pointer',
+              }}
+            >
+              Back to dashboard
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // ═══ PRACTICE VIEW (shadowing or drill) ═══
   const totalItems = mode === "shadowing" ? availableSentences.length : (selectedCategory?.words.length || 0);
-  const currentIdx = mode === "shadowing" ? (sentenceIndex % totalItems) + 1 : (drillIndex % totalItems) + 1;
+  const currentIdx = mode === "shadowing" ? sentenceIndex + 1 : drillIndex + 1;
 
   return (
     <div className="flex-1" style={{ background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
