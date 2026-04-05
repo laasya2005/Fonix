@@ -145,8 +145,8 @@ export function WordDetailCard({
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="bg-rose-50 rounded-xl p-3 border border-rose-100 text-center">
             <p className="text-[10px] uppercase tracking-wide text-rose-400 mb-1 font-semibold">You said</p>
-            <p className="text-base font-bold text-rose-700">{word.youSaid}</p>
-            {word.youSaidIpa && <p className="text-xs font-mono text-rose-500 mt-0.5">{word.youSaidIpa}</p>}
+            <p className="text-base font-bold text-rose-700">{word.youSaid || word.word}</p>
+            <p className="text-xs font-mono text-rose-500 mt-0.5">{word.youSaidIpa || word.ipa}</p>
           </div>
           <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-100 text-center">
             <p className="text-[10px] uppercase tracking-wide text-emerald-400 mb-1 font-semibold">Correct</p>
