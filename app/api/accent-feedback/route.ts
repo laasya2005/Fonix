@@ -43,20 +43,17 @@ export async function POST(request: NextRequest) {
       GradingSystem: "HundredMark",
       Granularity: "Phoneme",
       Dimension: "Comprehensive",
-      EnableMiscue: "True",
     };
-    // Base64 encode without padding/newlines
-    const pronHeader = Buffer.from(JSON.stringify(pronAssessmentParams)).toString("base64").replace(/=+$/, "").replace(/\n/g, "");
+    const pronHeader = Buffer.from(JSON.stringify(pronAssessmentParams)).toString("base64");
 
     const response = await fetch(
-      `https://${speechRegion}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=en-US`,
+      `https://${speechRegion}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=en-US&format=detailed`,
       {
         method: "POST",
         headers: {
           "Ocp-Apim-Subscription-Key": speechKey,
-          "Content-Type": "audio/wav; codecs=audio/pcm; samplerate=16000",
+          "Content-Type": "audio/wav",
           "Pronunciation-Assessment": pronHeader,
-          "Accept": "application/json",
         },
         body: new Uint8Array(audioBuffer),
       }
