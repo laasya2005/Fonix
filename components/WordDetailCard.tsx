@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Band } from "@/lib/types";
 import type { AnalyzedWord } from "@/lib/types";
 
@@ -13,20 +13,93 @@ interface WordDetailCardProps {
 
 export function WordDetailCard({
   word,
-  recordedAudioUrl,
   onClose,
   onPractice,
 }: WordDetailCardProps) {
   const [playingWhat, setPlayingWhat] = useState<"yours" | "correct" | null>(null);
+  const [isRecordingWord, setIsRecordingWord] = useState(false);
+  const [wordAudioUrl, setWordAudioUrl] = useState<string | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
+
+  // Record just this one word
+  const startWordRecording = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      chunksRef.current = [];
+
+      const mimeTypes = [
+        "audio/webm;codecs=opus",
+        "audio/webm",
+        "audio/mp4",
+        "audio/ogg;codecs=opus",
+        "",
+      ];
+      const mimeType = mimeTypes.find(
+        (t) => t === "" || MediaRecorder.isTypeSupported(t)
+      );
+
+      let recorder: MediaRecorder;
+      try {
+        recorder = mimeType
+          ? new MediaRecorder(stream, { mimeType: mimeType || undefined })
+          : new MediaRecorder(stream);
+      } catch {
+        stream.getTracks().forEach((t) => t.stop());
+        return;
+      }
+
+      recorderRef.current = recorder;
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(chunksRef.current, {
+          type: mimeType || "audio/webm",
+        });
+        const url = URL.createObjectURL(blob);
+        setWordAudioUrl(url);
+        setIsRecordingWord(false);
+        stream.getTracks().forEach((t) => t.stop());
+
+        // Auto-play back immediately so user hears themselves
+        const audio = new Audio(url);
+        audioRef.current = audio;
+        setPlayingWhat("yours");
+        audio.onended = () => setPlayingWhat(null);
+        audio.onerror = () => setPlayingWhat(null);
+        audio.play();
+      };
+
+      setIsRecordingWord(true);
+      recorder.start();
+
+      // Auto-stop after 2 seconds (enough for a single word)
+      setTimeout(() => {
+        if (recorder.state === "recording") {
+          recorder.stop();
+        }
+      }, 2000);
+    } catch {
+      // Mic not available
+    }
+  }, []);
+
+  const stopWordRecording = useCallback(() => {
+    if (recorderRef.current && recorderRef.current.state === "recording") {
+      recorderRef.current.stop();
+    }
+  }, []);
 
   function playYours() {
-    if (!recordedAudioUrl) return;
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
+    if (!wordAudioUrl) return;
+    if (audioRef.current) audioRef.current.pause();
+    speechSynthesis.cancel();
     setPlayingWhat("yours");
-    const audio = new Audio(recordedAudioUrl);
+    const audio = new Audio(wordAudioUrl);
     audioRef.current = audio;
     audio.onended = () => setPlayingWhat(null);
     audio.onerror = () => setPlayingWhat(null);
@@ -35,9 +108,7 @@ export function WordDetailCard({
 
   function playCorrect() {
     if (!("speechSynthesis" in window)) return;
-    if (audioRef.current) {
-      audioRef.current.pause();
-    }
+    if (audioRef.current) audioRef.current.pause();
     speechSynthesis.cancel();
     setPlayingWhat("correct");
     const utterance = new SpeechSynthesisUtterance(word.word);
@@ -91,20 +162,53 @@ export function WordDetailCard({
               </p>
             )}
             {!word.youSaidIpa && <div className="mb-3" />}
-            <button
-              onClick={playYours}
-              disabled={!recordedAudioUrl || playingWhat !== null}
-              className="w-full py-2 rounded-lg bg-rose-100 text-rose-600 text-xs font-medium hover:bg-rose-200 transition-colors disabled:opacity-40 flex items-center justify-center gap-1.5"
-            >
-              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              {playingWhat === "yours"
-                ? "Playing..."
-                : recordedAudioUrl
-                  ? "Hear your voice"
-                  : "No recording"}
-            </button>
+
+            {/* Record & hear yourself say just this word */}
+            {!wordAudioUrl ? (
+              <button
+                onClick={isRecordingWord ? stopWordRecording : startWordRecording}
+                disabled={playingWhat !== null}
+                className={`w-full py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 transition-colors disabled:opacity-40 ${
+                  isRecordingWord
+                    ? "bg-red-500 text-white animate-pulse"
+                    : "bg-rose-100 text-rose-600 hover:bg-rose-200"
+                }`}
+              >
+                {isRecordingWord ? (
+                  <>
+                    <div className="w-2 h-2 bg-white rounded-full" />
+                    Recording... tap to stop
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                      <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                    </svg>
+                    Say &ldquo;{word.word}&rdquo;
+                  </>
+                )}
+              </button>
+            ) : (
+              <div className="space-y-1.5">
+                <button
+                  onClick={playYours}
+                  disabled={playingWhat !== null}
+                  className="w-full py-2 rounded-lg bg-rose-100 text-rose-600 text-xs font-medium hover:bg-rose-200 transition-colors disabled:opacity-40 flex items-center justify-center gap-1.5"
+                >
+                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                  {playingWhat === "yours" ? "Playing..." : "Hear your voice"}
+                </button>
+                <button
+                  onClick={() => { setWordAudioUrl(null); }}
+                  className="w-full py-1.5 text-[10px] text-rose-400 hover:text-rose-600 transition-colors"
+                >
+                  Re-record
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Correct pronunciation */}
