@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import type { AnalyzedWord, AnalyzeResponse, SpeechResult } from "@/lib/types";
-import { analyzeTranscript } from "@/lib/analyzer";
 import { startListening, stopListening, isSpeechSupported } from "@/lib/speech";
 import { saveWordAttempt } from "@/lib/progress";
 import { MicButton } from "./MicButton";
@@ -101,21 +100,21 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
 
     startListening({
       onInterimTranscript: (text) => setInterimText(text),
-      onFinalResult: async (speechResult: SpeechResult, audioUrl: string | null) => {
+      onFinalResult: async (speechResult: SpeechResult, audioUrl: string | null, audioBlob: Blob | null) => {
         setRecordedAudioUrl(audioUrl);
         setState("analyzing");
 
-        const analysis = analyzeTranscript(sentenceLike, speechResult);
-
-        const topFlagged = analysis.flaggedWords.slice(0, 3);
+        const formData = new FormData();
+        formData.append("tokens", JSON.stringify(convo.tokens));
+        formData.append("focus", JSON.stringify(convo.focus));
+        formData.append("browserTranscript", speechResult.transcript);
+        if (audioBlob) {
+          formData.append("audio", audioBlob, "recording.webm");
+        }
 
         const res = await fetch("/api/analyze", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sentence: { tokens: convo.tokens, focus: convo.focus },
-            flaggedWords: topFlagged,
-          }),
+          body: formData,
         });
 
         const data = (await res.json()) as AnalyzeResponse;
@@ -124,10 +123,10 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
         setEncouragement(data.encouragement);
         setAllCorrect(false);
 
-        for (const flagged of topFlagged) {
-          const analyzed = data.words.find((w) => w.index === flagged.index);
-          if (analyzed) {
-            saveWordAttempt(flagged.expected, analyzed.status, flagged.tags as any);
+        for (const w of data.words) {
+          if (w.shouldPractice) {
+            const focusEntry = convo.focus.find((f) => f.word === w.word);
+            saveWordAttempt(w.word, w.status, (focusEntry?.tags ?? []) as any);
           }
         }
 

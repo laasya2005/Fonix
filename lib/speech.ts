@@ -2,7 +2,7 @@ import type { SpeechResult, SpeechWordResult } from "./types";
 
 interface SpeechCallbacks {
   onInterimTranscript: (text: string) => void;
-  onFinalResult: (result: SpeechResult, audioUrl: string | null) => void;
+  onFinalResult: (result: SpeechResult, audioUrl: string | null, audioBlob: Blob | null) => void;
   onError: (error: string) => void;
 }
 
@@ -25,6 +25,7 @@ export function startListening(callbacks: SpeechCallbacks): void {
   }
 
   let recordedAudioUrl: string | null = null;
+  let recordedAudioBlob: Blob | null = null;
 
   // Start audio recording alongside speech recognition
   navigator.mediaDevices
@@ -64,6 +65,7 @@ export function startListening(callbacks: SpeechCallbacks): void {
         const blobType = mimeType || "audio/webm";
         const audioBlob = new Blob(audioChunks, { type: blobType });
         recordedAudioUrl = URL.createObjectURL(audioBlob);
+        recordedAudioBlob = audioBlob;
         stream.getTracks().forEach((track) => track.stop());
       };
 
@@ -121,16 +123,18 @@ export function startListening(callbacks: SpeechCallbacks): void {
               transcript: finalTranscript.trim().toLowerCase(),
               words,
             },
-            recordedAudioUrl
+            recordedAudioUrl,
+            recordedAudioBlob
           );
-        }, 100);
+        }, 150);
       } else {
         callbacks.onFinalResult(
           {
             transcript: finalTranscript.trim().toLowerCase(),
             words,
           },
-          recordedAudioUrl
+          recordedAudioUrl,
+          recordedAudioBlob
         );
       }
     } else {

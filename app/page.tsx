@@ -4,7 +4,6 @@ import { useState, useCallback, useMemo } from "react";
 import sentencesData from "@/data/sentences.json";
 import conversationsData from "@/data/conversations.json";
 import type { Sentence, Category, AnalyzedWord, SpeechResult, AnalyzeResponse } from "@/lib/types";
-import { analyzeTranscript } from "@/lib/analyzer";
 import { markSentenceCompleted, saveWordAttempt } from "@/lib/progress";
 import { startListening, stopListening, isSpeechSupported } from "@/lib/speech";
 import { ModulePicker } from "@/components/ModulePicker";
@@ -96,25 +95,22 @@ export default function Home() {
       onInterimTranscript: (text) => {
         setInterimText(text);
       },
-      onFinalResult: async (speechResult: SpeechResult, audioUrl: string | null) => {
+      onFinalResult: async (speechResult: SpeechResult, audioUrl: string | null, audioBlob: Blob | null) => {
         setRecordedAudioUrl(audioUrl);
         setState("analyzing");
 
-        const analysis = analyzeTranscript(sentence, speechResult);
-
-        // Always send to API for accent-aware analysis — even when transcript matches
-        const topFlagged = analysis.flaggedWords.slice(0, 3);
+        // Build FormData with audio + sentence info
+        const formData = new FormData();
+        formData.append("tokens", JSON.stringify(sentence.tokens));
+        formData.append("focus", JSON.stringify(sentence.focus));
+        formData.append("browserTranscript", speechResult.transcript);
+        if (audioBlob) {
+          formData.append("audio", audioBlob, "recording.webm");
+        }
 
         const res = await fetch("/api/analyze", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            sentence: {
-              tokens: sentence.tokens,
-              focus: sentence.focus,
-            },
-            flaggedWords: topFlagged,
-          }),
+          body: formData,
         });
 
         const data = (await res.json()) as AnalyzeResponse;
@@ -124,10 +120,11 @@ export default function Home() {
         setAllCorrect(false);
         markSentenceCompleted(sentence.id);
 
-        for (const flagged of topFlagged) {
-          const analyzed = data.words.find((w) => w.index === flagged.index);
-          if (analyzed) {
-            saveWordAttempt(flagged.expected, analyzed.status, flagged.tags);
+        // Save word progress
+        for (const w of data.words) {
+          if (w.shouldPractice) {
+            const focusEntry = sentence.focus.find((f) => f.word === w.word);
+            saveWordAttempt(w.word, w.status, (focusEntry?.tags ?? []) as any);
           }
         }
 
