@@ -6,6 +6,7 @@ import type { AnalyzedWord, EvaluateWordResponse } from "@/lib/types";
 import { MicButton } from "./MicButton";
 import { startListening, stopListening, isSpeechSupported } from "@/lib/speech";
 import { saveWordAttempt } from "@/lib/progress";
+import { awardXP } from "@/lib/gamification";
 
 interface PracticeModeProps {
   word: AnalyzedWord;
@@ -14,9 +15,9 @@ interface PracticeModeProps {
 }
 
 const BAND_CONFIG = {
-  [Band.GREAT]: { label: "Excellent!", color: "var(--success)", bg: "var(--success-soft)", border: "rgba(52,211,153,0.2)" },
-  [Band.IMPROVING]: { label: "Getting closer", color: "var(--accent)", bg: "var(--accent-soft)", border: "rgba(232,185,49,0.2)" },
-  [Band.NEEDS_PRACTICE]: { label: "Keep trying", color: "var(--warn)", bg: "var(--warn-soft)", border: "rgba(251,146,60,0.2)" },
+  [Band.GREAT]: { label: "Excellent!", color: "var(--success)", bg: "var(--success-soft)", border: "rgba(16,185,129,0.2)" },
+  [Band.IMPROVING]: { label: "Getting closer", color: "var(--accent)", bg: "var(--accent-soft)", border: "rgba(124,92,252,0.2)" },
+  [Band.NEEDS_PRACTICE]: { label: "Keep trying", color: "var(--warn)", bg: "var(--warn-soft)", border: "rgba(245,158,11,0.2)" },
 };
 
 export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps) {
@@ -51,6 +52,9 @@ export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps
         setPreviousBand(evalResult.band);
         setAttemptNumber((n) => n + 1);
         saveWordAttempt(word.word, evalResult.band, []);
+        if (evalResult.band === Band.GREAT) {
+          awardXP(20, { greatWord: true });
+        }
       },
       onError: () => { setIsRecording(false); },
     });
@@ -71,7 +75,7 @@ export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.5rem' }}>
           {word.word}
         </h2>
-        <span style={{ fontFamily: 'monospace', fontSize: '0.9rem', color: 'var(--accent)', background: 'var(--accent-soft)', padding: '0.3rem 0.75rem', borderRadius: '2rem', border: '1px solid rgba(232,185,49,0.2)' }}>
+        <span style={{ fontFamily: 'monospace', fontSize: '0.9rem', color: 'var(--accent)', background: 'var(--accent-soft)', padding: '0.3rem 0.75rem', borderRadius: '2rem', border: '1px solid rgba(124,92,252,0.2)' }}>
           {word.ipa}
         </span>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.75rem', lineHeight: 1.5 }}>{word.tip}</p>
@@ -103,8 +107,8 @@ export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps
           {result.keepGoing && (
             <button onClick={handleToggle} className="touch-manipulation" style={{
               flex: 1, padding: '0.75rem', borderRadius: '0.6rem', border: 'none',
-              background: 'linear-gradient(135deg, var(--accent), #d4a020)',
-              color: '#0a0a0f', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
+              background: 'linear-gradient(135deg, var(--accent), #6242e0)',
+              color: '#ffffff', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer',
             }}>
               Try again
             </button>

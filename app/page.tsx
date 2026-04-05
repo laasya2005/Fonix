@@ -5,8 +5,9 @@ import sentencesData from "@/data/sentences.json";
 import conversationsData from "@/data/conversations.json";
 import type { Sentence, Category, AnalyzedWord, SpeechResult, AnalyzeResponse } from "@/lib/types";
 import { markSentenceCompleted, saveWordAttempt } from "@/lib/progress";
+import { awardXP } from "@/lib/gamification";
 import { startListening, stopListening, isSpeechSupported } from "@/lib/speech";
-import { ModulePicker } from "@/components/ModulePicker";
+import { Dashboard } from "@/components/Dashboard";
 import { ConversationMode } from "@/components/ConversationMode";
 import { SentenceDisplay } from "@/components/SentenceDisplay";
 import { MicButton } from "@/components/MicButton";
@@ -15,10 +16,12 @@ import { WordDetailCard } from "@/components/WordDetailCard";
 import { PracticeMode } from "@/components/PracticeMode";
 import { ResultsSummary } from "@/components/ResultsSummary";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
+import { AICoach } from "@/components/AICoach";
 
 type AppState =
   | "module-select"
   | "conversation"
+  | "coach"
   | "idle"
   | "recording"
   | "analyzing"
@@ -27,7 +30,11 @@ type AppState =
   | "practice"
   | "progress";
 
-const allSentences = sentencesData.sentences as Sentence[];
+const LEVEL_ORDER: Record<string, number> = { beginner: 0, intermediate: 1, advanced: 2 };
+
+const allSentences = (sentencesData.sentences as Sentence[]).sort(
+  (a, b) => (LEVEL_ORDER[a.level] ?? 0) - (LEVEL_ORDER[b.level] ?? 0) || a.difficulty - b.difficulty
+);
 
 export default function Home() {
   const [state, setState] = useState<AppState>("module-select");
@@ -58,7 +65,38 @@ export default function Home() {
   }, []);
 
   const handleConversationMode = useCallback(() => {
-    setState("conversation");
+    setState("coach");
+  }, []);
+
+  const handlePracticeWord = useCallback((word: string) => {
+    // Create a minimal AnalyzedWord so PracticeMode can work with it
+    const practiceWord: AnalyzedWord = {
+      index: 0,
+      word,
+      status: "NEEDS_PRACTICE" as AnalyzedWord["status"],
+      reason: "KNOWN_DIFFICULTY" as AnalyzedWord["reason"],
+      youSaid: word,
+      youSaidIpa: "",
+      ipa: "",
+      tip: `Practice saying "${word}" with clear American pronunciation.`,
+      syllables: "",
+      shouldPractice: true,
+    };
+    setSelectedWord(practiceWord);
+    setState("practice");
+  }, []);
+
+  const handleDailyChallenge = useCallback((sentenceIdx: number) => {
+    const allSents = (sentencesData.sentences as Sentence[]);
+    const dailySentence = allSents[sentenceIdx];
+    if (dailySentence) {
+      setSelectedModule(dailySentence.category as Category);
+      // Find index within the filtered/sorted sentences array
+      const filtered = allSents.filter((s) => s.category === dailySentence.category);
+      const idx = filtered.indexOf(dailySentence);
+      setSentenceIndex(idx >= 0 ? idx : 0);
+      setState("idle");
+    }
   }, []);
 
   const handleChangeModule = useCallback(() => {
@@ -128,6 +166,14 @@ export default function Home() {
           }
         }
 
+        // Award XP for sentence completion
+        const isPerfect = data.words.length === 0 || data.words.every((w) => !w.shouldPractice);
+        awardXP(isPerfect ? 25 : 10, {
+          sentenceCompleted: true,
+          perfectScore: isPerfect,
+          category: sentence.category,
+        });
+
         setState("results");
       },
       onError: () => {
@@ -163,17 +209,24 @@ export default function Home() {
     setState("results");
   }, []);
 
-  // Module selection screen
+  // Dashboard / module selection screen
   if (state === "module-select") {
     return (
-      <ModulePicker
+      <Dashboard
         onSelect={handleModuleSelect}
         onConversationMode={handleConversationMode}
+        onPracticeWord={handlePracticeWord}
+        onDailyChallenge={handleDailyChallenge}
       />
     );
   }
 
-  // Conversation practice mode
+  // AI Coach mode
+  if (state === "coach") {
+    return <AICoach onBack={handleChangeModule} />;
+  }
+
+  // Conversation practice mode (legacy)
   if (state === "conversation") {
     return (
       <ConversationMode
@@ -185,11 +238,14 @@ export default function Home() {
 
   // Practice mode
   if (state === "practice" && selectedWord) {
+    // If no module selected, user came from dashboard review — go back to dashboard
+    const practiceBack = selectedModule ? handleBackToResults : handleChangeModule;
+    const practiceNext = selectedModule ? handleNextSentence : handleChangeModule;
     return (
       <PracticeMode
         word={selectedWord}
-        onBack={handleBackToResults}
-        onNextSentence={handleNextSentence}
+        onBack={practiceBack}
+        onNextSentence={practiceNext}
       />
     );
   }
@@ -201,6 +257,12 @@ export default function Home() {
 
   const totalSentences = sentences.length;
   const currentNum = (sentenceIndex % totalSentences) + 1;
+
+  // Compute position within current level
+  const currentLevel = sentence.level;
+  const levelSentences = sentences.filter((s) => s.level === currentLevel);
+  const posInLevel = levelSentences.indexOf(sentence) + 1;
+  const totalInLevel = levelSentences.length;
 
   return (
     <>
@@ -226,6 +288,8 @@ export default function Home() {
       <div style={{ padding: '1.25rem', flex: 1 }}>
         <SentenceDisplay
           sentence={sentence}
+          currentIndex={posInLevel}
+          totalInLevel={totalInLevel}
           onChangeModule={handleChangeModule}
         />
 
