@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import sentencesData from "@/data/sentences.json";
-import type { Sentence, AnalyzedWord, SpeechResult, AnalyzeResponse } from "@/lib/types";
+import type { Sentence, Category, AnalyzedWord, SpeechResult, AnalyzeResponse } from "@/lib/types";
 import { analyzeTranscript } from "@/lib/analyzer";
 import { markSentenceCompleted, saveWordAttempt } from "@/lib/progress";
 import { startListening, stopListening, isSpeechSupported } from "@/lib/speech";
+import { ModulePicker } from "@/components/ModulePicker";
 import { SentenceDisplay } from "@/components/SentenceDisplay";
 import { MicButton } from "@/components/MicButton";
 import { TranscriptView } from "@/components/TranscriptView";
@@ -15,6 +16,7 @@ import { ResultsSummary } from "@/components/ResultsSummary";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
 
 type AppState =
+  | "module-select"
   | "idle"
   | "recording"
   | "analyzing"
@@ -23,10 +25,11 @@ type AppState =
   | "practice"
   | "progress";
 
-const sentences = sentencesData.sentences as Sentence[];
+const allSentences = sentencesData.sentences as Sentence[];
 
 export default function Home() {
-  const [state, setState] = useState<AppState>("idle");
+  const [state, setState] = useState<AppState>("module-select");
+  const [selectedModule, setSelectedModule] = useState<Category | null>(null);
   const [sentenceIndex, setSentenceIndex] = useState(0);
   const [interimText, setInterimText] = useState("");
   const [analyzedWords, setAnalyzedWords] = useState<AnalyzedWord[]>([]);
@@ -36,7 +39,34 @@ export default function Home() {
   const [selectedWord, setSelectedWord] = useState<AnalyzedWord | null>(null);
   const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
 
+  const sentences = useMemo(
+    () =>
+      selectedModule
+        ? allSentences.filter((s) => s.category === selectedModule)
+        : allSentences,
+    [selectedModule]
+  );
+
   const sentence = sentences[sentenceIndex % sentences.length];
+
+  const handleModuleSelect = useCallback((category: Category) => {
+    setSelectedModule(category);
+    setSentenceIndex(0);
+    setState("idle");
+  }, []);
+
+  const handleChangeModule = useCallback(() => {
+    setSelectedModule(null);
+    setSentenceIndex(0);
+    setAnalyzedWords([]);
+    setSummary("");
+    setEncouragement("");
+    setAllCorrect(false);
+    setInterimText("");
+    setSelectedWord(null);
+    setRecordedAudioUrl(null);
+    setState("module-select");
+  }, []);
 
   const handleMicToggle = useCallback(() => {
     if (state === "recording") {
@@ -96,7 +126,6 @@ export default function Home() {
         setAllCorrect(false);
         markSentenceCompleted(sentence.id);
 
-        // Save initial word analysis with tags from the sentence focus data
         for (const flagged of topFlagged) {
           const analyzed = data.words.find((w) => w.index === flagged.index);
           if (analyzed) {
@@ -139,6 +168,12 @@ export default function Home() {
     setState("results");
   }, []);
 
+  // Module selection screen
+  if (state === "module-select") {
+    return <ModulePicker onSelect={handleModuleSelect} />;
+  }
+
+  // Practice mode
   if (state === "practice" && selectedWord) {
     return (
       <PracticeMode
@@ -149,6 +184,7 @@ export default function Home() {
     );
   }
 
+  // Progress dashboard
   if (state === "progress") {
     return <ProgressDashboard onClose={() => setState("idle")} />;
   }
@@ -181,7 +217,10 @@ export default function Home() {
 
       {/* Main card */}
       <div className="bg-white rounded-none sm:rounded-2xl p-6 shadow-sm shadow-indigo-100">
-        <SentenceDisplay sentence={sentence} />
+        <SentenceDisplay
+          sentence={sentence}
+          onChangeModule={handleChangeModule}
+        />
 
         <MicButton
           isRecording={state === "recording"}

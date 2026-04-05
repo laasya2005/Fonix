@@ -30,7 +30,7 @@ export interface FocusWord {
   tags: PronunciationTag[];
 }
 
-export type Category = "daily" | "interview" | "phone_call";
+export type Category = "interview" | "public_speaking" | "customer_service" | "sales" | "social";
 export type Level = "beginner" | "intermediate" | "advanced";
 
 export interface Sentence {

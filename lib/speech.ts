@@ -31,7 +31,28 @@ export function startListening(callbacks: SpeechCallbacks): void {
     .getUserMedia({ audio: true })
     .then((stream) => {
       audioChunks = [];
-      mediaRecorder = new MediaRecorder(stream);
+
+      // Find a supported MIME type
+      const mimeTypes = [
+        "audio/webm;codecs=opus",
+        "audio/webm",
+        "audio/mp4",
+        "audio/ogg;codecs=opus",
+        "",
+      ];
+      const mimeType = mimeTypes.find(
+        (t) => t === "" || MediaRecorder.isTypeSupported(t)
+      );
+
+      try {
+        mediaRecorder = mimeType
+          ? new MediaRecorder(stream, { mimeType: mimeType || undefined })
+          : new MediaRecorder(stream);
+      } catch {
+        // MediaRecorder not supported — continue without recording
+        stream.getTracks().forEach((track) => track.stop());
+        return;
+      }
 
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -40,9 +61,9 @@ export function startListening(callbacks: SpeechCallbacks): void {
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        const blobType = mimeType || "audio/webm";
+        const audioBlob = new Blob(audioChunks, { type: blobType });
         recordedAudioUrl = URL.createObjectURL(audioBlob);
-        // Stop all tracks to release the mic
         stream.getTracks().forEach((track) => track.stop());
       };
 
