@@ -44,7 +44,7 @@ export function TranscriptView({
     );
   }
 
-  if (analyzedWords.length === 0 && tokens.length === 0) {
+  if (analyzedWords.length === 0) {
     return null;
   }
 
