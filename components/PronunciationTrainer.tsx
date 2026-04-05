@@ -16,10 +16,11 @@ interface AccentFeedback {
 
 interface PronunciationTrainerProps {
   onBack: () => void;
+  initialMode?: "shadowing" | "drill-select";
 }
 
-export function PronunciationTrainer({ onBack }: PronunciationTrainerProps) {
-  const [mode, setMode] = useState<Mode>("menu");
+export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrainerProps) {
+  const [mode, setMode] = useState<Mode>(initialMode || "menu");
   const [practiceState, setPracticeState] = useState<PracticeState>("ready");
 
   // Shadowing state

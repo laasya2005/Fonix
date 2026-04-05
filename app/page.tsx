@@ -24,6 +24,7 @@ type AppState =
   | "module-select"
   | "coach"
   | "pronunciation"
+  | "drills"
   | "idle"
   | "recording"
   | "analyzing"
@@ -234,6 +235,7 @@ function AppContent() {
         onPracticeWord={handlePracticeWord}
         onDailyChallenge={handleDailyChallenge}
         onPronunciation={() => setState("pronunciation")}
+        onDrills={() => setState("drills")}
       />
     );
   }
@@ -243,9 +245,14 @@ function AppContent() {
     return <AICoach onBack={handleChangeModule} />;
   }
 
-  // Pronunciation training mode
+  // Pronunciation training mode — shadowing
   if (state === "pronunciation") {
-    return <PronunciationTrainer onBack={handleChangeModule} />;
+    return <PronunciationTrainer onBack={handleChangeModule} initialMode="shadowing" />;
+  }
+
+  // Sound drills mode
+  if (state === "drills") {
+    return <PronunciationTrainer onBack={handleChangeModule} initialMode="drill-select" />;
   }
 
 

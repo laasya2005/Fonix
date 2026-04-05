@@ -11,9 +11,10 @@ interface DashboardProps {
   onPracticeWord: (word: string) => void;
   onDailyChallenge: (sentenceIndex: number) => void;
   onPronunciation: () => void;
+  onDrills: () => void;
 }
 
-export function Dashboard({ onConversationMode, onPronunciation }: DashboardProps) {
+export function Dashboard({ onConversationMode, onPronunciation, onDrills }: DashboardProps) {
   const [xp, setXp] = useState(0);
   const [level, setLevel] = useState(1);
   const [userEmail, setUserEmail] = useState("");
@@ -101,7 +102,7 @@ export function Dashboard({ onConversationMode, onPronunciation }: DashboardProp
         {/* Two secondary actions */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
           <button
-            onClick={onPronunciation}
+            onClick={onDrills}
             className="touch-manipulation"
             style={{
               padding: '1.25rem 1rem', borderRadius: '1rem',
