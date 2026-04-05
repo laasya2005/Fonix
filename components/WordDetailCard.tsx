@@ -69,7 +69,7 @@ export function WordDetailCard({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/30">
-      <div className="animate-slide-up bg-white rounded-t-2xl w-full max-w-lg p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+      <div className="animate-slide-up bg-white rounded-t-2xl w-full p-5 shadow-xl max-h-[85dvh] overflow-y-auto safe-bottom">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div>
@@ -105,7 +105,7 @@ export function WordDetailCard({
           <button
             onClick={playYours}
             disabled={!recordedAudioUrl || playingWhat !== null}
-            className="w-full py-3 rounded-lg bg-rose-100 text-rose-700 text-sm font-semibold hover:bg-rose-200 transition-colors disabled:opacity-40 flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-lg bg-rose-100 text-rose-700 text-sm font-semibold hover:bg-rose-200 transition-colors disabled:opacity-40 flex items-center justify-center gap-2 active:scale-95 touch-manipulation"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M8 5v14l11-7z" />
@@ -131,7 +131,7 @@ export function WordDetailCard({
             <button
               onClick={playCorrect}
               disabled={playingWhat !== null}
-              className="py-3 px-5 rounded-lg bg-emerald-100 text-emerald-700 text-sm font-semibold hover:bg-emerald-200 transition-colors disabled:opacity-40 flex items-center gap-2"
+              className="py-3 px-5 rounded-lg bg-emerald-100 text-emerald-700 text-sm font-semibold hover:bg-emerald-200 transition-colors disabled:opacity-40 flex items-center gap-2 active:scale-95 touch-manipulation"
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
@@ -183,7 +183,7 @@ export function WordDetailCard({
         {/* Practice CTA */}
         <button
           onClick={() => onPractice(word)}
-          className="w-full py-3.5 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white font-semibold text-sm hover:from-indigo-600 hover:to-indigo-700 transition-all shadow-lg shadow-indigo-200"
+          className="w-full py-3.5 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-200 active:scale-95 touch-manipulation"
         >
           Practice this word
         </button>

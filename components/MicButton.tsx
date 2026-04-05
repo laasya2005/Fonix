@@ -8,7 +8,7 @@ interface MicButtonProps {
 
 export function MicButton({ isRecording, onToggle, disabled }: MicButtonProps) {
   return (
-    <div className="flex flex-col items-center my-6">
+    <div className="flex flex-col items-center my-5">
       <div className="relative">
         {isRecording && (
           <div className="absolute inset-0 rounded-full bg-indigo-400 animate-pulse-ring" />
@@ -16,18 +16,18 @@ export function MicButton({ isRecording, onToggle, disabled }: MicButtonProps) {
         <button
           onClick={onToggle}
           disabled={disabled}
-          className={`relative w-16 h-16 rounded-full flex items-center justify-center transition-all duration-200 ${
+          className={`relative w-[72px] h-[72px] rounded-full flex items-center justify-center transition-all duration-200 active:scale-95 touch-manipulation ${
             isRecording
-              ? "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-200"
-              : "bg-gradient-to-br from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 shadow-lg shadow-indigo-200"
-          } ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+              ? "bg-red-500 shadow-lg shadow-red-200"
+              : "bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-lg shadow-indigo-200"
+          } ${disabled ? "opacity-50" : ""}`}
           aria-label={isRecording ? "Stop recording" : "Start recording"}
         >
           {isRecording ? (
-            <div className="w-5 h-5 bg-white rounded-sm" />
+            <div className="w-6 h-6 bg-white rounded-sm" />
           ) : (
             <svg
-              className="w-6 h-6 text-white"
+              className="w-7 h-7 text-white"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -37,7 +37,7 @@ export function MicButton({ isRecording, onToggle, disabled }: MicButtonProps) {
           )}
         </button>
       </div>
-      <span className="text-xs text-slate-400 mt-3">
+      <span className="text-xs text-slate-400 mt-2">
         {isRecording ? "Listening..." : "Tap to speak"}
       </span>
     </div>

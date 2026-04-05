@@ -3,18 +3,39 @@
 :root {
   --color-primary: #6366f1;
   --color-primary-light: #818cf8;
-  --color-bg: #f5f3ff;
 }
 
 body {
   background: #ffffff;
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Safe area insets for notched phones */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* Prevent text size adjustment on orientation change */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Smooth touch scrolling */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
 }
 
 @keyframes pulse-ring {
