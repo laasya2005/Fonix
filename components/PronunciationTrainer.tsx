@@ -197,7 +197,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
         formData.append("tip", currentSentence.tip);
       }
       if (result.blob) {
-        formData.append("audio", result.blob, "recording.webm");
+        formData.append("audio", result.blob, "recording.wav");
       }
 
       let feedbackResult: AccentFeedback = { verdict: "close", feedback: "Try to match the American pronunciation.", example: "" };
@@ -206,9 +206,14 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
           method: "POST",
           body: formData,
         });
-        feedbackResult = await res.json();
-      } catch {
-        // use default
+        if (res.ok) {
+          feedbackResult = await res.json();
+        } else {
+          const errText = await res.text();
+          feedbackResult = { verdict: "close", feedback: `Error: ${res.status}. ${errText.slice(0, 100)}`, example: "" };
+        }
+      } catch (err) {
+        feedbackResult = { verdict: "close", feedback: `Network error: ${String(err).slice(0, 100)}`, example: "" };
       }
       setAccentFeedback(feedbackResult);
       setLoadingFeedback(false);
