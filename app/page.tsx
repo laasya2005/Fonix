@@ -149,9 +149,34 @@ export default function Home() {
     return <ProgressDashboard onClose={() => setState("idle")} />;
   }
 
+  const totalSentences = sentences.length;
+  const currentNum = (sentenceIndex % totalSentences) + 1;
+
   return (
     <>
-      <div className="bg-white rounded-2xl p-6 shadow-sm shadow-indigo-100">
+      {/* Progress bar + sentence counter */}
+      <div className="px-4 mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-medium text-slate-500">
+            Sentence {currentNum} of {totalSentences}
+          </span>
+          <button
+            onClick={() => setState("progress")}
+            className="text-xs font-medium text-indigo-500 hover:text-indigo-700 transition-colors"
+          >
+            View progress
+          </button>
+        </div>
+        <div className="w-full bg-indigo-100 rounded-full h-1.5">
+          <div
+            className="bg-indigo-500 h-1.5 rounded-full transition-all duration-500"
+            style={{ width: `${(currentNum / totalSentences) * 100}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Main card */}
+      <div className="bg-white rounded-none sm:rounded-2xl p-6 shadow-sm shadow-indigo-100">
         <SentenceDisplay sentence={sentence} />
 
         <MicButton
@@ -180,13 +205,17 @@ export default function Home() {
         )}
       </div>
 
-      <button
-        onClick={() => setState("progress")}
-        className="mt-4 w-full py-2 text-sm text-indigo-500 hover:text-indigo-700 transition-colors"
-      >
-        View progress
-      </button>
+      {/* Skip sentence link */}
+      <div className="px-4 mt-3 text-center">
+        <button
+          onClick={handleNextSentence}
+          className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          Skip this sentence
+        </button>
+      </div>
 
+      {/* Word detail drawer */}
       {state === "word-detail" && selectedWord && (
         <WordDetailCard
           word={selectedWord}

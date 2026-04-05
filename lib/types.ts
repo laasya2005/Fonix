@@ -90,6 +90,7 @@ export interface AnalyzedWord {
   status: Band;
   reason: FlagReason;
   youSaid: string;
+  youSaidIpa: string;
   ipa: string;
   tip: string;
   syllables: string;

@@ -31,11 +31,12 @@ Problem words:
 ${wordDescriptions}
 
 For each word, provide:
-1. The correct IPA pronunciation
-2. A syllable breakdown (using · as separator)
-3. A short, encouraging tip in plain English (like talking to a friend, not a textbook)
-4. Whether the status is "NEEDS_PRACTICE" (word was clearly wrong) or "IMPROVING" (close but needs work)
-5. Whether the user should practice this word
+1. The correct IPA pronunciation (ipa)
+2. An approximate IPA of how the user likely pronounced it based on what was heard (youSaidIpa). For example if they said "wader" instead of "water", their IPA would be /ˈweɪdər/
+3. A syllable breakdown of the correct word (using · as separator)
+4. A short, encouraging tip in plain English (like talking to a friend, not a textbook)
+5. Whether the status is "NEEDS_PRACTICE" (word was clearly wrong) or "IMPROVING" (close but needs work)
+6. Whether the user should practice this word
 
 Also provide:
 - A one-line summary of what to focus on
@@ -50,7 +51,8 @@ Respond in this exact JSON format:
       "status": "NEEDS_PRACTICE" or "IMPROVING",
       "reason": "<original reason from input>",
       "youSaid": "<what was heard>",
-      "ipa": "<IPA pronunciation>",
+      "youSaidIpa": "<approximate IPA of user pronunciation>",
+      "ipa": "<correct IPA pronunciation>",
       "tip": "<friendly plain-English tip>",
       "syllables": "<syllable breakdown>",
       "shouldPractice": true or false
