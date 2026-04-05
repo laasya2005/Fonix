@@ -6,7 +6,8 @@ interface SpeechCallbacks {
   onError: (error: string) => void;
 }
 
-let recognition: SpeechRecognition | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let recognition: any = null;
 
 export function isSpeechSupported(): boolean {
   return (
@@ -30,7 +31,8 @@ export function startListening(callbacks: SpeechCallbacks): void {
   recognition.continuous = false;
   recognition.maxAlternatives = 1;
 
-  recognition.onresult = (event: SpeechRecognitionEvent) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  recognition.onresult = (event: any) => {
     let interimTranscript = "";
     let finalTranscript = "";
     const words: SpeechWordResult[] = [];
@@ -64,7 +66,8 @@ export function startListening(callbacks: SpeechCallbacks): void {
     }
   };
 
-  recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  recognition.onerror = (event: any) => {
     callbacks.onError(`Speech recognition error: ${event.error}`);
   };
 
