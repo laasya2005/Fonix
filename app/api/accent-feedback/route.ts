@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const SOUND_TIPS: Record<string, string> = {
-  th_sound: "Tongue should be between your teeth. If it sounds like T or D, your tongue is behind your teeth.",
-  flap_t: "The T should be a quick, soft tongue tap — like a fast D. Not a hard T.",
-  v_w: "For V, upper teeth must touch lower lip. For W, just round your lips.",
-  r_sound: "Curl your tongue backward — it should NOT touch the roof of your mouth.",
-  l_sound: "Touch your tongue tip to the ridge behind your upper front teeth.",
-  stress: "The stressed syllable should be LOUDER and LONGER than the others.",
-  vowels: "American vowels are open and relaxed. Listen carefully to the model.",
-  connected: "Let words flow together. Don't pause between each word.",
-  final_consonants: "Make sure you release the final sounds. Don't swallow the ending.",
-  schwa: "Unstressed syllables should be a quick, lazy 'uh' — not a full vowel.",
+  th_sound: "Tongue should be between your teeth.",
+  flap_t: "The T should be a quick, soft tongue tap.",
+  v_w: "V = teeth on lip. W = rounded lips.",
+  r_sound: "Curl tongue backward, don't tap the roof.",
+  l_sound: "Tongue tip touches ridge behind upper teeth.",
+  stress: "Stressed syllable should be LOUDER and LONGER.",
+  vowels: "American vowels are open and relaxed.",
+  connected: "Let words flow together smoothly.",
+  final_consonants: "Release the final sounds clearly.",
+  schwa: "Unstressed syllables = quick lazy 'uh'.",
 };
 
 export async function POST(request: NextRequest) {
@@ -24,21 +24,20 @@ export async function POST(request: NextRequest) {
   const speechKey = process.env.AZURE_SPEECH_KEY;
   const speechRegion = process.env.AZURE_SPEECH_REGION || "eastus";
 
+  // Check prerequisites
   if (!speechKey) {
-    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "DEBUG: Azure Speech key not found in env vars.", example: "" });
+    return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: "[1] Azure key missing from env vars", example: "" });
   }
   if (!audioFile) {
-    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "DEBUG: No audio file in form data.", example: "" });
+    return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: "[2] No audio file received", example: "" });
   }
   if (audioFile.size === 0) {
-    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "DEBUG: Audio file is empty (0 bytes).", example: "" });
+    return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: "[3] Audio file is 0 bytes", example: "" });
   }
 
   try {
     const audioBuffer = await audioFile.arrayBuffer();
-    console.log(`Audio received: ${audioBuffer.byteLength} bytes, type: ${audioFile.type}, target: "${target}"`);
 
-    // Azure Pronunciation Assessment via REST API (no SDK needed)
     const pronAssessmentParams = {
       ReferenceText: target,
       GradingSystem: "HundredMark",
@@ -46,7 +45,6 @@ export async function POST(request: NextRequest) {
       Dimension: "Comprehensive",
       EnableMiscue: true,
     };
-
     const pronHeader = Buffer.from(JSON.stringify(pronAssessmentParams)).toString("base64");
 
     const response = await fetch(
@@ -65,42 +63,24 @@ export async function POST(request: NextRequest) {
 
     if (!response.ok) {
       const errText = await response.text();
-      console.error("Azure Speech error:", response.status, errText);
-      return NextResponse.json({ verdict: "compare", overallScore: null, feedback: `Azure error ${response.status}: ${errText.slice(0, 150)}`, example: "" });
+      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[4] Azure HTTP ${response.status}: ${errText.slice(0, 200)}`, example: "" });
     }
 
     const result = await response.json();
-    console.log("Azure result:", JSON.stringify(result).slice(0, 500));
 
     if (result.RecognitionStatus !== "Success") {
-      return NextResponse.json({
-        verdict: "needs_work",
-        overallScore: null,
-        feedback: "Could not recognize your speech. Try speaking louder and closer to the mic.",
-        example: "",
-      });
+      return NextResponse.json({ verdict: "needs_work", overallScore: null, words: [], feedback: `[5] Azure status: ${result.RecognitionStatus}. Speak louder/closer to mic.`, example: "" });
     }
 
-    // Extract pronunciation assessment
     const nBest = result.NBest?.[0];
     if (!nBest?.PronunciationAssessment) {
-      return NextResponse.json({
-        verdict: "compare",
-        overallScore: null,
-        feedback: SOUND_TIPS[soundCategory || ""] || "Listen to both recordings and compare.",
-        example: "",
-      });
+      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[6] No pronunciation data in Azure response`, example: "" });
     }
 
     const assessment = nBest.PronunciationAssessment;
     const overallScore = Math.round(assessment.PronScore || 0);
-    const accuracyScore = Math.round(assessment.AccuracyScore || 0);
-    const fluencyScore = Math.round(assessment.FluencyScore || 0);
-    const completenessScore = Math.round(assessment.CompletenessScore || 0);
 
-    // Get word-level and phoneme-level details
     const wordResults: Array<{ word: string; score: number; phonemes: Array<{ phoneme: string; score: number }> }> = [];
-
     if (nBest.Words) {
       for (const w of nBest.Words) {
         const phonemes = (w.Phonemes || []).map((p: { Phoneme: string; PronunciationAssessment?: { AccuracyScore?: number } }) => ({
@@ -115,40 +95,30 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Determine verdict
     let verdict: string;
     let feedback: string;
     let example = "";
+    const tip = SOUND_TIPS[soundCategory || ""] || "";
 
     if (overallScore >= 80) {
       verdict = "pass";
-      feedback = `Score: ${overallScore}/100 — Good American pronunciation!`;
+      feedback = `Score: ${overallScore}/100 — Good pronunciation!`;
     } else if (overallScore >= 50) {
       verdict = "close";
-      const weakPhonemes = wordResults.flatMap((w) => w.phonemes).filter((p) => p.score < 60);
-      if (weakPhonemes.length > 0) {
-        const worst = weakPhonemes.sort((a, b) => a.score - b.score)[0];
-        feedback = `Score: ${overallScore}/100 — The "${worst.phoneme}" sound scored ${worst.score}/100. Focus on that sound.`;
-      } else {
-        feedback = `Score: ${overallScore}/100 — Almost there. Listen to the American version again.`;
-      }
-      example = SOUND_TIPS[soundCategory || ""] || "";
+      const weak = wordResults.flatMap((w) => w.phonemes).filter((p) => p.score < 60).sort((a, b) => a.score - b.score);
+      feedback = weak.length > 0
+        ? `Score: ${overallScore}/100 — The "${weak[0].phoneme}" sound scored ${weak[0].score}. Focus on that.`
+        : `Score: ${overallScore}/100 — Almost there.`;
+      example = tip;
     } else {
       verdict = "needs_work";
-      feedback = `Score: ${overallScore}/100 — Listen to the American version carefully, then try again.`;
-      example = SOUND_TIPS[soundCategory || ""] || "";
+      feedback = `Score: ${overallScore}/100 — Listen to the American version and try again.`;
+      example = tip;
     }
 
-    return NextResponse.json({
-      verdict,
-      overallScore,
-      scores: { accuracy: accuracyScore, fluency: fluencyScore, completeness: completenessScore },
-      words: wordResults,
-      feedback,
-      example,
-    });
+    return NextResponse.json({ verdict, overallScore, words: wordResults, feedback, example });
+
   } catch (err) {
-    console.error("Accent feedback error:", err);
-    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: `Error: ${String(err).slice(0, 200)}`, example: "" });
+    return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[7] Error: ${String(err).slice(0, 200)}`, example: "" });
   }
 }
