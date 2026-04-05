@@ -316,7 +316,7 @@ export function AICoach({ onBack }: AICoachProps) {
                       letterSpacing: '0.04em', color: 'var(--text-dim)', marginBottom: '0.2rem',
                       display: 'block',
                     }}>
-                      {c.type}
+                      Accent tip
                     </span>
                     <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.2rem' }}>
                       <span style={{ textDecoration: 'line-through' }}>{c.original}</span>

@@ -63,7 +63,7 @@ export function ProgressDashboard({ onClose }: ProgressDashboardProps) {
             {topTags.map(([tag, count]) => (
               <span key={tag} style={{
                 fontSize: '0.7rem', background: 'var(--warn-soft)', color: 'var(--warn)',
-                padding: '0.25rem 0.6rem', borderRadius: '2rem', border: '1px solid rgba(251,146,60,0.15)',
+                padding: '0.25rem 0.6rem', borderRadius: '2rem', border: '1px solid rgba(245,158,11,0.15)',
               }}>
                 {TAG_LABELS[tag] || tag} ({count})
               </span>

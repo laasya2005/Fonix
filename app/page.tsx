@@ -2,13 +2,11 @@
 
 import { useState, useCallback, useMemo } from "react";
 import sentencesData from "@/data/sentences.json";
-import conversationsData from "@/data/conversations.json";
 import type { Sentence, Category, AnalyzedWord, SpeechResult, AnalyzeResponse } from "@/lib/types";
 import { markSentenceCompleted, saveWordAttempt } from "@/lib/progress";
 import { awardXP } from "@/lib/gamification";
 import { startListening, stopListening, isSpeechSupported } from "@/lib/speech";
 import { Dashboard } from "@/components/Dashboard";
-import { ConversationMode } from "@/components/ConversationMode";
 import { SentenceDisplay } from "@/components/SentenceDisplay";
 import { MicButton } from "@/components/MicButton";
 import { TranscriptView } from "@/components/TranscriptView";
@@ -23,7 +21,6 @@ import { LevelUpPopup } from "@/components/LevelUpPopup";
 
 type AppState =
   | "module-select"
-  | "conversation"
   | "coach"
   | "pronunciation"
   | "idle"
@@ -250,15 +247,6 @@ export default function Home() {
     return <PronunciationTrainer onBack={handleChangeModule} />;
   }
 
-  // Conversation practice mode (legacy)
-  if (state === "conversation") {
-    return (
-      <ConversationMode
-        conversations={conversationsData.conversations as any}
-        onBack={handleChangeModule}
-      />
-    );
-  }
 
   // Practice mode
   if (state === "practice" && selectedWord) {

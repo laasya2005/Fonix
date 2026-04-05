@@ -255,8 +255,8 @@ export function Dashboard({ onSelect, onConversationMode, onPracticeWord, onDail
                   </svg>
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: '0.15rem' }}>AI Coach - Conversation Practice</p>
-                  <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>{coachLocked ? "Reach Level 4 to unlock" : "Real workplace dialogues with live feedback"}</p>
+                  <p style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: '0.15rem' }}>Accent Coach — Live Practice</p>
+                  <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>{coachLocked ? "Reach Level 4 to unlock" : "Speak in real scenarios, get accent feedback"}</p>
                 </div>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-dim)" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"/></svg>
               </div>

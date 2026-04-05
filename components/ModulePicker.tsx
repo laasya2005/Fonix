@@ -68,7 +68,7 @@ export function ModulePicker({ onSelect, onConversationMode }: ModulePickerProps
           background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '1.25rem', flexShrink: 0,
         }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0a0f" strokeWidth={2}><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth={2}><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--accent)' }}>

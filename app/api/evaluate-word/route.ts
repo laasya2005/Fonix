@@ -39,8 +39,8 @@ Respond in this exact JSON format:
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },
-    temperature: 0.7,
-    max_tokens: 150,
+    temperature: 0.3,
+    max_tokens: 100,
   });
 
   const content = completion.choices[0]?.message?.content;

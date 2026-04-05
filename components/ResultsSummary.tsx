@@ -19,7 +19,7 @@ export function ResultsSummary({
 }: ResultsSummaryProps) {
   if (allCorrect) {
     return (
-      <div className="animate-fade-in" style={{ marginTop: '1rem', padding: '1rem', background: 'var(--success-soft)', borderRadius: '0.75rem', border: '1px solid rgba(52,211,153,0.2)', textAlign: 'center' }}>
+      <div className="animate-fade-in" style={{ marginTop: '1rem', padding: '1rem', background: 'var(--success-soft)', borderRadius: '0.75rem', border: '1px solid rgba(16,185,129,0.2)', textAlign: 'center' }}>
         <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: '1rem', color: 'var(--success)', marginBottom: '0.25rem' }}>
           Excellent pronunciation!
         </p>
@@ -29,7 +29,7 @@ export function ResultsSummary({
           className="touch-manipulation"
           style={{
             width: '100%', padding: '0.75rem', borderRadius: '0.6rem', border: 'none',
-            background: 'var(--success)', color: '#0a0a0f', fontWeight: 600, fontSize: '0.85rem',
+            background: 'var(--success)', color: '#ffffff', fontWeight: 600, fontSize: '0.85rem',
             cursor: 'pointer',
           }}
         >
@@ -50,7 +50,7 @@ export function ResultsSummary({
       )}
 
       {practiceWords.length > 0 && (
-        <div style={{ padding: '0.75rem', background: 'var(--warn-soft)', borderRadius: '0.6rem', border: '1px solid rgba(251,146,60,0.15)' }}>
+        <div style={{ padding: '0.75rem', background: 'var(--warn-soft)', borderRadius: '0.6rem', border: '1px solid rgba(245,158,11,0.15)' }}>
           <p style={{ fontSize: '0.8rem', color: 'var(--warn)' }}>
             <span style={{ fontWeight: 700 }}>Focus on: </span>
             {practiceWords.join(", ")}

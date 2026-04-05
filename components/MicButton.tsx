@@ -46,17 +46,17 @@ export function MicButton({ isRecording, onToggle, disabled }: MicButtonProps) {
             transition: 'all 0.2s ease',
             background: isRecording
               ? 'var(--error)'
-              : 'linear-gradient(135deg, var(--accent), #d4a020)',
+              : 'linear-gradient(135deg, var(--accent), #6242e0)',
             boxShadow: isRecording
-              ? '0 0 30px rgba(248,113,113,0.3)'
-              : '0 0 30px var(--accent-glow), 0 4px 20px rgba(0,0,0,0.4)',
+              ? '0 0 30px rgba(239,68,68,0.3)'
+              : '0 0 30px var(--accent-glow), 0 4px 20px rgba(124,92,252,0.15)',
           }}
           aria-label={isRecording ? "Stop recording" : "Start recording"}
         >
           {isRecording ? (
             <div style={{ width: '1.5rem', height: '1.5rem', background: 'white', borderRadius: '0.25rem' }} />
           ) : (
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="#0a0a0f">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff">
               <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
               <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
             </svg>

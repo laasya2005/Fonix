@@ -18,7 +18,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  themeColor: "#0a0a0f",
+  themeColor: "#faf9ff",
 };
 
 export default function RootLayout({
@@ -35,7 +35,7 @@ export default function RootLayout({
       </head>
       <body>
         <div className="min-h-[100dvh] flex flex-col">
-          <header className="w-full py-3.5 text-center safe-top sticky top-0 z-40" style={{ background: 'rgba(10,10,15,0.85)', backdropFilter: 'blur(12px)', borderBottom: '1px solid var(--border)' }}>
+          <header className="w-full py-3.5 text-center safe-top sticky top-0 z-40" style={{ background: 'rgba(250,249,255,0.85)', backdropFilter: 'blur(12px)', borderBottom: '1px solid var(--border)' }}>
             <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.35rem', fontWeight: 700, color: 'var(--accent)', letterSpacing: '-0.02em' }}>
               Clario
             </h1>

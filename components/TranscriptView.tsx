@@ -81,7 +81,38 @@ export function TranscriptView({
             );
           }
 
+          const isSkipped = analyzed.youSaid === "(skipped)";
+          const isDifferentWord = !isSkipped && analyzed.youSaid && analyzed.youSaid.toLowerCase() !== analyzed.word.toLowerCase() && analyzed.reason === "TRANSCRIPT_MISMATCH";
+          const isNotAttempted = isSkipped || isDifferentWord;
           const needsPractice = analyzed.status === Band.NEEDS_PRACTICE;
+
+          if (isNotAttempted) {
+            return (
+              <button
+                key={i}
+                onClick={() => onWordClick(analyzed)}
+                className="touch-manipulation"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0.2rem 0.5rem',
+                  borderRadius: '0.4rem',
+                  border: '1px dashed var(--text-dim)',
+                  background: 'var(--surface-raised)',
+                  color: 'var(--text-dim)',
+                  fontSize: '0.95rem',
+                  fontWeight: 500,
+                  marginRight: '0.25rem',
+                  opacity: 0.7,
+                  cursor: 'pointer',
+                }}
+              >
+                {token}
+                <span style={{ fontSize: '0.55rem' }}>{isSkipped ? "skipped" : "wrong word"}</span>
+              </button>
+            );
+          }
 
           return (
             <button
