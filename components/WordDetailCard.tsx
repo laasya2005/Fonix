@@ -202,7 +202,7 @@ export function WordDetailCard({
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
                   <span style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', fontWeight: 700, color: 'var(--success)' }}>{word.word}</span>
-                  <span style={{ marginLeft: '0.5rem', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--text-muted)' }}>{word.ipa}</span>
+                  <span style={{ marginLeft: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-muted)' }}>{word.ipa}</span>
                 </div>
                 <button onClick={playCorrect} disabled={playingWhat !== null} className="touch-manipulation" style={{
                   padding: '0.55rem 1rem', borderRadius: '0.5rem', border: 'none',
@@ -222,12 +222,12 @@ export function WordDetailCard({
                 <div style={{ background: 'var(--warn-soft)', borderRadius: '0.6rem', padding: '0.75rem', border: '1px solid rgba(245,158,11,0.15)', textAlign: 'center' }}>
                   <p style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--warn)', fontWeight: 600, marginBottom: '0.3rem' }}>You said</p>
                   <p style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--warn)' }}>{word.youSaid || word.word}</p>
-                  <p style={{ fontFamily: 'monospace', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>{word.youSaidIpa}</p>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>{word.youSaidIpa}</p>
                 </div>
                 <div style={{ background: 'var(--success-soft)', borderRadius: '0.6rem', padding: '0.75rem', border: '1px solid rgba(16,185,129,0.15)', textAlign: 'center' }}>
                   <p style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--success)', fontWeight: 600, marginBottom: '0.3rem' }}>Correct</p>
                   <p style={{ fontFamily: 'var(--font-display)', fontSize: '1rem', fontWeight: 700, color: 'var(--success)' }}>{word.word}</p>
-                  <p style={{ fontFamily: 'monospace', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>{word.ipa}</p>
+                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>{word.ipa}</p>
                 </div>
               </div>
             )}
@@ -240,7 +240,7 @@ export function WordDetailCard({
                   {word.syllables.split("·").map((syl, i, arr) => (
                     <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
                       <span style={{
-                        fontFamily: 'monospace', fontSize: '0.95rem', fontWeight: 600,
+                        fontFamily: 'var(--font-mono)', fontSize: '0.95rem', fontWeight: 600,
                         padding: '0.35rem 0.65rem', borderRadius: '0.4rem',
                         background: 'var(--surface-raised)', border: '1px solid var(--border)',
                         color: 'var(--accent)',

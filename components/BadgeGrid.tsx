@@ -25,7 +25,7 @@ export function BadgeGrid({ earned }: BadgeGridProps) {
               <div style={{
                 fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.2rem',
                 color: isEarned ? 'var(--accent)' : 'var(--text-dim)',
-                fontFamily: 'monospace', letterSpacing: '-0.02em',
+                fontFamily: 'var(--font-mono)', letterSpacing: '-0.02em',
               }}>{badge.icon}</div>
               <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.2 }}>{badge.name}</p>
             </div>

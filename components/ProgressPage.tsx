@@ -167,7 +167,7 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
                 background: 'var(--surface)', border: `1px solid ${earned ? 'var(--accent)' : 'var(--border)'}`,
                 opacity: earned ? 1 : 0.35,
               }}>
-                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: earned ? 'var(--accent)' : 'var(--text-dim)', fontFamily: 'monospace', marginBottom: '0.15rem' }}>
+                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: earned ? 'var(--accent)' : 'var(--text-dim)', fontFamily: 'var(--font-mono)', marginBottom: '0.15rem' }}>
                   {badge.icon}
                 </p>
                 <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.2 }}>{badge.name}</p>

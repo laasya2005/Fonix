@@ -33,7 +33,7 @@ export function LevelUpPopup({ newLevel, onClose }: LevelUpPopupProps) {
           width: '3rem', height: '3rem', borderRadius: '50%',
           background: 'var(--surface-raised)', border: '1px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          margin: '0 auto 0.5rem', fontFamily: 'monospace',
+          margin: '0 auto 0.5rem', fontFamily: 'var(--font-mono)',
           fontSize: '0.85rem', fontWeight: 700, color: 'var(--accent)',
         }}>L{newLevel}</div>
         <p style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--accent)', fontWeight: 700, marginBottom: '0.25rem' }}>

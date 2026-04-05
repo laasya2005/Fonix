@@ -33,7 +33,7 @@ export function BadgePopup({ badgeId, onClose }: BadgePopupProps) {
           width: '3rem', height: '3rem', borderRadius: '50%',
           background: 'var(--surface-raised)', border: '1px solid var(--border)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          margin: '0 auto 0.75rem', fontFamily: 'monospace',
+          margin: '0 auto 0.75rem', fontFamily: 'var(--font-mono)',
           fontSize: '0.85rem', fontWeight: 700, color: 'var(--accent)',
         }}>{badge.icon}</div>
         <p style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.25rem' }}>

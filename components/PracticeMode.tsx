@@ -75,7 +75,7 @@ export function PracticeMode({ word, onBack, onNextSentence }: PracticeModeProps
         <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.5rem' }}>
           {word.word}
         </h2>
-        <span style={{ fontFamily: 'monospace', fontSize: '0.9rem', color: 'var(--accent)', background: 'var(--accent-soft)', padding: '0.3rem 0.75rem', borderRadius: '2rem', border: '1px solid rgba(124,92,252,0.2)' }}>
+        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--accent)', background: 'var(--accent-soft)', padding: '0.3rem 0.75rem', borderRadius: '2rem', border: '1px solid rgba(124,92,252,0.2)' }}>
           {word.ipa}
         </span>
         <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.75rem', lineHeight: 1.5 }}>{word.tip}</p>

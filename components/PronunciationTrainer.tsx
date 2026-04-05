@@ -422,7 +422,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
               borderRadius: '0.85rem', padding: '1.25rem', marginBottom: '1rem',
             }}>
               <p style={{
-                fontSize: '2.5rem', fontWeight: 800, fontFamily: 'monospace',
+                fontSize: '2.5rem', fontWeight: 800, fontFamily: 'var(--font-mono)',
                 color: avgScore >= 80 ? 'var(--success)' : avgScore >= 50 ? 'var(--warn)' : 'var(--error)',
                 marginBottom: '0.25rem',
               }}>
@@ -568,7 +568,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             {mode === "drill" ? currentText : `\u201C${currentText}\u201D`}
           </p>
           {currentPhonetic && (
-            <p style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--accent)', marginTop: '0.3rem' }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--accent)', marginTop: '0.3rem' }}>
               {currentPhonetic}
             </p>
           )}
@@ -706,7 +706,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   <span style={{
                     fontSize: '1.5rem', fontWeight: 800, color: scoreColor(accentFeedback.overallScore!),
-                    fontFamily: 'monospace',
+                    fontFamily: 'var(--font-mono)',
                   }}>
                     {accentFeedback.overallScore}
                   </span>
@@ -729,7 +729,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
                     {accentFeedback.words.flatMap(w => w.phonemes).map((p, i) => (
                       <span key={i} style={{
                         padding: '0.2rem 0.4rem', borderRadius: '0.3rem',
-                        fontSize: '0.95rem', fontFamily: 'monospace', fontWeight: 600,
+                        fontSize: '0.95rem', fontFamily: 'var(--font-mono)', fontWeight: 600,
                         background: p.score >= 80 ? 'var(--success-soft)' : p.score >= 50 ? 'var(--warn-soft)' : 'var(--error-soft)',
                         color: scoreColor(p.score),
                         border: `1px solid ${p.score >= 80 ? 'rgba(16,185,129,0.15)' : p.score >= 50 ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)'}`,
