@@ -9,6 +9,7 @@ export interface SoundCategory {
   name: string;
   description: string;
   minLevel: number;
+  howTo: string[];
   words: DrillWord[];
 }
 
@@ -25,6 +26,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "TH Sound",
     description: "Tongue between teeth — voiced and voiceless",
     minLevel: 1,
+    howTo: [
+      "Stick your tongue out slightly between your upper and lower teeth",
+      "Gently bite down — your teeth should lightly touch your tongue",
+      "Blow air over your tongue (for voiceless TH like 'think')",
+      "Or vibrate your throat while blowing (for voiced TH like 'this')",
+      "Common mistake: substituting T or D — if you say 'tink', your tongue is behind your teeth instead of between them",
+    ],
     words: [
       { text: "think", phonetic: "/θɪŋk/", tip: "Tongue between teeth, blow air — not 'tink'" },
       { text: "this", phonetic: "/ðɪs/", tip: "Same position but vibrate your throat" },
@@ -45,6 +53,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "Flap T",
     description: "Americans turn T into a soft D between vowels",
     minLevel: 1,
+    howTo: [
+      "When T comes between two vowels, Americans don't say a hard T",
+      "Instead, quickly tap the tip of your tongue on the ridge behind your upper teeth",
+      "It sounds like a very fast, soft D — 'water' becomes 'wah-der'",
+      "Think of it as a lazy T — your tongue barely touches and bounces off",
+      "Practice: say 'da-da-da' fast. That tongue tap is the flap T",
+    ],
     words: [
       { text: "water", phonetic: "/ˈwɑːɾɚ/", tip: "Say 'wah-der' — T becomes a quick D tap" },
       { text: "better", phonetic: "/ˈbeɾɚ/", tip: "Say 'beh-der' — soft, quick tongue tap" },
@@ -65,6 +80,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "V vs W",
     description: "V = teeth on lip, W = rounded lips",
     minLevel: 1,
+    howTo: [
+      "V: lightly bite your lower lip with your upper teeth, then vibrate",
+      "W: push your lips forward into a small circle, like blowing out a candle",
+      "Key difference: V uses teeth touching lip. W uses only lips, no teeth.",
+      "Test yourself: say 'vine' — you should feel teeth on lip. Say 'wine' — lips only",
+      "Common mistake: using W for both. If you say 'wery' instead of 'very', your teeth aren't touching your lip",
+    ],
     words: [
       { text: "vine", phonetic: "/vaɪn/", tip: "Upper teeth touch lower lip, then release" },
       { text: "wine", phonetic: "/waɪn/", tip: "Round lips like blowing a candle — no teeth" },
@@ -85,6 +107,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "R Sound",
     description: "American R — tongue curls back, never taps",
     minLevel: 2,
+    howTo: [
+      "Curl the tip of your tongue backward — it should NOT touch the roof of your mouth",
+      "The sides of your tongue should touch your upper back teeth",
+      "Your lips can round slightly forward",
+      "The sound comes from the shape of your tongue, not from tapping anything",
+      "Common mistake: tapping tongue on the roof (Indian/British R). American R floats — tongue curls back in the air",
+    ],
     words: [
       { text: "car", phonetic: "/kɑːr/", tip: "Curl tongue tip back, don't tap the roof" },
       { text: "work", phonetic: "/wɜːrk/", tip: "Tongue pulls back and bunches up" },
@@ -105,6 +134,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "L Sound",
     description: "Light L vs Dark L — tongue tip touches ridge",
     minLevel: 2,
+    howTo: [
+      "Light L (at start of word): touch tongue tip to the ridge right behind your upper front teeth",
+      "Dark L (at end of word): same tongue position but raise the back of your tongue too",
+      "Dark L sounds thicker — the back of your tongue lifts toward the soft palate",
+      "Practice: 'light' (light L) vs 'full' (dark L) — feel the difference in tongue position",
+      "Common mistake: dropping the L entirely ('ful' instead of 'full') or using a W sound",
+    ],
     words: [
       { text: "light", phonetic: "/laɪt/", tip: "Tongue tip touches the ridge behind upper teeth" },
       { text: "full", phonetic: "/fʊl/", tip: "Dark L — tongue tip up, back of tongue raised" },
@@ -125,6 +161,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "Word Stress",
     description: "Which syllable gets the emphasis",
     minLevel: 3,
+    howTo: [
+      "English words have one syllable that is LOUDER, LONGER, and HIGHER in pitch",
+      "The stressed syllable gets more energy — say it stronger, hold it slightly longer",
+      "Unstressed syllables get quieter and shorter — they often become 'uh' (schwa)",
+      "Example: 'dePENd' — the PEN is louder and longer. 'DE' is quick and quiet",
+      "Wrong stress sounds very foreign, even if each sound is perfect. This is one of the most important things to get right.",
+    ],
     words: [
       { text: "develop", phonetic: "/dɪˈvɛləp/", tip: "de-VEL-op — stress on the second syllable" },
       { text: "comfortable", phonetic: "/ˈkʌmftɚbəl/", tip: "COMF-ter-bul — 3 syllables, not 4" },
@@ -145,6 +188,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "Vowel Sounds",
     description: "American vowels differ from other accents",
     minLevel: 2,
+    howTo: [
+      "American English has more vowel sounds than most languages — small differences matter",
+      "'hot' uses an open 'ah' sound (mouth wide open), not the British 'o'",
+      "'cat' has a wide stretched 'æ' — open your mouth wide and pull corners back",
+      "Diphthongs are vowels that MOVE: 'face' starts open and closes to a smile",
+      "Listen carefully to the model — American vowels are often longer and more relaxed than other accents",
+    ],
     words: [
       { text: "hot", phonetic: "/hɑːt/", tip: "American: open 'ah' sound — not British 'o'" },
       { text: "cat", phonetic: "/kæt/", tip: "Wide open mouth — 'æ' sound, not 'eh'" },
@@ -165,6 +215,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "Connected Speech",
     description: "How words blend together in natural American English",
     minLevel: 4,
+    howTo: [
+      "Americans don't say each word separately — words flow into each other",
+      "'want to' becomes 'wanna', 'going to' becomes 'gonna' — these are normal, not lazy",
+      "When a word ends in a consonant and the next starts with a vowel, they LINK: 'got it' → 'gah-dit'",
+      "Function words (to, of, for, a) get reduced: 'of' becomes 'uv', 'a' becomes 'uh'",
+      "Practice: say the phrase fast as ONE sound, not as separate words",
+    ],
     words: [
       { text: "got it", phonetic: "/ˈɡɑːɾɪt/", tip: "Blends into 'gah-dit' — one smooth sound" },
       { text: "want to", phonetic: "/ˈwɑːnə/", tip: "Say 'wanna' — T disappears completely" },
@@ -185,6 +242,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "Final Consonants",
     description: "Don't drop the ending sounds",
     minLevel: 3,
+    howTo: [
+      "Many non-native speakers drop consonants at the end of words — Americans don't",
+      "'worked' ends with K-T — you need to release both sounds at the end",
+      "Past tense -ed endings: 'helped' = helpt, 'changed' = chainjd, 'wanted' = wan-tid",
+      "Practice: exaggerate the ending at first. Say 'helpt!' with a strong T",
+      "Then gradually make it natural — the ending should be there but not overly loud",
+    ],
     words: [
       { text: "helped", phonetic: "/hɛlpt/", tip: "Say the final 'pt' — don't drop the T" },
       { text: "asked", phonetic: "/æskt/", tip: "Three consonants at the end: S-K-T" },
@@ -205,6 +269,13 @@ export const SOUND_CATEGORIES: SoundCategory[] = [
     name: "Schwa Sound",
     description: "The most common vowel in English — the lazy 'uh'",
     minLevel: 3,
+    howTo: [
+      "The schwa /ə/ is the most common sound in English — it's a quick, lazy 'uh'",
+      "It appears in UNSTRESSED syllables: 'about' = uh-BOUT, 'banana' = buh-NAN-uh",
+      "Don't pronounce every vowel clearly — unstressed vowels should be reduced to 'uh'",
+      "This is what makes English sound natural. Pronouncing every syllable fully sounds robotic",
+      "Practice: say 'banana' — the first and last 'a' should both be a quick 'uh', not 'aa'",
+    ],
     words: [
       { text: "about", phonetic: "/əˈbaʊt/", tip: "First syllable: lazy 'uh' not 'ay'" },
       { text: "banana", phonetic: "/bəˈnænə/", tip: "Three schwas — buh-NAN-uh" },

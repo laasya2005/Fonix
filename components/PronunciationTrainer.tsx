@@ -229,13 +229,17 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
   }, [mode, stopAny]);
 
   // Try again
-  const handleTryAgain = useCallback(() => {
+  const handleTryAgain = useCallback(async () => {
     stopAny();
     setUserAudioUrl(null);
     setUserAudioBlob(null);
     setAccentFeedback(null);
     setPracticeState("ready");
-  }, [stopAny]);
+
+    // Auto-replay the correct pronunciation so user hears it again before retrying
+    await new Promise((r) => setTimeout(r, 300));
+    playModel();
+  }, [stopAny, playModel]);
 
   const container = { width: '100%', maxWidth: '30rem', margin: '0 auto', padding: '0 1.25rem' } as const;
 
@@ -375,6 +379,25 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
         <div style={{ width: '100%', height: '0.2rem', borderRadius: '1rem', background: 'var(--surface-raised)', marginBottom: '1rem', overflow: 'hidden' }}>
           <div style={{ height: '100%', borderRadius: '1rem', background: 'var(--accent)', width: `${(currentIdx / totalItems) * 100}%`, transition: 'width 0.3s ease' }} />
         </div>
+
+        {/* How-to instructions (drill mode, shown before first recording) */}
+        {mode === "drill" && selectedCategory && practiceState === "ready" && !userAudioUrl && (
+          <div style={{
+            background: 'var(--surface)', border: '1px solid var(--border)',
+            borderRadius: '0.75rem', padding: '0.75rem', marginBottom: '0.75rem',
+          }}>
+            <p style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.4rem' }}>
+              How to make this sound:
+            </p>
+            <ol style={{ margin: 0, paddingLeft: '1.1rem' }}>
+              {selectedCategory.howTo.map((step, i) => (
+                <li key={i} style={{ fontSize: '0.62rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '0.15rem' }}>
+                  {step}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )}
 
         {/* Category label (drill mode) */}
         {mode === "drill" && selectedCategory && (
