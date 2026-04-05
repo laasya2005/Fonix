@@ -147,7 +147,7 @@ describe("analyzeTranscript", () => {
     const result = analyzeTranscript(sentence, speech);
     const coldFlag = result.flaggedWords.find((w) => w.expected === "cold");
     expect(coldFlag).toBeDefined();
-    expect(coldFlag!.heard).toBe("");
+    expect(coldFlag!.heard).toBe("(skipped)");
     expect(coldFlag!.confidence).toBe(0);
   });
 
