@@ -54,17 +54,17 @@ export async function POST(request: NextRequest) {
         method: "POST",
         headers: {
           "Ocp-Apim-Subscription-Key": speechKey,
-          "Content-Type": "audio/wav",
+          "Content-Type": "audio/wav; codecs=audio/pcm; samplerate=16000",
           "Pronunciation-Assessment": pronHeader,
           "Accept": "application/json",
         },
-        body: audioBuffer,
+        body: new Uint8Array(audioBuffer),
       }
     );
 
     if (!response.ok) {
       const errText = await response.text();
-      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[4] Azure HTTP ${response.status}: ${errText.slice(0, 200)}`, example: "" });
+      return NextResponse.json({ verdict: "compare", overallScore: null, words: [], feedback: `[4] Azure ${response.status}: ${errText.slice(0, 200)} | audio: ${audioBuffer.byteLength}b, target: "${target}"`, example: "" });
     }
 
     const result = await response.json();
