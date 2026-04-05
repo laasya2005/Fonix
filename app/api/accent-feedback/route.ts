@@ -25,10 +25,13 @@ export async function POST(request: NextRequest) {
   const speechRegion = process.env.AZURE_SPEECH_REGION || "eastus";
 
   if (!speechKey) {
-    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "Azure Speech key not configured.", example: "" });
+    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "DEBUG: Azure Speech key not found in env vars.", example: "" });
   }
-  if (!audioFile || audioFile.size === 0) {
-    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "No audio received. Try recording again.", example: "" });
+  if (!audioFile) {
+    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "DEBUG: No audio file in form data.", example: "" });
+  }
+  if (audioFile.size === 0) {
+    return NextResponse.json({ verdict: "compare", overallScore: null, feedback: "DEBUG: Audio file is empty (0 bytes).", example: "" });
   }
 
   try {
