@@ -51,37 +51,40 @@ export async function POST(request: NextRequest) {
 
   const modeContext = MODE_CONTEXT[mode] || MODE_CONTEXT.small_talk;
 
+  // Collect already-corrected words from conversation history to avoid repeating
+  const alreadyCorrected = new Set<string>();
+  for (const msg of messages) {
+    if (msg.text && typeof msg.text === "string") {
+      // Check if previous messages contained correction data (stored in text)
+      const corrMatch = msg.text.match(/\[corrected:([^\]]+)\]/);
+      if (corrMatch) corrMatch[1].split(",").forEach((w: string) => alreadyCorrected.add(w.trim().toLowerCase()));
+    }
+  }
+  const alreadyCorrectedList = alreadyCorrected.size > 0 ? Array.from(alreadyCorrected).join(", ") : "none";
+
   const systemPrompt = `You are Fonix, an American English ACCENT coach. You help non-native speakers sound more American.
 
 SCENARIO: ${modeContext}
 
-CRITICAL RULES — ACCENT ONLY:
-1. DO NOT correct grammar. DO NOT correct phrasing. ONLY correct pronunciation and accent.
-2. Respond with 1-2 SHORT sentences. Keep the conversation going naturally.
-3. After the user speaks, give exactly 1 pronunciation tip based on how they likely SOUND (not what words they used).
-4. Focus on these American English accent features:
-   - Flap T: "water" sounds like "wah-der", "better" like "beh-der"
-   - TH sound: tongue between teeth, not T or D substitution
-   - American R: tongue curls back, doesn't tap
-   - V vs W: V = teeth on lip, W = rounded lips
-   - Word stress: which syllable is emphasized
-   - Vowel sounds: American vowels (e.g. "hot" = /hɑːt/ not /hɒt/)
-   - Connected speech: how words blend together ("got it" → "gah-dit")
-5. Always include a "say it like..." example in your tip.
-6. Ignore grammar mistakes completely — even if they say "I am go yesterday", only comment on accent.
+CRITICAL RULES:
+1. ONLY correct pronunciation/accent. NEVER correct grammar or phrasing.
+2. Respond with 1-2 SHORT sentences. Keep the conversation natural.
+3. Give at most 1 correction per response. If nothing stands out, give 0 corrections — just reply naturally.
+4. NEVER repeat a correction you already gave. Words already corrected: ${alreadyCorrectedList}. Pick a DIFFERENT word or give no correction.
+5. Only correct words that are genuinely hard to pronounce or have clear accent markers. Don't nitpick common simple words.
+6. Focus on: flap T, TH sound, American R, V/W, word stress, vowel sounds, connected speech.
+7. If you do correct, your spokenResponse should naturally include the correction — don't say "by the way". Just weave it in: "That sounded great! Just make sure 'water' sounds more like 'wah-der'."
 
 BROWSER HEARD: "${browserTranscript}"
 WHISPER HEARD: "${whisperTranscript}"
 
-Compare these transcripts. Differences reveal pronunciation issues (words the speaker mispronounced so badly that transcription differed).
-
 Respond ONLY in JSON:
 {
-  "spokenResponse": "Your conversational reply (1-2 sentences)",
+  "spokenResponse": "Your conversational reply with correction woven in naturally (1-2 sentences)",
   "corrections": [
-    {"original": "word they mispronounced", "suggested": "correct pronunciation guide (say: ___)", "type": "pronunciation"}
+    {"original": "word", "suggested": "how to say it (say: ___)", "type": "pronunciation"}
   ],
-  "tip": "1 specific accent tip with mouth/tongue position guidance"
+  "tip": ""
 }`;
 
   const gptMessages: Array<{ role: "system" | "assistant" | "user"; content: string }> = [
@@ -116,19 +119,13 @@ Respond ONLY in JSON:
 
   const parsed = JSON.parse(content);
 
-  // Build full spoken text: response + corrections spoken naturally
   const corrections = parsed.corrections || [];
-  let fullSpoken = parsed.spokenResponse || "";
+  const fullSpoken = parsed.spokenResponse || "";
 
-  if (corrections.length > 0) {
-    const correctionPhrases = corrections.map(
-      (c: { original: string; suggested: string }) =>
-        `By the way, instead of saying "${c.original}", try saying "${c.suggested}".`
-    );
-    fullSpoken += " " + correctionPhrases.join(" ");
-  }
+  // Tag corrected words so we can track them in conversation history
+  const correctedWords = corrections.map((c: { original: string }) => c.original.toLowerCase());
 
-  // Generate TTS for the full response including corrections
+  // Generate TTS for the spoken response (corrections are woven in naturally)
   let audioBase64 = "";
   try {
     const ttsResponse = await openai.audio.speech.create({
@@ -160,8 +157,14 @@ Respond ONLY in JSON:
     }
   }
 
+  // Append corrected words tag to spokenResponse so conversation history tracks them
+  const responseText = correctedWords.length > 0
+    ? `${parsed.spokenResponse || ""} [corrected:${correctedWords.join(",")}]`
+    : parsed.spokenResponse || "";
+
   return NextResponse.json({
     spokenResponse: parsed.spokenResponse || "",
+    responseTextForHistory: responseText,
     corrections: corrections.map((c: { original: string; suggested: string; type: string }, i: number) => ({
       ...c,
       audio: correctionAudios[i] || "",

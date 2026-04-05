@@ -133,7 +133,9 @@ export function AICoach({ onBack }: AICoachProps) {
 
           const coachMsg: Message = {
             role: "coach",
-            text: data.spokenResponse,
+            // Use responseTextForHistory (includes [corrected:...] tags) for tracking,
+            // but display spokenResponse (clean text) in the UI
+            text: data.responseTextForHistory || data.spokenResponse,
             corrections: data.corrections?.length > 0 ? data.corrections : undefined,
             tip: data.tip || undefined,
           };
@@ -300,7 +302,7 @@ export function AICoach({ onBack }: AICoachProps) {
               borderBottomLeftRadius: msg.role === "coach" ? '0.2rem' : '0.75rem',
               borderBottomRightRadius: msg.role === "user" ? '0.2rem' : '0.75rem',
             }}>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text)', lineHeight: 1.5 }}>{msg.text}</p>
+              <p style={{ fontSize: '0.8rem', color: 'var(--text)', lineHeight: 1.5 }}>{msg.text.replace(/\s*\[corrected:[^\]]*\]/, '')}</p>
             </div>
 
             {/* Corrections with audio replay */}
