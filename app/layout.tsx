@@ -22,7 +22,7 @@ export default function RootLayout({
               Your pronunciation coach
             </p>
           </header>
-          <main className="w-full max-w-lg mx-auto flex-1">{children}</main>
+          <main className="w-full flex-1 flex flex-col">{children}</main>
         </div>
       </body>
     </html>

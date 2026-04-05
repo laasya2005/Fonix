@@ -24,7 +24,7 @@ interface ModulePickerProps {
 
 export function ModulePicker({ onSelect, onConversationMode }: ModulePickerProps) {
   return (
-    <div className="p-4 pt-5">
+    <div className="p-4 pt-5 bg-white flex-1">
       <div className="text-center mb-5">
         <h2 className="text-lg font-bold text-slate-800">
           What do you want to improve?

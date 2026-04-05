@@ -209,7 +209,7 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
         </div>
       </div>
 
-      <div className="bg-white p-4">
+      <div className="bg-white p-4 flex-1">
         {/* Scenario */}
         <div className="flex items-center gap-2 mb-4">
           <span className="text-xs font-medium uppercase tracking-wide text-indigo-500 bg-indigo-50 px-2.5 py-1 rounded-full">
@@ -319,7 +319,7 @@ export function ConversationMode({ conversations, onBack }: ConversationModeProp
       </div>
 
       {/* Skip */}
-      <div className="bg-white pb-4 pt-1 text-center border-b border-slate-100">
+      <div className="bg-white pb-4 pt-1 text-center">
         <button
           onClick={handleNext}
           className="text-[11px] text-slate-400 hover:text-slate-600 transition-colors"

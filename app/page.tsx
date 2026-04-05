@@ -237,8 +237,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Main content — no card, just content on white bg */}
-      <div className="bg-white p-4 pb-2">
+      {/* Main content */}
+      <div className="bg-white p-4 pb-2 flex-1">
         <SentenceDisplay
           sentence={sentence}
           onChangeModule={handleChangeModule}
@@ -271,7 +271,7 @@ export default function Home() {
       </div>
 
       {/* Skip */}
-      <div className="bg-white pb-4 pt-1 text-center border-b border-slate-100">
+      <div className="bg-white pb-4 pt-1 text-center">
         <button
           onClick={handleNextSentence}
           className="text-[11px] text-slate-400 hover:text-slate-600 transition-colors"
