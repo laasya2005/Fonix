@@ -16,11 +16,11 @@ const XP_TABLE = [
 ];
 
 const LEVEL_UNLOCKS: Record<number, string> = {
-  1: "TH Sound, Flap T, V vs W",
-  2: "R Sound, L Sound, Vowel Sounds",
-  3: "Word Stress, Schwa, Final Consonants",
-  4: "Connected Speech, Live Coach",
-  5: "Everything unlocked",
+  1: "TH Sound, Flap T, V vs W + 5 beginner sentences",
+  2: "R Sound, L Sound, Vowels + 4 intermediate sentences",
+  3: "Word Stress, Schwa, Final Consonants + 4 advanced sentences",
+  4: "Connected Speech, Live Accent Coach + 5 fluency sentences",
+  5: "All content — you speak with an American accent",
 };
 
 export function ProgressPage({ onBack }: ProgressPageProps) {
@@ -112,9 +112,9 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
           ))}
         </div>
 
-        {/* Level roadmap */}
+        {/* Curriculum */}
         <p style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
-          Level roadmap
+          Your path to fluency
         </p>
         <div style={{
           background: 'var(--surface)', border: '1px solid var(--border)',
@@ -144,7 +144,8 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
                     <span style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>{lvl.minXP} XP</span>
                     {isCurrent && <span style={{ fontSize: '0.48rem', fontWeight: 700, color: 'var(--accent)' }}>YOU</span>}
                   </div>
-                  <p style={{ fontSize: '0.58rem', color: 'var(--text-dim)' }}>{LEVEL_UNLOCKS[lvl.level]}</p>
+                  <p style={{ fontSize: '0.6rem', color: 'var(--text-dim)', fontStyle: 'italic', marginTop: '0.05rem' }}>{lvl.subtitle}</p>
+                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)', marginTop: '0.15rem' }}>{LEVEL_UNLOCKS[lvl.level]}</p>
                 </div>
               </div>
             );

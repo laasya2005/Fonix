@@ -35,12 +35,12 @@ export interface AwardResult {
   streakCount: number;
 }
 
-export const LEVELS: { level: number; name: string; minXP: number }[] = [
-  { level: 1, name: "Newcomer", minXP: 0 },
-  { level: 2, name: "Speaker", minXP: 100 },
-  { level: 3, name: "Communicator", minXP: 300 },
-  { level: 4, name: "Presenter", minXP: 600 },
-  { level: 5, name: "Fluent", minXP: 1000 },
+export const LEVELS: { level: number; name: string; minXP: number; subtitle: string }[] = [
+  { level: 1, name: "Foundation", minXP: 0, subtitle: "Learn the mouth positions" },
+  { level: 2, name: "Core Sounds", minXP: 100, subtitle: "Master the American sound system" },
+  { level: 3, name: "Word Mastery", minXP: 300, subtitle: "Stress, rhythm, and endings" },
+  { level: 4, name: "Sentence Flow", minXP: 600, subtitle: "Connect words like a native" },
+  { level: 5, name: "Fluent", minXP: 1000, subtitle: "Speak with an American accent" },
 ];
 
 export const BADGES: { id: string; name: string; icon: string; condition: string }[] = [
