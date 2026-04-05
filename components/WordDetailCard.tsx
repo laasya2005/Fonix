@@ -13,13 +13,12 @@ interface WordDetailCardProps {
 
 export function WordDetailCard({
   word,
-  recordedAudioUrl,
   onClose,
   onPractice,
 }: WordDetailCardProps) {
-  const [playingWhat, setPlayingWhat] = useState<"yours" | "correct" | "rerecord" | null>(null);
-  const [rerecordedUrl, setRerecordedUrl] = useState<string | null>(null);
-  const [isRerecording, setIsRerecording] = useState(false);
+  const [playingWhat, setPlayingWhat] = useState<"yours" | "correct" | null>(null);
+  const [wordAudioUrl, setWordAudioUrl] = useState<string | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const recorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
@@ -30,19 +29,6 @@ export function WordDetailCard({
     setPlayingWhat(null);
   }
 
-  // Play back original sentence recording (how user actually said it)
-  function playYours() {
-    if (!recordedAudioUrl) return;
-    stopAny();
-    setPlayingWhat("yours");
-    const audio = new Audio(recordedAudioUrl);
-    audioRef.current = audio;
-    audio.onended = () => setPlayingWhat(null);
-    audio.onerror = () => setPlayingWhat(null);
-    audio.play();
-  }
-
-  // Play correct pronunciation via TTS
   function playCorrect() {
     if (!("speechSynthesis" in window)) return;
     stopAny();
@@ -55,20 +41,18 @@ export function WordDetailCard({
     speechSynthesis.speak(utterance);
   }
 
-  // Play re-recorded single word
-  function playRerecorded() {
-    if (!rerecordedUrl) return;
+  function playYours() {
+    if (!wordAudioUrl) return;
     stopAny();
-    setPlayingWhat("rerecord");
-    const audio = new Audio(rerecordedUrl);
+    setPlayingWhat("yours");
+    const audio = new Audio(wordAudioUrl);
     audioRef.current = audio;
     audio.onended = () => setPlayingWhat(null);
     audio.onerror = () => setPlayingWhat(null);
     audio.play();
   }
 
-  // Re-record just this word
-  const startRerecord = useCallback(async () => {
+  const startRecording = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       chunksRef.current = [];
@@ -95,20 +79,20 @@ export function WordDetailCard({
       recorder.onstop = () => {
         const blob = new Blob(chunksRef.current, { type: mimeType || "audio/webm" });
         const url = URL.createObjectURL(blob);
-        setRerecordedUrl(url);
-        setIsRerecording(false);
+        setWordAudioUrl(url);
+        setIsRecording(false);
         stream.getTracks().forEach((t) => t.stop());
 
-        // Auto-play back
+        // Auto-play back so user hears themselves immediately
         const audio = new Audio(url);
         audioRef.current = audio;
-        setPlayingWhat("rerecord");
+        setPlayingWhat("yours");
         audio.onended = () => setPlayingWhat(null);
         audio.onerror = () => setPlayingWhat(null);
         audio.play();
       };
 
-      setIsRerecording(true);
+      setIsRecording(true);
       recorder.start();
       setTimeout(() => {
         if (recorder.state === "recording") recorder.stop();
@@ -118,7 +102,7 @@ export function WordDetailCard({
     }
   }, []);
 
-  const stopRerecord = useCallback(() => {
+  const stopRecording = useCallback(() => {
     if (recorderRef.current && recorderRef.current.state === "recording") {
       recorderRef.current.stop();
     }
@@ -149,104 +133,85 @@ export function WordDetailCard({
           </button>
         </div>
 
-        {/* Pronunciation comparison side by side */}
-        <div className="grid grid-cols-2 gap-3 mb-4">
-          {/* Your pronunciation */}
-          <div className="bg-rose-50 rounded-xl p-4 border border-rose-100">
-            <p className="text-[10px] uppercase tracking-wide text-rose-400 mb-1.5 font-semibold">
-              You said
-            </p>
-            <p className="text-lg font-bold text-rose-700 mb-0.5">
-              {word.youSaid}
-            </p>
-            {word.youSaidIpa && (
-              <p className="text-sm font-mono text-rose-500 mb-3">
-                {word.youSaidIpa}
-              </p>
-            )}
-            {!word.youSaidIpa && <div className="mb-3" />}
+        {/* Step 1: Record yourself saying just this word */}
+        <div className="bg-indigo-50 rounded-xl p-4 mb-4 border border-indigo-100">
+          <p className="text-[10px] uppercase tracking-wider text-indigo-400 mb-3 font-semibold">
+            Step 1 — Say &ldquo;{word.word}&rdquo;
+          </p>
+          <div className="flex items-center gap-2">
             <button
-              onClick={playYours}
-              disabled={!recordedAudioUrl || playingWhat !== null}
-              className="w-full py-2 rounded-lg bg-rose-100 text-rose-600 text-xs font-medium hover:bg-rose-200 transition-colors disabled:opacity-40 flex items-center justify-center gap-1.5"
+              onClick={isRecording ? stopRecording : startRecording}
+              disabled={playingWhat !== null}
+              className={`flex-1 py-3 rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-40 ${
+                isRecording
+                  ? "bg-red-500 text-white animate-pulse"
+                  : "bg-indigo-500 text-white hover:bg-indigo-600 shadow-sm shadow-indigo-200"
+              }`}
             >
-              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              {playingWhat === "yours"
-                ? "Playing..."
-                : recordedAudioUrl
-                  ? "Hear your voice"
-                  : "No recording"}
+              {isRecording ? (
+                <>
+                  <div className="w-2.5 h-2.5 bg-white rounded-full" />
+                  Recording... tap to stop
+                </>
+              ) : (
+                <>
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+                    <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
+                  </svg>
+                  {wordAudioUrl ? "Record again" : "Tap to record"}
+                </>
+              )}
             </button>
+            {wordAudioUrl && (
+              <button
+                onClick={playYours}
+                disabled={playingWhat !== null}
+                className="py-3 px-4 rounded-lg bg-rose-100 text-rose-600 text-sm font-semibold hover:bg-rose-200 transition-colors disabled:opacity-40 flex items-center gap-1.5"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                {playingWhat === "yours" ? "Playing..." : "Hear yours"}
+              </button>
+            )}
           </div>
+        </div>
 
-          {/* Correct pronunciation */}
-          <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
-            <p className="text-[10px] uppercase tracking-wide text-emerald-400 mb-1.5 font-semibold">
-              Correct
-            </p>
-            <p className="text-lg font-bold text-emerald-700 mb-0.5">
-              {word.word}
-            </p>
-            <p className="text-sm font-mono text-emerald-500 mb-3">
-              {word.ipa}
-            </p>
+        {/* Step 2: Compare with correct */}
+        <div className="bg-emerald-50 rounded-xl p-4 mb-4 border border-emerald-100">
+          <p className="text-[10px] uppercase tracking-wider text-emerald-400 mb-3 font-semibold">
+            Step 2 — Compare with correct
+          </p>
+          <div className="flex items-center gap-3 mb-3">
+            <div className="flex-1">
+              <p className="text-lg font-bold text-emerald-700">{word.word}</p>
+              <p className="text-sm font-mono text-emerald-500">{word.ipa}</p>
+            </div>
             <button
               onClick={playCorrect}
               disabled={playingWhat !== null}
-              className="w-full py-2 rounded-lg bg-emerald-100 text-emerald-600 text-xs font-medium hover:bg-emerald-200 transition-colors disabled:opacity-40 flex items-center justify-center gap-1.5"
+              className="py-3 px-5 rounded-lg bg-emerald-100 text-emerald-600 text-sm font-semibold hover:bg-emerald-200 transition-colors disabled:opacity-40 flex items-center gap-1.5"
             >
-              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" />
               </svg>
               {playingWhat === "correct" ? "Playing..." : "Hear correct"}
             </button>
           </div>
         </div>
 
-        {/* Try saying just this word */}
-        <div className="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100">
-          <p className="text-[10px] uppercase tracking-wider text-slate-400 mb-2 font-semibold">
-            Try saying just this word
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={isRerecording ? stopRerecord : startRerecord}
-              disabled={playingWhat !== null}
-              className={`flex-1 py-2.5 rounded-lg text-xs font-medium flex items-center justify-center gap-1.5 transition-colors disabled:opacity-40 ${
-                isRerecording
-                  ? "bg-red-500 text-white animate-pulse"
-                  : "bg-indigo-100 text-indigo-600 hover:bg-indigo-200"
-              }`}
-            >
-              {isRerecording ? (
-                <>
-                  <div className="w-2 h-2 bg-white rounded-full" />
-                  Tap to stop
-                </>
-              ) : (
-                <>
-                  <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
-                    <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" />
-                  </svg>
-                  Say &ldquo;{word.word}&rdquo;
-                </>
-              )}
-            </button>
-            {rerecordedUrl && (
-              <button
-                onClick={playRerecorded}
-                disabled={playingWhat !== null}
-                className="py-2.5 px-3 rounded-lg bg-slate-200 text-slate-600 text-xs font-medium hover:bg-slate-300 transition-colors disabled:opacity-40 flex items-center gap-1.5"
-              >
-                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-                {playingWhat === "rerecord" ? "Playing..." : "Replay"}
-              </button>
-            )}
+        {/* Phonetic comparison */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <div className="bg-rose-50 rounded-xl p-3 border border-rose-100 text-center">
+            <p className="text-[10px] uppercase tracking-wide text-rose-400 mb-1 font-semibold">You said</p>
+            <p className="text-base font-bold text-rose-700">{word.youSaid}</p>
+            {word.youSaidIpa && <p className="text-xs font-mono text-rose-500 mt-0.5">{word.youSaidIpa}</p>}
+          </div>
+          <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-100 text-center">
+            <p className="text-[10px] uppercase tracking-wide text-emerald-400 mb-1 font-semibold">Correct</p>
+            <p className="text-base font-bold text-emerald-700">{word.word}</p>
+            <p className="text-xs font-mono text-emerald-500 mt-0.5">{word.ipa}</p>
           </div>
         </div>
 
@@ -261,9 +226,7 @@ export function WordDetailCard({
                 <span className="bg-indigo-50 text-indigo-700 font-mono text-base font-semibold px-3 py-1.5 rounded-lg border border-indigo-100">
                   {syl.trim()}
                 </span>
-                {i < arr.length - 1 && (
-                  <span className="text-slate-300 text-xs">·</span>
-                )}
+                {i < arr.length - 1 && <span className="text-slate-300 text-xs">·</span>}
               </span>
             ))}
           </div>
