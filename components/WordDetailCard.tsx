@@ -1,31 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Band } from "@/lib/types";
 import type { AnalyzedWord } from "@/lib/types";
 
 interface WordDetailCardProps {
   word: AnalyzedWord;
+  recordedAudioUrl: string | null;
   onClose: () => void;
   onPractice: (word: AnalyzedWord) => void;
 }
 
 export function WordDetailCard({
   word,
+  recordedAudioUrl,
   onClose,
   onPractice,
 }: WordDetailCardProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [playingWhat, setPlayingWhat] = useState<"yours" | "correct" | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  function playYours() {
+    if (!recordedAudioUrl) return;
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    setPlayingWhat("yours");
+    const audio = new Audio(recordedAudioUrl);
+    audioRef.current = audio;
+    audio.onended = () => setPlayingWhat(null);
+    audio.onerror = () => setPlayingWhat(null);
+    audio.play();
+  }
 
   function playCorrect() {
     if (!("speechSynthesis" in window)) return;
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
     speechSynthesis.cancel();
-    setIsPlaying(true);
+    setPlayingWhat("correct");
     const utterance = new SpeechSynthesisUtterance(word.word);
     utterance.lang = "en-US";
     utterance.rate = 0.75;
-    utterance.onend = () => setIsPlaying(false);
-    utterance.onerror = () => setIsPlaying(false);
+    utterance.onend = () => setPlayingWhat(null);
+    utterance.onerror = () => setPlayingWhat(null);
     speechSynthesis.speak(utterance);
   }
 
@@ -56,49 +75,59 @@ export function WordDetailCard({
           </button>
         </div>
 
-        {/* Phonetic comparison — the key visual */}
-        <div className="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100">
-          <p className="text-[10px] uppercase tracking-wider text-slate-400 mb-3 font-semibold">
-            Pronunciation comparison
-          </p>
-
+        {/* Pronunciation comparison side by side */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
           {/* Your pronunciation */}
-          <div className="flex items-center gap-3 mb-3">
-            <span className="w-16 text-[10px] uppercase tracking-wide text-rose-400 font-semibold shrink-0">
+          <div className="bg-rose-50 rounded-xl p-4 border border-rose-100">
+            <p className="text-[10px] uppercase tracking-wide text-rose-400 mb-1.5 font-semibold">
               You said
-            </span>
-            <div className="flex-1">
-              <span className="text-base font-semibold text-rose-700">
-                {word.youSaid}
-              </span>
-              {word.youSaidIpa && (
-                <span className="ml-2 text-sm font-mono text-rose-500 bg-rose-50 px-2 py-0.5 rounded border border-rose-100">
-                  {word.youSaidIpa}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Divider with arrow */}
-          <div className="flex items-center gap-2 ml-16 mb-3">
-            <div className="flex-1 border-t border-dashed border-slate-200" />
-            <span className="text-slate-300 text-xs">&#x2193;</span>
-            <div className="flex-1 border-t border-dashed border-slate-200" />
+            </p>
+            <p className="text-lg font-bold text-rose-700 mb-0.5">
+              {word.youSaid}
+            </p>
+            {word.youSaidIpa && (
+              <p className="text-sm font-mono text-rose-500 mb-3">
+                {word.youSaidIpa}
+              </p>
+            )}
+            {!word.youSaidIpa && <div className="mb-3" />}
+            <button
+              onClick={playYours}
+              disabled={!recordedAudioUrl || playingWhat !== null}
+              className="w-full py-2 rounded-lg bg-rose-100 text-rose-600 text-xs font-medium hover:bg-rose-200 transition-colors disabled:opacity-40 flex items-center justify-center gap-1.5"
+            >
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              {playingWhat === "yours"
+                ? "Playing..."
+                : recordedAudioUrl
+                  ? "Hear your voice"
+                  : "No recording"}
+            </button>
           </div>
 
           {/* Correct pronunciation */}
-          <div className="flex items-center gap-3">
-            <span className="w-16 text-[10px] uppercase tracking-wide text-emerald-400 font-semibold shrink-0">
+          <div className="bg-emerald-50 rounded-xl p-4 border border-emerald-100">
+            <p className="text-[10px] uppercase tracking-wide text-emerald-400 mb-1.5 font-semibold">
               Correct
-            </span>
-            <div className="flex-1">
-              <span className="text-base font-semibold text-emerald-700">
-                {word.word}
-              </span>
-              <span className="ml-2 text-sm font-mono text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100">
-                {word.ipa}
-              </span>
-            </div>
+            </p>
+            <p className="text-lg font-bold text-emerald-700 mb-0.5">
+              {word.word}
+            </p>
+            <p className="text-sm font-mono text-emerald-500 mb-3">
+              {word.ipa}
+            </p>
+            <button
+              onClick={playCorrect}
+              disabled={playingWhat !== null}
+              className="w-full py-2 rounded-lg bg-emerald-100 text-emerald-600 text-xs font-medium hover:bg-emerald-200 transition-colors disabled:opacity-40 flex items-center justify-center gap-1.5"
+            >
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              {playingWhat === "correct" ? "Playing..." : "Hear correct"}
+            </button>
           </div>
         </div>
 
@@ -129,25 +158,13 @@ export function WordDetailCard({
           <p className="text-sm text-amber-800 leading-relaxed">{word.tip}</p>
         </div>
 
-        {/* Actions */}
-        <div className="flex gap-3">
-          <button
-            onClick={playCorrect}
-            disabled={isPlaying}
-            className="flex-1 py-3.5 rounded-xl border-2 border-indigo-200 text-indigo-600 font-semibold text-sm hover:bg-indigo-50 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-            </svg>
-            {isPlaying ? "Playing..." : "Hear correct"}
-          </button>
-          <button
-            onClick={() => onPractice(word)}
-            className="flex-1 py-3.5 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white font-semibold text-sm hover:from-indigo-600 hover:to-indigo-700 transition-all shadow-lg shadow-indigo-200"
-          >
-            Practice this word
-          </button>
-        </div>
+        {/* Practice CTA */}
+        <button
+          onClick={() => onPractice(word)}
+          className="w-full py-3.5 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 text-white font-semibold text-sm hover:from-indigo-600 hover:to-indigo-700 transition-all shadow-lg shadow-indigo-200"
+        >
+          Practice this word
+        </button>
       </div>
     </div>
   );

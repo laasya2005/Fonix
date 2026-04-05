@@ -34,6 +34,7 @@ export default function Home() {
   const [encouragement, setEncouragement] = useState("");
   const [allCorrect, setAllCorrect] = useState(false);
   const [selectedWord, setSelectedWord] = useState<AnalyzedWord | null>(null);
+  const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
 
   const sentence = sentences[sentenceIndex % sentences.length];
 
@@ -51,13 +52,15 @@ export default function Home() {
     setSummary("");
     setEncouragement("");
     setAllCorrect(false);
+    setRecordedAudioUrl(null);
     setState("recording");
 
     startListening({
       onInterimTranscript: (text) => {
         setInterimText(text);
       },
-      onFinalResult: async (speechResult: SpeechResult) => {
+      onFinalResult: async (speechResult: SpeechResult, audioUrl: string | null) => {
+        setRecordedAudioUrl(audioUrl);
         setState("analyzing");
 
         const analysis = analyzeTranscript(sentence, speechResult);
@@ -127,6 +130,7 @@ export default function Home() {
     setAllCorrect(false);
     setInterimText("");
     setSelectedWord(null);
+    setRecordedAudioUrl(null);
     setState("idle");
   }, []);
 
@@ -219,6 +223,7 @@ export default function Home() {
       {state === "word-detail" && selectedWord && (
         <WordDetailCard
           word={selectedWord}
+          recordedAudioUrl={recordedAudioUrl}
           onClose={handleBackToResults}
           onPractice={handlePractice}
         />

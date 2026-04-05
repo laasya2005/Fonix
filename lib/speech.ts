@@ -2,12 +2,14 @@ import type { SpeechResult, SpeechWordResult } from "./types";
 
 interface SpeechCallbacks {
   onInterimTranscript: (text: string) => void;
-  onFinalResult: (result: SpeechResult) => void;
+  onFinalResult: (result: SpeechResult, audioUrl: string | null) => void;
   onError: (error: string) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let recognition: any = null;
+let mediaRecorder: MediaRecorder | null = null;
+let audioChunks: Blob[] = [];
 
 export function isSpeechSupported(): boolean {
   return (
@@ -21,6 +23,34 @@ export function startListening(callbacks: SpeechCallbacks): void {
     callbacks.onError("Speech recognition is not supported in this browser.");
     return;
   }
+
+  let recordedAudioUrl: string | null = null;
+
+  // Start audio recording alongside speech recognition
+  navigator.mediaDevices
+    .getUserMedia({ audio: true })
+    .then((stream) => {
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+        recordedAudioUrl = URL.createObjectURL(audioBlob);
+        // Stop all tracks to release the mic
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      mediaRecorder.start();
+    })
+    .catch(() => {
+      // Recording failed — continue without audio capture
+    });
 
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -48,7 +78,10 @@ export function startListening(callbacks: SpeechCallbacks): void {
         for (const w of resultWords) {
           words.push({
             word: w,
-            confidence: Math.max(0, Math.min(1, confidence + (Math.random() - 0.5) * 0.15)),
+            confidence: Math.max(
+              0,
+              Math.min(1, confidence + (Math.random() - 0.5) * 0.15)
+            ),
           });
         }
       } else {
@@ -57,10 +90,28 @@ export function startListening(callbacks: SpeechCallbacks): void {
     }
 
     if (finalTranscript) {
-      callbacks.onFinalResult({
-        transcript: finalTranscript.trim().toLowerCase(),
-        words,
-      });
+      // Stop recording, then deliver result after a small delay
+      // so the onstop handler can create the audio URL
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        setTimeout(() => {
+          callbacks.onFinalResult(
+            {
+              transcript: finalTranscript.trim().toLowerCase(),
+              words,
+            },
+            recordedAudioUrl
+          );
+        }, 100);
+      } else {
+        callbacks.onFinalResult(
+          {
+            transcript: finalTranscript.trim().toLowerCase(),
+            words,
+          },
+          recordedAudioUrl
+        );
+      }
     } else {
       callbacks.onInterimTranscript(interimTranscript);
     }
@@ -68,6 +119,9 @@ export function startListening(callbacks: SpeechCallbacks): void {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   recognition.onerror = (event: any) => {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      mediaRecorder.stop();
+    }
     callbacks.onError(`Speech recognition error: ${event.error}`);
   };
 
@@ -78,5 +132,9 @@ export function stopListening(): void {
   if (recognition) {
     recognition.stop();
     recognition = null;
+  }
+  if (mediaRecorder && mediaRecorder.state === "recording") {
+    mediaRecorder.stop();
+    mediaRecorder = null;
   }
 }
