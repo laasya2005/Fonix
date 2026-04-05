@@ -9,8 +9,22 @@ import { PRONUNCIATION_VIDEOS } from "@/data/pronunciation-videos";
 type Mode = "menu" | "shadowing" | "drill-select" | "drill";
 type PracticeState = "ready" | "playing-model" | "recording" | "comparing" | "feedback";
 
+interface PhonemeScore {
+  phoneme: string;
+  score: number;
+}
+
+interface WordScore {
+  word: string;
+  score: number;
+  phonemes: PhonemeScore[];
+}
+
 interface AccentFeedback {
-  verdict: "pass" | "close" | "needs_work";
+  verdict: string;
+  overallScore?: number | null;
+  scores?: { accuracy: number; fluency: number; completeness: number };
+  words?: WordScore[];
   feedback: string;
   example: string;
 }
@@ -174,6 +188,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
       if (mode === "drill" && currentDrillWord) {
         formData.append("word", currentDrillWord.text);
         formData.append("tip", currentDrillWord.tip);
+        if (selectedCategory) formData.append("category", selectedCategory.id);
       } else {
         formData.append("sentence", currentSentence.text);
         formData.append("tip", currentSentence.tip);
@@ -195,8 +210,15 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
       setAccentFeedback(feedbackResult);
       setLoadingFeedback(false);
 
-      // Award XP for completing practice
-      awardXP(10, { sentenceCompleted: true });
+      // Award XP based on score
+      const score = feedbackResult.overallScore;
+      if (score != null && score >= 80) {
+        awardXP(25, { sentenceCompleted: true, perfectScore: true });
+      } else if (score != null && score >= 50) {
+        awardXP(10, { sentenceCompleted: true });
+      } else {
+        awardXP(5, { sentenceCompleted: true });
+      }
       return;
     }
 
@@ -573,25 +595,69 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
           </div>
         )}
 
-        {accentFeedback && (
-          <div className="animate-fade-in" style={{
-            background: 'var(--surface)', borderRadius: '0.85rem',
-            border: '1px solid var(--border)', padding: '0.85rem',
-            marginBottom: '0.5rem',
-          }}>
-            <p style={{ fontSize: '0.55rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.3rem' }}>
-              Self-check
-            </p>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text)', lineHeight: 1.6, marginBottom: '0.3rem' }}>
-              {accentFeedback.feedback}
-            </p>
-            {accentFeedback.example && (
-              <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
-                {accentFeedback.example}
+        {accentFeedback && (() => {
+          const v = accentFeedback.verdict;
+          const hasScore = accentFeedback.overallScore != null;
+          const scoreColor = (s: number) => s >= 80 ? 'var(--success)' : s >= 50 ? 'var(--warn)' : 'var(--error)';
+
+          return (
+            <div className="animate-fade-in" style={{
+              background: 'var(--surface)', borderRadius: '0.85rem',
+              border: '1px solid var(--border)', padding: '0.85rem',
+              marginBottom: '0.5rem',
+            }}>
+              {/* Score header */}
+              {hasScore && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <span style={{
+                    fontSize: '1.5rem', fontWeight: 800, color: scoreColor(accentFeedback.overallScore!),
+                    fontFamily: 'monospace',
+                  }}>
+                    {accentFeedback.overallScore}
+                  </span>
+                  <div>
+                    <p style={{ fontSize: '0.7rem', fontWeight: 600, color: scoreColor(accentFeedback.overallScore!) }}>
+                      {v === "pass" ? "Good" : v === "close" ? "Almost" : "Try again"}
+                    </p>
+                    <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>out of 100</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Phoneme scores */}
+              {accentFeedback.words && accentFeedback.words.length > 0 && accentFeedback.words.some(w => w.phonemes.length > 0) && (
+                <div style={{ marginBottom: '0.5rem' }}>
+                  <p style={{ fontSize: '0.55rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.3rem' }}>
+                    Sound breakdown
+                  </p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+                    {accentFeedback.words.flatMap(w => w.phonemes).map((p, i) => (
+                      <span key={i} style={{
+                        padding: '0.2rem 0.4rem', borderRadius: '0.3rem',
+                        fontSize: '0.7rem', fontFamily: 'monospace', fontWeight: 600,
+                        background: p.score >= 80 ? 'var(--success-soft)' : p.score >= 50 ? 'var(--warn-soft)' : 'var(--error-soft)',
+                        color: scoreColor(p.score),
+                        border: `1px solid ${p.score >= 80 ? 'rgba(16,185,129,0.15)' : p.score >= 50 ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)'}`,
+                      }}>
+                        {p.phoneme} {p.score}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Feedback text */}
+              <p style={{ fontSize: '0.72rem', color: 'var(--text)', lineHeight: 1.5, marginBottom: accentFeedback.example ? '0.25rem' : 0 }}>
+                {accentFeedback.feedback}
               </p>
-            )}
-          </div>
-        )}
+              {accentFeedback.example && (
+                <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                  {accentFeedback.example}
+                </p>
+              )}
+            </div>
+          );
+        })()}
 
         {/* Action buttons */}
         {(practiceState === "comparing" || accentFeedback) && (

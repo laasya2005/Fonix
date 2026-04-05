@@ -1,51 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
+import * as sdk from "microsoft-cognitiveservices-speech-sdk";
 
-// The accent feedback API now returns targeted coaching tips
-// based on the sound category — NOT AI-judged pass/fail
-// because Whisper+GPT cannot reliably detect accent-level differences.
-// The real feedback comes from the user's own A/B comparison.
-
-const TIPS: Record<string, { feedback: string; reminder: string }> = {
-  th_sound: {
-    feedback: "Listen back: does your TH sound airy (correct) or like a hard T/D (needs work)?",
-    reminder: "Tongue should be visible between your teeth. If it's behind your teeth, you're making a T sound.",
-  },
-  flap_t: {
-    feedback: "Listen back: does the T sound soft like a quick D (correct) or like a hard T (needs work)?",
-    reminder: "The tongue should barely tap the roof — like saying 'da' very quickly. Not a strong T.",
-  },
-  v_w: {
-    feedback: "Listen back: for V, can you hear the buzzy teeth-on-lip sound? For W, is it smooth with no buzz?",
-    reminder: "V = upper teeth touch lower lip (you feel vibration). W = lips round forward, no teeth.",
-  },
-  r_sound: {
-    feedback: "Listen back: does your R sound thick and American (correct) or light/tapped (needs work)?",
-    reminder: "Tongue curls back and NEVER touches the roof. If your tongue taps, it's not the American R.",
-  },
-  l_sound: {
-    feedback: "Listen back: at the end of words, can you still hear the L or does it disappear?",
-    reminder: "For dark L (end of words), tongue tip stays pressed on the ridge. Don't drop it.",
-  },
-  stress: {
-    feedback: "Listen back: is one syllable clearly LOUDER and LONGER than the others?",
-    reminder: "The stressed syllable should pop out. Unstressed syllables should be quick and quiet.",
-  },
-  vowels: {
-    feedback: "Listen back: does your vowel match the American version or does it sound different?",
-    reminder: "American vowels are often more open and relaxed. 'Hot' = wide open 'ah', not rounded 'o'.",
-  },
-  connected: {
-    feedback: "Listen back: do the words flow together smoothly or do they sound choppy and separate?",
-    reminder: "Don't pause between words. Let them blend: 'want to' → 'wanna', 'got it' → 'gadit'.",
-  },
-  final_consonants: {
-    feedback: "Listen back: can you hear the ending sounds clearly or do they get swallowed?",
-    reminder: "Exaggerate the ending at first. 'Worked' = work-T. Make sure the final sound comes out.",
-  },
-  schwa: {
-    feedback: "Listen back: are your unstressed syllables quick and lazy ('uh') or are you pronouncing every vowel fully?",
-    reminder: "Unstressed syllables should be fast and reduced to 'uh'. 'banana' = buh-NAN-uh, not ba-NA-na.",
-  },
+const SOUND_TIPS: Record<string, string> = {
+  th_sound: "Tongue should be between your teeth. If it sounds like T or D, your tongue is behind your teeth.",
+  flap_t: "The T should be a quick, soft tongue tap — like a fast D. Not a hard T.",
+  v_w: "For V, upper teeth must touch lower lip. For W, just round your lips.",
+  r_sound: "Curl your tongue backward — it should NOT touch the roof of your mouth.",
+  l_sound: "Touch your tongue tip to the ridge behind your upper front teeth.",
+  stress: "The stressed syllable should be LOUDER and LONGER than the others.",
+  vowels: "American vowels are open and relaxed. Listen carefully to the model.",
+  connected: "Let words flow together. Don't pause between each word.",
+  final_consonants: "Make sure you release the final sounds. Don't swallow the ending.",
+  schwa: "Unstressed syllables should be a quick, lazy 'uh' — not a full vowel.",
 };
 
 export async function POST(request: NextRequest) {
@@ -53,30 +19,142 @@ export async function POST(request: NextRequest) {
   const targetWord = formData.get("word") as string;
   const targetSentence = formData.get("sentence") as string;
   const tip = formData.get("tip") as string;
+  const soundCategory = formData.get("category") as string;
+  const audioFile = formData.get("audio") as File | null;
 
-  // Determine which sound category this belongs to
-  // Look for keywords in the tip to match a category
-  let category = "general";
-  const tipLower = (tip || "").toLowerCase();
-  if (tipLower.includes("th") || tipLower.includes("tongue between teeth")) category = "th_sound";
-  else if (tipLower.includes("flap") || tipLower.includes("wah-der") || tipLower.includes("soft d") || tipLower.includes("beh-der")) category = "flap_t";
-  else if (tipLower.includes("v ") || tipLower.includes("w ") || tipLower.includes("teeth on lip") || tipLower.includes("rounded lip")) category = "v_w";
-  else if (tipLower.includes("curl") || tipLower.includes("american r")) category = "r_sound";
-  else if (tipLower.includes("light l") || tipLower.includes("dark l") || tipLower.includes("ridge")) category = "l_sound";
-  else if (tipLower.includes("stress") || tipLower.includes("syllable")) category = "stress";
-  else if (tipLower.includes("vowel") || tipLower.includes("open") || tipLower.includes("rounded")) category = "vowels";
-  else if (tipLower.includes("blend") || tipLower.includes("wanna") || tipLower.includes("gonna") || tipLower.includes("link")) category = "connected";
-  else if (tipLower.includes("ending") || tipLower.includes("final") || tipLower.includes("drop")) category = "final_consonants";
-  else if (tipLower.includes("schwa") || tipLower.includes("lazy") || tipLower.includes("uh")) category = "schwa";
+  const target = targetWord || targetSentence || "";
+  const speechKey = process.env.AZURE_SPEECH_KEY;
+  const speechRegion = process.env.AZURE_SPEECH_REGION;
 
-  const matched = TIPS[category] || {
-    feedback: "Listen to both recordings — does yours match the American version?",
-    reminder: "Focus on matching the exact sounds, not just the words.",
-  };
+  // If no Azure key or no audio, return self-check tips
+  if (!speechKey || !speechRegion || !audioFile || audioFile.size === 0) {
+    const catTip = SOUND_TIPS[soundCategory || ""] || "Listen to both recordings and compare.";
+    return NextResponse.json({
+      verdict: "compare",
+      overallScore: null,
+      phonemeScores: [],
+      feedback: catTip,
+      example: "",
+    });
+  }
 
-  return NextResponse.json({
-    verdict: "compare",
-    feedback: matched.feedback,
-    example: matched.reminder,
-  });
+  try {
+    const audioBuffer = Buffer.from(await audioFile.arrayBuffer());
+
+    // Azure Speech Pronunciation Assessment
+    const speechConfig = sdk.SpeechConfig.fromSubscription(speechKey, speechRegion);
+    speechConfig.speechRecognitionLanguage = "en-US";
+
+    const pronunciationConfig = sdk.PronunciationAssessmentConfig.fromJSON(JSON.stringify({
+      referenceText: target,
+      gradingSystem: "HundredMark",
+      granularity: "Phoneme",
+      dimension: "Comprehensive",
+      enableMiscue: true,
+    }));
+
+    // Create audio config from push stream
+    const format = sdk.AudioStreamFormat.getWaveFormatPCM(16000, 16, 1);
+    const pushStream = sdk.AudioInputStream.createPushStream(format);
+    pushStream.write(audioBuffer.buffer.slice(audioBuffer.byteOffset, audioBuffer.byteOffset + audioBuffer.byteLength));
+    pushStream.close();
+
+    const audioConfig = sdk.AudioConfig.fromStreamInput(pushStream);
+    const recognizer = new sdk.SpeechRecognizer(speechConfig, audioConfig);
+    pronunciationConfig.applyTo(recognizer);
+
+    const result = await new Promise<sdk.SpeechRecognitionResult>((resolve, reject) => {
+      recognizer.recognizeOnceAsync(
+        (res) => { recognizer.close(); resolve(res); },
+        (err) => { recognizer.close(); reject(err); }
+      );
+    });
+
+    if (result.reason === sdk.ResultReason.RecognizedSpeech) {
+      const assessment = sdk.PronunciationAssessmentResult.fromResult(result);
+
+      const overallScore = Math.round(assessment.pronunciationScore);
+      const accuracyScore = Math.round(assessment.accuracyScore);
+      const fluencyScore = Math.round(assessment.fluencyScore);
+      const completenessScore = Math.round(assessment.completenessScore);
+
+      // Get word-level and phoneme-level details
+      const wordResults: Array<{ word: string; score: number; phonemes: Array<{ phoneme: string; score: number }> }> = [];
+
+      const detailResult = result.properties.getProperty(
+        sdk.PropertyId.SpeechServiceResponse_JsonResult
+      );
+
+      if (detailResult) {
+        try {
+          const parsed = JSON.parse(detailResult);
+          const nBest = parsed?.NBest?.[0];
+          if (nBest?.Words) {
+            for (const w of nBest.Words) {
+              const phonemes = (w.Phonemes || []).map((p: { Phoneme: string; PronunciationAssessment: { AccuracyScore: number } }) => ({
+                phoneme: p.Phoneme,
+                score: Math.round(p.PronunciationAssessment?.AccuracyScore || 0),
+              }));
+              wordResults.push({
+                word: w.Word,
+                score: Math.round(w.PronunciationAssessment?.AccuracyScore || 0),
+                phonemes,
+              });
+            }
+          }
+        } catch { /* parsing failed, use summary scores */ }
+      }
+
+      // Determine verdict
+      let verdict: string;
+      let feedback: string;
+      let example = "";
+
+      if (overallScore >= 80) {
+        verdict = "pass";
+        feedback = `Score: ${overallScore}/100 — Good American pronunciation!`;
+      } else if (overallScore >= 50) {
+        verdict = "close";
+        // Find the worst phoneme
+        const weakPhonemes = wordResults.flatMap((w) => w.phonemes).filter((p) => p.score < 60);
+        if (weakPhonemes.length > 0) {
+          const worst = weakPhonemes.sort((a, b) => a.score - b.score)[0];
+          feedback = `Score: ${overallScore}/100 — The "${worst.phoneme}" sound scored ${worst.score}/100. Focus on that sound.`;
+        } else {
+          feedback = `Score: ${overallScore}/100 — Almost there. Listen to the American version again and try to match it more closely.`;
+        }
+        example = SOUND_TIPS[soundCategory || ""] || "Compare your recording with the American version.";
+      } else {
+        verdict = "needs_work";
+        feedback = `Score: ${overallScore}/100 — Listen to the American version carefully, then try again.`;
+        example = SOUND_TIPS[soundCategory || ""] || "Watch the tutorial video and focus on mouth position.";
+      }
+
+      return NextResponse.json({
+        verdict,
+        overallScore,
+        scores: { accuracy: accuracyScore, fluency: fluencyScore, completeness: completenessScore },
+        words: wordResults,
+        feedback,
+        example,
+      });
+    }
+
+    // Speech not recognized
+    return NextResponse.json({
+      verdict: "needs_work",
+      overallScore: null,
+      feedback: "Could not recognize your speech. Try speaking louder and closer to the mic.",
+      example: "",
+    });
+  } catch (err) {
+    // Azure error — fall back to self-check
+    const catTip = SOUND_TIPS[soundCategory || ""] || "Listen to both recordings and compare.";
+    return NextResponse.json({
+      verdict: "compare",
+      overallScore: null,
+      feedback: catTip,
+      example: String(err).includes("401") ? "Azure key issue — check your credentials." : "",
+    });
+  }
 }
