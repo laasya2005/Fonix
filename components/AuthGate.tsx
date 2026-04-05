@@ -15,6 +15,7 @@ export function AuthGate({ children }: AuthGateProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -32,12 +33,19 @@ export function AuthGate({ children }: AuthGateProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setSubmitting(true);
     const supabase = getSupabase();
 
     if (mode === "signup") {
       const { error } = await supabase.auth.signUp({ email, password });
-      if (error) setError(error.message);
+      if (error) {
+        setError(error.message);
+      } else {
+        setSuccess("Check your email for a confirmation link. Once confirmed, come back and log in.");
+        setMode("login");
+        setPassword("");
+      }
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setError(error.message);
@@ -72,6 +80,15 @@ export function AuthGate({ children }: AuthGateProps) {
           </p>
         </div>
 
+        {success && (
+          <div style={{
+            padding: '0.75rem', borderRadius: '0.6rem', marginBottom: '0.75rem',
+            background: 'var(--success-soft)', border: '1px solid rgba(16,185,129,0.15)',
+          }}>
+            <p style={{ fontSize: '0.72rem', color: 'var(--success)', lineHeight: 1.5 }}>{success}</p>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
           <input
             type="email"
@@ -88,7 +105,7 @@ export function AuthGate({ children }: AuthGateProps) {
           />
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Password (min 6 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -122,7 +139,7 @@ export function AuthGate({ children }: AuthGateProps) {
         <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.72rem', color: 'var(--text-dim)' }}>
           {mode === "login" ? "No account? " : "Already have an account? "}
           <button
-            onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(""); }}
+            onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(""); setSuccess(""); }}
             style={{
               background: 'none', border: 'none', color: 'var(--accent)',
               fontSize: '0.72rem', cursor: 'pointer', textDecoration: 'underline',
