@@ -22,7 +22,11 @@ export function BadgeGrid({ earned }: BadgeGridProps) {
               border: `1px solid ${isEarned ? 'var(--border-glow)' : 'var(--border)'}`,
               opacity: isEarned ? 1 : 0.4,
             }}>
-              <div style={{ fontSize: '1.2rem', marginBottom: '0.2rem' }}>{badge.icon}</div>
+              <div style={{
+                fontSize: '0.6rem', fontWeight: 700, marginBottom: '0.2rem',
+                color: isEarned ? 'var(--accent)' : 'var(--text-dim)',
+                fontFamily: 'monospace', letterSpacing: '-0.02em',
+              }}>{badge.icon}</div>
               <p style={{ fontSize: '0.45rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.2 }}>{badge.name}</p>
             </div>
           );

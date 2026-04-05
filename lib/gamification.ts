@@ -44,18 +44,18 @@ export const LEVELS: { level: number; name: string; minXP: number }[] = [
 ];
 
 export const BADGES: { id: string; name: string; icon: string; condition: string }[] = [
-  { id: "first_words", name: "First Words", icon: "🎯", condition: "Complete 1 sentence" },
-  { id: "perfect_score", name: "Perfect Score", icon: "⭐", condition: "All words correct on a sentence" },
-  { id: "on_fire", name: "On Fire", icon: "🔥", condition: "3-day streak" },
-  { id: "committed", name: "Committed", icon: "💪", condition: "7-day streak" },
-  { id: "chatterbox", name: "Chatterbox", icon: "🗣️", condition: "10 AI Coach exchanges" },
-  { id: "leveling_up", name: "Leveling Up", icon: "📈", condition: "Reach Level 2" },
-  { id: "halfway_there", name: "Halfway There", icon: "🏆", condition: "Reach Level 3" },
-  { id: "th_master", name: "TH Master", icon: "👄", condition: "5 TH words at GREAT" },
-  { id: "public_speaker", name: "Public Speaker", icon: "🎤", condition: "Complete all Speaking drills" },
-  { id: "interview_ready", name: "Interview Ready", icon: "💼", condition: "Complete all Interview drills" },
-  { id: "daily_hero", name: "Daily Hero", icon: "📅", condition: "Complete 5 daily challenges" },
-  { id: "fluent", name: "Fluent", icon: "🌟", condition: "Reach Level 5" },
+  { id: "first_words", name: "First Words", icon: "1", condition: "Complete 1 sentence" },
+  { id: "perfect_score", name: "Perfect Score", icon: "P", condition: "All words correct on a sentence" },
+  { id: "on_fire", name: "On Fire", icon: "3d", condition: "3-day streak" },
+  { id: "committed", name: "Committed", icon: "7d", condition: "7-day streak" },
+  { id: "chatterbox", name: "Chatterbox", icon: "10", condition: "10 coach exchanges" },
+  { id: "leveling_up", name: "Leveling Up", icon: "L2", condition: "Reach Level 2" },
+  { id: "halfway_there", name: "Halfway There", icon: "L3", condition: "Reach Level 3" },
+  { id: "th_master", name: "TH Master", icon: "TH", condition: "5 TH words at GREAT" },
+  { id: "public_speaker", name: "Public Speaker", icon: "SP", condition: "Complete all Speaking drills" },
+  { id: "interview_ready", name: "Interview Ready", icon: "IN", condition: "Complete all Interview drills" },
+  { id: "daily_hero", name: "Daily Hero", icon: "5x", condition: "Complete 5 daily challenges" },
+  { id: "fluent", name: "Fluent", icon: "F", condition: "Reach Level 5" },
 ];
 
 const DEFAULT_STATE: GamificationState = {

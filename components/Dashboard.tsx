@@ -160,7 +160,7 @@ export function Dashboard({ onSelect, onConversationMode, onPracticeWord, onDail
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.4rem' }}>
               {[
-                { label: 'Streak', value: gState.streak.count > 0 ? `🔥 ${gState.streak.count}d` : '—' },
+                { label: 'Streak', value: gState.streak.count > 0 ? `${gState.streak.count}d` : '--' },
                 { label: 'Sentences', value: stats.sentencesCompleted },
                 { label: 'To review', value: stats.struggled },
               ].map((s) => (
@@ -204,9 +204,11 @@ export function Dashboard({ onSelect, onConversationMode, onPracticeWord, onDail
             <div style={{
               width: '2.5rem', height: '2.5rem', borderRadius: '0.6rem', flexShrink: 0,
               background: 'var(--surface-raised)', border: '1px solid var(--border)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              👅
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 1v11m0 0a3 3 0 003-3V5a3 3 0 00-6 0v4a3 3 0 003 3zm-5 1a5 5 0 0010 0M12 19v4m-4 0h8" />
+              </svg>
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <p style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: '0.15rem' }}>Pronunciation Gym</p>
