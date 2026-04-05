@@ -195,14 +195,8 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
       setAccentFeedback(feedbackResult);
       setLoadingFeedback(false);
 
-      // Award XP based on verdict
-      if (feedbackResult.verdict === "pass") {
-        awardXP(25, { sentenceCompleted: true, perfectScore: true });
-      } else if (feedbackResult.verdict === "close") {
-        awardXP(10, { sentenceCompleted: true });
-      } else {
-        awardXP(5, { sentenceCompleted: true });
-      }
+      // Award XP for completing practice
+      awardXP(10, { sentenceCompleted: true });
       return;
     }
 
@@ -461,6 +455,14 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
               {currentPhonetic}
             </p>
           )}
+          {mode === "drill" && currentDrillWord?.soundsLike && (
+            <p style={{
+              fontSize: '1rem', fontWeight: 700, color: 'var(--text-muted)',
+              marginTop: '0.25rem', letterSpacing: '0.03em',
+            }}>
+              Sounds like: {currentDrillWord.soundsLike}
+            </p>
+          )}
           <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '0.35rem', lineHeight: 1.4 }}>
             {currentTip}
           </p>
@@ -571,42 +573,25 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
           </div>
         )}
 
-        {accentFeedback && (() => {
-          const v = accentFeedback.verdict;
-          const verdictConfig = {
-            pass: { label: "Good", color: 'var(--success)', bg: 'var(--success-soft)', border: 'rgba(16,185,129,0.15)' },
-            close: { label: "Almost", color: 'var(--warn)', bg: 'var(--warn-soft)', border: 'rgba(245,158,11,0.15)' },
-            needs_work: { label: "Try again", color: 'var(--error)', bg: 'var(--error-soft)', border: 'rgba(239,68,68,0.15)' },
-          };
-          const cfg = verdictConfig[v] || verdictConfig.close;
-
-          return (
-            <div className="animate-fade-in" style={{
-              background: cfg.bg, borderRadius: '0.85rem',
-              border: `1px solid ${cfg.border}`, padding: '0.85rem',
-              marginBottom: '0.5rem',
-            }}>
-              {/* Verdict label */}
-              <p style={{
-                fontSize: '0.88rem', fontWeight: 700, color: cfg.color, marginBottom: '0.3rem',
-              }}>
-                {cfg.label}
+        {accentFeedback && (
+          <div className="animate-fade-in" style={{
+            background: 'var(--surface)', borderRadius: '0.85rem',
+            border: '1px solid var(--border)', padding: '0.85rem',
+            marginBottom: '0.5rem',
+          }}>
+            <p style={{ fontSize: '0.55rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.3rem' }}>
+              Self-check
+            </p>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text)', lineHeight: 1.6, marginBottom: '0.3rem' }}>
+              {accentFeedback.feedback}
+            </p>
+            {accentFeedback.example && (
+              <p style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>
+                {accentFeedback.example}
               </p>
-
-              {/* Feedback */}
-              <p style={{ fontSize: '0.75rem', color: 'var(--text)', lineHeight: 1.5, marginBottom: accentFeedback.example ? '0.3rem' : 0 }}>
-                {accentFeedback.feedback}
-              </p>
-
-              {/* Example — only for close/needs_work */}
-              {accentFeedback.example && (
-                <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600, fontStyle: 'italic' }}>
-                  {accentFeedback.example}
-                </p>
-              )}
-            </div>
-          );
-        })()}
+            )}
+          </div>
+        )}
 
         {/* Action buttons */}
         {(practiceState === "comparing" || accentFeedback) && (
