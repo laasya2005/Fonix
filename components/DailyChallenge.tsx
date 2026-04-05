@@ -33,10 +33,10 @@ export function DailyChallenge({ sentence, completed, onStart }: DailyChallengeP
       opacity: completed ? 0.6 : 1,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
-        <span style={{ fontSize: '0.55rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-dim)' }}>
+        <span style={{ fontSize: '0.8rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-dim)' }}>
           Daily Challenge
         </span>
-        <span style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>
+        <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>
           {completed ? "Completed" : timeLeft + " left"}
         </span>
       </div>
@@ -47,12 +47,12 @@ export function DailyChallenge({ sentence, completed, onStart }: DailyChallengeP
         &ldquo;{sentence.text}&rdquo;
       </p>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: '0.6rem', color: 'var(--accent)', fontWeight: 600 }}>+50 XP bonus</span>
+        <span style={{ fontSize: '0.85rem', color: 'var(--accent)', fontWeight: 600 }}>+50 XP bonus</span>
         {!completed && (
           <button onClick={onStart} className="touch-manipulation" style={{
             padding: '0.4rem 0.85rem', borderRadius: '0.5rem',
             border: '1px solid var(--text)', background: 'var(--text)', color: 'var(--bg)',
-            fontWeight: 600, fontSize: '0.65rem', cursor: 'pointer',
+            fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer',
           }}>
             Start
           </button>

@@ -192,7 +192,7 @@ export function AICoach({ onBack }: AICoachProps) {
         <div style={{ width: '100%', maxWidth: '30rem', margin: '0 auto', padding: '0 1.25rem' }}>
           {/* Back button */}
           <div style={{ padding: '0.5rem 0' }}>
-            <button onClick={onBack} style={{ fontSize: '0.7rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <button onClick={onBack} style={{ fontSize: '0.95rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}>
               &larr; Dashboard
             </button>
           </div>
@@ -209,7 +209,7 @@ export function AICoach({ onBack }: AICoachProps) {
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--text)', marginTop: '1.25rem', letterSpacing: '-0.02em' }}>
               Ready to practice?
             </h2>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-dim)', marginTop: '0.25rem' }}>
+            <p style={{ fontSize: '1rem', color: 'var(--text-dim)', marginTop: '0.25rem' }}>
               Choose a scenario and start talking
             </p>
           </div>
@@ -231,7 +231,7 @@ export function AICoach({ onBack }: AICoachProps) {
                 onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = 'var(--border)'; }}
               >
                 <p style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: '0.15rem' }}>{s.name}</p>
-                <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)', lineHeight: 1.4 }}>{s.desc}</p>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)', lineHeight: 1.4 }}>{s.desc}</p>
               </button>
             ))}
           </div>
@@ -249,10 +249,10 @@ export function AICoach({ onBack }: AICoachProps) {
       {/* Top bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 1.25rem' }}>
         <button onClick={endSession} style={{
-          fontSize: '0.65rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer',
+          fontSize: '0.9rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer',
         }}>&larr; End</button>
         <span style={{
-          fontSize: '0.55rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
+          fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em',
           padding: '0.2rem 0.6rem', borderRadius: '1rem',
           background: 'var(--surface-raised)', border: '1px solid var(--border)', color: 'var(--text-dim)',
         }}>
@@ -276,7 +276,7 @@ export function AICoach({ onBack }: AICoachProps) {
             </div>
           </div>
         </div>
-        <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)', marginTop: '0.75rem', minHeight: '1rem', transition: 'opacity 0.3s ease' }}>
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)', marginTop: '0.75rem', minHeight: '1rem', transition: 'opacity 0.3s ease' }}>
           {statusText[state]}
         </p>
       </div>
@@ -312,17 +312,17 @@ export function AICoach({ onBack }: AICoachProps) {
                     background: 'var(--surface-raised)', border: '1px solid var(--border)',
                   }}>
                     <span style={{
-                      fontSize: '0.5rem', fontWeight: 600, textTransform: 'uppercase',
+                      fontSize: '1rem', fontWeight: 600, textTransform: 'uppercase',
                       letterSpacing: '0.04em', color: 'var(--text-dim)', marginBottom: '0.2rem',
                       display: 'block',
                     }}>
                       Accent tip
                     </span>
-                    <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.2rem' }}>
+                    <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)', marginBottom: '0.2rem' }}>
                       <span style={{ textDecoration: 'line-through' }}>{c.original}</span>
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem' }}>
-                      <p style={{ fontSize: '0.72rem', color: 'var(--text)', fontWeight: 600 }}>
+                      <p style={{ fontSize: '0.95rem', color: 'var(--text)', fontWeight: 600 }}>
                         {c.suggested}
                       </p>
                       {c.audio && (
@@ -332,7 +332,7 @@ export function AICoach({ onBack }: AICoachProps) {
                           style={{
                             padding: '0.25rem 0.5rem', borderRadius: '0.3rem',
                             border: '1px solid var(--border)', background: 'var(--surface)',
-                            color: 'var(--text-muted)', fontSize: '0.55rem', fontWeight: 600,
+                            color: 'var(--text-muted)', fontSize: '0.8rem', fontWeight: 600,
                             cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.2rem',
                             flexShrink: 0,
                           }}
@@ -353,7 +353,7 @@ export function AICoach({ onBack }: AICoachProps) {
                 maxWidth: '85%', marginTop: '0.25rem', padding: '0.4rem 0.65rem',
                 borderRadius: '0.4rem', background: 'var(--surface-raised)', border: '1px solid var(--border)',
               }}>
-                <p style={{ fontSize: '0.6rem', color: 'var(--text-muted)' }}>{msg.tip}</p>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{msg.tip}</p>
               </div>
             )}
           </div>

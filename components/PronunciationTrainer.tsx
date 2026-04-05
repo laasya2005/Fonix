@@ -284,7 +284,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
       <div className="flex-1" style={{ background: 'var(--bg)' }}>
         <div style={container}>
           <div style={{ padding: '0.5rem 0' }}>
-            <button onClick={onBack} style={{ fontSize: '0.7rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <button onClick={onBack} style={{ fontSize: '0.95rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}>
               &larr; Dashboard
             </button>
           </div>
@@ -293,7 +293,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.3rem' }}>
               Pronunciation Gym
             </h2>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
+            <p style={{ fontSize: '1rem', color: 'var(--text-dim)' }}>
               Train your ear and your mouth
             </p>
           </div>
@@ -311,7 +311,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             <p style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: '0.15rem' }}>
               Shadowing Practice
             </p>
-            <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>
               Hear a sentence, repeat it, compare your accent
             </p>
           </button>
@@ -329,7 +329,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             <p style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text)', marginBottom: '0.15rem' }}>
               Sound Drills
             </p>
-            <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>
               Focus on specific sounds: TH, flap T, V/W, R
             </p>
           </button>
@@ -344,7 +344,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
       <div className="flex-1" style={{ background: 'var(--bg)' }}>
         <div style={container}>
           <div style={{ padding: '0.5rem 0' }}>
-            <button onClick={() => setMode("menu")} style={{ fontSize: '0.7rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            <button onClick={() => setMode("menu")} style={{ fontSize: '0.95rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer' }}>
               &larr; Back
             </button>
           </div>
@@ -373,7 +373,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
                 >
                   <div style={{ flex: 1 }}>
                     <p style={{ fontWeight: 600, fontSize: '0.8rem', color: 'var(--text)' }}>{cat.name}</p>
-                    <p style={{ fontSize: '0.6rem', color: 'var(--text-dim)' }}>
+                    <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)' }}>
                       {locked ? `Unlocks at Lv.${cat.minLevel} ${levelName}` : `${cat.description} \u00b7 ${cat.words.length} words`}
                     </p>
                   </div>
@@ -428,27 +428,27 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
               }}>
                 {avgScore}
               </p>
-              <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Average score</p>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-dim)' }}>Average score</p>
 
               <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', marginTop: '0.75rem' }}>
                 <div>
                   <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--success)' }}>{passed}</p>
-                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>Passed</p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Passed</p>
                 </div>
                 <div>
                   <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-muted)' }}>{drillScores.length - passed}</p>
-                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>Need work</p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Need work</p>
                 </div>
                 <div>
                   <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-muted)' }}>{drillScores.length}</p>
-                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>Total</p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>Total</p>
                 </div>
               </div>
             </div>
           )}
 
           {avgScore == null && (
-            <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+            <p style={{ fontSize: '1rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
               All {mode === "drill-complete" ? "words" : "sentences"} completed
             </p>
           )}
@@ -516,9 +516,9 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.5rem 0' }}>
           <button onClick={() => { cancelRecording(); stopAny(); setMode(mode === "drill" ? "drill-select" : "menu"); setPracticeState("ready"); }} style={{
-            fontSize: '0.7rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer',
+            fontSize: '0.95rem', color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer',
           }}>&larr; Back</button>
-          <span style={{ fontSize: '0.6rem', color: 'var(--text-dim)', fontWeight: 500 }}>
+          <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)', fontWeight: 500 }}>
             {currentIdx} / {totalItems}
           </span>
         </div>
@@ -535,12 +535,12 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
               background: 'var(--surface)', border: '1px solid var(--border)',
               borderRadius: '0.75rem', padding: '0.75rem', marginBottom: '0.75rem',
             }}>
-              <p style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.4rem' }}>
+              <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text)', marginBottom: '0.4rem' }}>
                 How to make this sound:
               </p>
               <ol style={{ margin: 0, paddingLeft: '1.1rem' }}>
                 {selectedCategory.howTo.map((step, i) => (
-                  <li key={i} style={{ fontSize: '0.62rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '0.15rem' }}>
+                  <li key={i} style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '0.15rem' }}>
                     {step}
                   </li>
                 ))}
@@ -551,7 +551,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
 
         {/* Category label (drill mode) */}
         {mode === "drill" && selectedCategory && (
-          <p style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.4rem' }}>
+          <p style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.4rem' }}>
             {selectedCategory.name} drill
           </p>
         )}
@@ -580,7 +580,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
               Sounds like: {currentDrillWord.soundsLike}
             </p>
           )}
-          <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)', marginTop: '0.35rem', lineHeight: 1.4 }}>
+          <p style={{ fontSize: '0.95rem', color: 'var(--text-dim)', marginTop: '0.35rem', lineHeight: 1.4 }}>
             {currentTip}
           </p>
         </div>
@@ -593,7 +593,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
           style={{
             width: '100%', padding: '0.7rem', borderRadius: '0.6rem',
             border: '1px solid var(--border)', background: 'var(--surface)',
-            color: 'var(--text)', fontSize: '0.78rem', fontWeight: 600,
+            color: 'var(--text)', fontSize: '1rem', fontWeight: 600,
             cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
             marginBottom: '0.5rem',
           }}
@@ -631,7 +631,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             )}
           </button>
         </div>
-        <p style={{ textAlign: 'center', fontSize: '0.65rem', color: 'var(--text-dim)', marginBottom: '0.75rem' }}>
+        <p style={{ textAlign: 'center', fontSize: '0.9rem', color: 'var(--text-dim)', marginBottom: '0.75rem' }}>
           {practiceState === "recording" ? "Recording... tap to stop" : practiceState === "ready" ? "Tap to record yourself" : ""}
         </p>
 
@@ -642,7 +642,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             border: '1px solid var(--border)', padding: '0.85rem',
             marginBottom: '0.5rem',
           }}>
-            <p style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.5rem' }}>
+            <p style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.5rem' }}>
               Compare
             </p>
 
@@ -651,7 +651,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
                 flex: 1, padding: '0.55rem', borderRadius: '0.5rem',
                 border: `1px solid ${playingWhat === "model" ? 'var(--accent)' : 'var(--border)'}`,
                 background: playingWhat === "model" ? 'var(--accent-soft)' : 'var(--surface-raised)',
-                color: 'var(--text)', fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer',
+                color: 'var(--text)', fontSize: '0.95rem', fontWeight: 600, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem',
               }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -662,7 +662,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
                 flex: 1, padding: '0.55rem', borderRadius: '0.5rem',
                 border: `1px solid ${playingWhat === "user" ? 'var(--accent)' : 'var(--border)'}`,
                 background: playingWhat === "user" ? 'var(--accent-soft)' : 'var(--surface-raised)',
-                color: 'var(--text)', fontSize: '0.7rem', fontWeight: 600, cursor: 'pointer',
+                color: 'var(--text)', fontSize: '0.95rem', fontWeight: 600, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem',
               }}>
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -673,7 +673,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             <button onClick={loopBoth} disabled={playingWhat !== null} className="touch-manipulation" style={{
               width: '100%', padding: '0.45rem', borderRadius: '0.4rem',
               border: '1px solid var(--border)', background: 'var(--surface-raised)',
-              color: 'var(--text-muted)', fontSize: '0.6rem', fontWeight: 500, cursor: 'pointer',
+              color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 500, cursor: 'pointer',
             }}>
               Loop both (American → Yours)
             </button>
@@ -686,7 +686,7 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             background: 'var(--surface-raised)', borderRadius: '0.75rem',
             padding: '0.75rem', textAlign: 'center', marginBottom: '0.5rem',
           }}>
-            <p style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Checking your pronunciation...</p>
+            <p style={{ fontSize: '0.95rem', color: 'var(--text-dim)' }}>Checking your pronunciation...</p>
           </div>
         )}
 
@@ -711,10 +711,10 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
                     {accentFeedback.overallScore}
                   </span>
                   <div>
-                    <p style={{ fontSize: '0.7rem', fontWeight: 600, color: scoreColor(accentFeedback.overallScore!) }}>
+                    <p style={{ fontSize: '0.95rem', fontWeight: 600, color: scoreColor(accentFeedback.overallScore!) }}>
                       {v === "pass" ? "Good" : v === "close" ? "Almost" : "Try again"}
                     </p>
-                    <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>out of 100</p>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>out of 100</p>
                   </div>
                 </div>
               )}
@@ -722,14 +722,14 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
               {/* Phoneme scores */}
               {accentFeedback.words && accentFeedback.words.length > 0 && accentFeedback.words.some(w => w.phonemes.length > 0) && (
                 <div style={{ marginBottom: '0.5rem' }}>
-                  <p style={{ fontSize: '0.55rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.3rem' }}>
+                  <p style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.3rem' }}>
                     Sound breakdown
                   </p>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
                     {accentFeedback.words.flatMap(w => w.phonemes).map((p, i) => (
                       <span key={i} style={{
                         padding: '0.2rem 0.4rem', borderRadius: '0.3rem',
-                        fontSize: '0.7rem', fontFamily: 'monospace', fontWeight: 600,
+                        fontSize: '0.95rem', fontFamily: 'monospace', fontWeight: 600,
                         background: p.score >= 80 ? 'var(--success-soft)' : p.score >= 50 ? 'var(--warn-soft)' : 'var(--error-soft)',
                         color: scoreColor(p.score),
                         border: `1px solid ${p.score >= 80 ? 'rgba(16,185,129,0.15)' : p.score >= 50 ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)'}`,
@@ -742,11 +742,11 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
               )}
 
               {/* Feedback text */}
-              <p style={{ fontSize: '0.72rem', color: 'var(--text)', lineHeight: 1.5, marginBottom: accentFeedback.example ? '0.25rem' : 0 }}>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text)', lineHeight: 1.5, marginBottom: accentFeedback.example ? '0.25rem' : 0 }}>
                 {accentFeedback.feedback}
               </p>
               {accentFeedback.example && (
-                <p style={{ fontSize: '0.65rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.4 }}>
                   {accentFeedback.example}
                 </p>
               )}
@@ -760,14 +760,14 @@ export function PronunciationTrainer({ onBack, initialMode }: PronunciationTrain
             <button onClick={handleTryAgain} className="touch-manipulation" style={{
               flex: 1, padding: '0.7rem', borderRadius: '0.6rem',
               border: '1px solid var(--border)', background: 'var(--surface)',
-              color: 'var(--text)', fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer',
+              color: 'var(--text)', fontWeight: 600, fontSize: '1rem', cursor: 'pointer',
             }}>
               Try again
             </button>
             <button onClick={handleNext} className="touch-manipulation" style={{
               flex: 1, padding: '0.7rem', borderRadius: '0.6rem',
               border: '1px solid var(--text)', background: 'var(--text)', color: 'var(--bg)',
-              fontWeight: 600, fontSize: '0.78rem', cursor: 'pointer',
+              fontWeight: 600, fontSize: '1rem', cursor: 'pointer',
             }}>
               Next
             </button>

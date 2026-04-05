@@ -36,13 +36,13 @@ export function BadgePopup({ badgeId, onClose }: BadgePopupProps) {
           margin: '0 auto 0.75rem', fontFamily: 'monospace',
           fontSize: '0.85rem', fontWeight: 700, color: 'var(--accent)',
         }}>{badge.icon}</div>
-        <p style={{ fontSize: '0.6rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.25rem' }}>
+        <p style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.25rem' }}>
           Badge earned
         </p>
         <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)' }}>
           {badge.name}
         </p>
-        <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+        <p style={{ fontSize: '0.95rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
           {badge.condition}
         </p>
       </div>

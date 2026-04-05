@@ -24,11 +24,11 @@ export function LevelBar({ xp, level }: LevelBarProps) {
           <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text)' }}>
             Level {level}
           </span>
-          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+          <span style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 500 }}>
             {currentLevel.name}
           </span>
         </div>
-        <span style={{ fontSize: '0.6rem', color: 'var(--text-dim)', fontWeight: 500 }}>
+        <span style={{ fontSize: '0.85rem', color: 'var(--text-dim)', fontWeight: 500 }}>
           {xp} XP {nextLevel ? `/ ${nextLevel.minXP}` : ""}
         </span>
       </div>
@@ -39,7 +39,7 @@ export function LevelBar({ xp, level }: LevelBarProps) {
         }} />
       </div>
       {nextLevel && (
-        <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)', marginTop: '0.3rem' }}>
+        <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginTop: '0.3rem' }}>
           {nextLevel.minXP - xp} XP to {nextLevel.name}
         </p>
       )}

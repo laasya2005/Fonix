@@ -75,7 +75,7 @@ export function AuthGate({ children }: AuthGateProps) {
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.75rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '0.35rem' }}>
             Fonix
           </h1>
-          <p style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
+          <p style={{ fontSize: '1rem', color: 'var(--text-dim)' }}>
             Train your American accent
           </p>
         </div>
@@ -85,7 +85,7 @@ export function AuthGate({ children }: AuthGateProps) {
             padding: '0.75rem', borderRadius: '0.6rem', marginBottom: '0.75rem',
             background: 'var(--success-soft)', border: '1px solid rgba(16,185,129,0.15)',
           }}>
-            <p style={{ fontSize: '0.72rem', color: 'var(--success)', lineHeight: 1.5 }}>{success}</p>
+            <p style={{ fontSize: '0.95rem', color: 'var(--success)', lineHeight: 1.5 }}>{success}</p>
           </div>
         )}
 
@@ -119,7 +119,7 @@ export function AuthGate({ children }: AuthGateProps) {
           />
 
           {error && (
-            <p style={{ fontSize: '0.7rem', color: 'var(--error)', marginBottom: '0.5rem' }}>{error}</p>
+            <p style={{ fontSize: '0.95rem', color: 'var(--error)', marginBottom: '0.5rem' }}>{error}</p>
           )}
 
           <button
@@ -136,13 +136,13 @@ export function AuthGate({ children }: AuthGateProps) {
           </button>
         </form>
 
-        <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.72rem', color: 'var(--text-dim)' }}>
+        <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.95rem', color: 'var(--text-dim)' }}>
           {mode === "login" ? "No account? " : "Already have an account? "}
           <button
             onClick={() => { setMode(mode === "login" ? "signup" : "login"); setError(""); setSuccess(""); }}
             style={{
               background: 'none', border: 'none', color: 'var(--accent)',
-              fontSize: '0.72rem', cursor: 'pointer', textDecoration: 'underline',
+              fontSize: '0.95rem', cursor: 'pointer', textDecoration: 'underline',
               textUnderlineOffset: '2px',
             }}
           >

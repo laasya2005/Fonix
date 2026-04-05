@@ -9,7 +9,7 @@ interface BadgeGridProps {
 export function BadgeGrid({ earned }: BadgeGridProps) {
   return (
     <div>
-      <p style={{ fontSize: '0.55rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.5rem' }}>
+      <p style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-dim)', fontWeight: 600, marginBottom: '0.5rem' }}>
         Badges ({earned.length} / {BADGES.length})
       </p>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.4rem' }}>
@@ -23,11 +23,11 @@ export function BadgeGrid({ earned }: BadgeGridProps) {
               opacity: isEarned ? 1 : 0.4,
             }}>
               <div style={{
-                fontSize: '0.6rem', fontWeight: 700, marginBottom: '0.2rem',
+                fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.2rem',
                 color: isEarned ? 'var(--accent)' : 'var(--text-dim)',
                 fontFamily: 'monospace', letterSpacing: '-0.02em',
               }}>{badge.icon}</div>
-              <p style={{ fontSize: '0.45rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.2 }}>{badge.name}</p>
+              <p style={{ fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.2 }}>{badge.name}</p>
             </div>
           );
         })}

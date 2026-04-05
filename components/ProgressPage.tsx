@@ -52,7 +52,7 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
 
         {/* Back */}
         <button onClick={onBack} style={{
-          fontSize: '0.7rem', color: 'var(--text-dim)', background: 'none',
+          fontSize: '0.95rem', color: 'var(--text-dim)', background: 'none',
           border: 'none', cursor: 'pointer', marginBottom: '1rem',
         }}>&larr; Dashboard</button>
 
@@ -65,12 +65,12 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
             <span style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>
               Lv.{g.level} {currentLevel.name}
             </span>
-            <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>{g.xp} XP</span>
+            <span style={{ fontSize: '0.95rem', color: 'var(--text-dim)' }}>{g.xp} XP</span>
           </div>
           <div style={{ width: '100%', height: '5px', borderRadius: '3px', background: 'var(--surface-raised)', overflow: 'hidden', marginBottom: '0.4rem' }}>
             <div style={{ height: '100%', borderRadius: '3px', background: 'var(--accent)', width: `${pct}%` }} />
           </div>
-          <p style={{ fontSize: '0.65rem', color: 'var(--text-dim)' }}>
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>
             {nextLevel ? `${xpNeeded} XP to Lv.${nextLevel.level} ${nextLevel.name}` : "Max level reached"}
           </p>
         </div>
@@ -87,13 +87,13 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
               background: 'var(--surface)', border: '1px solid var(--border)',
             }}>
               <p style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)' }}>{String(s.value)}</p>
-              <p style={{ fontSize: '0.5rem', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</p>
+              <p style={{ fontSize: '1rem', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{s.label}</p>
             </div>
           ))}
         </div>
 
         {/* How to earn XP */}
-        <p style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
+        <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
           How to earn XP
         </p>
         <div style={{
@@ -106,14 +106,14 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
               padding: '0.35rem 0',
               borderBottom: i < XP_TABLE.length - 1 ? '1px solid var(--surface-raised)' : 'none',
             }}>
-              <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)' }}>{row.action}</span>
-              <span style={{ fontSize: '0.65rem', color: 'var(--accent)', fontWeight: 600 }}>{row.xp}</span>
+              <span style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>{row.action}</span>
+              <span style={{ fontSize: '0.9rem', color: 'var(--accent)', fontWeight: 600 }}>{row.xp}</span>
             </div>
           ))}
         </div>
 
         {/* Curriculum */}
-        <p style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
+        <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
           Your path to fluency
         </p>
         <div style={{
@@ -134,18 +134,18 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
                   background: isUnlocked ? 'var(--accent)' : 'var(--surface-raised)',
                   border: `1.5px solid ${isUnlocked ? 'var(--accent)' : 'var(--border)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '0.5rem', fontWeight: 700, color: isUnlocked ? 'white' : 'var(--text-dim)',
+                  fontSize: '1rem', fontWeight: 700, color: isUnlocked ? 'white' : 'var(--text-dim)',
                 }}>{lvl.level}</div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                    <span style={{ fontSize: '0.72rem', fontWeight: isCurrent ? 700 : 500, color: isCurrent ? 'var(--text)' : 'var(--text-muted)' }}>
+                    <span style={{ fontSize: '0.95rem', fontWeight: isCurrent ? 700 : 500, color: isCurrent ? 'var(--text)' : 'var(--text-muted)' }}>
                       {lvl.name}
                     </span>
-                    <span style={{ fontSize: '0.55rem', color: 'var(--text-dim)' }}>{lvl.minXP} XP</span>
-                    {isCurrent && <span style={{ fontSize: '0.48rem', fontWeight: 700, color: 'var(--accent)' }}>YOU</span>}
+                    <span style={{ fontSize: '0.8rem', color: 'var(--text-dim)' }}>{lvl.minXP} XP</span>
+                    {isCurrent && <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--accent)' }}>YOU</span>}
                   </div>
-                  <p style={{ fontSize: '0.6rem', color: 'var(--text-dim)', fontStyle: 'italic', marginTop: '0.05rem' }}>{lvl.subtitle}</p>
-                  <p style={{ fontSize: '0.55rem', color: 'var(--text-dim)', marginTop: '0.15rem' }}>{LEVEL_UNLOCKS[lvl.level]}</p>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-dim)', fontStyle: 'italic', marginTop: '0.05rem' }}>{lvl.subtitle}</p>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginTop: '0.15rem' }}>{LEVEL_UNLOCKS[lvl.level]}</p>
                 </div>
               </div>
             );
@@ -153,7 +153,7 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
         </div>
 
         {/* Badges */}
-        <p style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
+        <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.4rem' }}>
           Badges ({g.badges.length} / {BADGES.length})
         </p>
         <div style={{
@@ -167,11 +167,11 @@ export function ProgressPage({ onBack }: ProgressPageProps) {
                 background: 'var(--surface)', border: `1px solid ${earned ? 'var(--accent)' : 'var(--border)'}`,
                 opacity: earned ? 1 : 0.35,
               }}>
-                <p style={{ fontSize: '0.6rem', fontWeight: 700, color: earned ? 'var(--accent)' : 'var(--text-dim)', fontFamily: 'monospace', marginBottom: '0.15rem' }}>
+                <p style={{ fontSize: '0.85rem', fontWeight: 700, color: earned ? 'var(--accent)' : 'var(--text-dim)', fontFamily: 'monospace', marginBottom: '0.15rem' }}>
                   {badge.icon}
                 </p>
-                <p style={{ fontSize: '0.5rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.2 }}>{badge.name}</p>
-                <p style={{ fontSize: '0.45rem', color: 'var(--text-dim)', marginTop: '0.1rem' }}>{badge.condition}</p>
+                <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.2 }}>{badge.name}</p>
+                <p style={{ fontSize: '0.95rem', color: 'var(--text-dim)', marginTop: '0.1rem' }}>{badge.condition}</p>
               </div>
             );
           })}
