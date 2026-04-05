@@ -14,6 +14,7 @@ import { WordDetailCard } from "@/components/WordDetailCard";
 import { PracticeMode } from "@/components/PracticeMode";
 import { ResultsSummary } from "@/components/ResultsSummary";
 import { ProgressDashboard } from "@/components/ProgressDashboard";
+import { ProgressPage } from "@/components/ProgressPage";
 import { AICoach } from "@/components/AICoach";
 import { PronunciationTrainer } from "@/components/PronunciationTrainer";
 import { BadgePopup } from "@/components/BadgePopup";
@@ -25,6 +26,7 @@ type AppState =
   | "coach"
   | "pronunciation"
   | "drills"
+  | "progress-page"
   | "idle"
   | "recording"
   | "analyzing"
@@ -236,6 +238,7 @@ function AppContent() {
         onDailyChallenge={handleDailyChallenge}
         onPronunciation={() => setState("pronunciation")}
         onDrills={() => setState("drills")}
+        onProgress={() => setState("progress-page")}
       />
     );
   }
@@ -253,6 +256,11 @@ function AppContent() {
   // Sound drills mode
   if (state === "drills") {
     return <PronunciationTrainer onBack={handleChangeModule} initialMode="drill-select" />;
+  }
+
+  // Progress page
+  if (state === "progress-page") {
+    return <ProgressPage onBack={handleChangeModule} />;
   }
 
 
